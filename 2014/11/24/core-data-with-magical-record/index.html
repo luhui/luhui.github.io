@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS,CoreData," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前言最近使用Core data在多线程下遇到了不少的坑，多数都是因为使用不规范所引起的，这里将从最常用的MOC做展开，谈谈多线程下如何正确的使用context。p.s.这篇博客会持续不断的更新，主要是记录core data中踩到的坑，在踩坑中慢慢成长，不断规范core data的使用方法。 NSManagedObjectContext定义说到MOC，当然先要贴上一副描述 1An instance">
+<meta name="keywords" content="iOS,CoreData">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CoreData与MagicalRecord的故事">
+<meta property="og:url" content="http://yoursite.com/2014/11/24/core-data-with-magical-record/index.html">
+<meta property="og:site_name" content="mluffy&#39;s blog">
+<meta property="og:description" content="前言最近使用Core data在多线程下遇到了不少的坑，多数都是因为使用不规范所引起的，这里将从最常用的MOC做展开，谈谈多线程下如何正确的使用context。p.s.这篇博客会持续不断的更新，主要是记录core data中踩到的坑，在踩坑中慢慢成长，不断规范core data的使用方法。 NSManagedObjectContext定义说到MOC，当然先要贴上一副描述 1An instance">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-14T12:43:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CoreData与MagicalRecord的故事">
+<meta name="twitter:description" content="前言最近使用Core data在多线程下遇到了不少的坑，多数都是因为使用不规范所引起的，这里将从最常用的MOC做展开，谈谈多线程下如何正确的使用context。p.s.这篇博客会持续不断的更新，主要是记录core data中踩到的坑，在踩坑中慢慢成长，不断规范core data的使用方法。 NSManagedObjectContext定义说到MOC，当然先要贴上一副描述 1An instance">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2014/11/24/core-data-with-magical-record/"/>
+
+
+
+
+
+  <title>CoreData与MagicalRecord的故事 | mluffy's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mluffy's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">诶？不错哟</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/11/24/core-data-with-magical-record/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mluffy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mluffy's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CoreData与MagicalRecord的故事</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-11-24T20:38:08+08:00">
+                2014-11-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近使用Core data在多线程下遇到了不少的坑，多数都是因为使用不规范所引起的，这里将从最常用的MOC做展开，谈谈多线程下如何正确的使用context。<br>p.s.这篇博客会持续不断的更新，主要是记录core data中踩到的坑，在踩坑中慢慢成长，不断规范core data的使用方法。</p>
+<h1 id="NSManagedObjectContext"><a href="#NSManagedObjectContext" class="headerlink" title="NSManagedObjectContext"></a>NSManagedObjectContext</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>说到MOC，当然先要贴上一副描述</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">An instance of NSManagedObjectContext represents a single “object space” or scratch pad in an application. Its primary responsibility is to manage a collection of managed objects. These objects form a group of related model objects that represent an internally consistent view of one or more persistent stores. A single managed object instance exists in one and only one context, but multiple copies of an object can exist in different contexts. Thus object uniquing is scoped to a particular context.</div></pre></td></tr></table></figure>
+<p>从字义上来说，他就是一个数据库的上下文，并且维持在内存中。<br>context可以创建多个，说明一个进程中，可以拥有多个数据库的内存副本，并且每个副本之间都是相对独立的。<br>其实从这一点来看，Core data的设计结构和git是相似的。persistent store类似git的中心仓库，每个moc都是git的分支，moc内的操作都互不影响，只有在save（git的push）时才会保存到persistent store（git中心仓库）中。</p>
+<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">The context is a powerful object with a central role in the life-cycle of managed objects, with responsibilities from life-cycle management (including faulting) to validation, inverse relationship handling, and undo/redo. Through a context you can retrieve or “fetch” objects from a persistent store, make changes to those objects, and then either discard the changes or—again through the context—commit them back to the persistent store. The context is responsible for watching for changes in its objects and maintains an undo manager so you can have finer-grained control over undo and redo. You can insert new objects and delete ones you have fetched, and commit these modifications to the persistent store.</div><div class="line"></div><div class="line">All objects fetched from an external store are registered in a context together with a global identifier (an instance of NSManagedObjectID) that’s used to uniquely identify each object to the external store.</div></pre></td></tr></table></figure>
+<p>作为对象的管理者，moc管理着所有注册在这个moc下的对象的生命周期（包括faulting）。并且提供了非常丰富的数据操作，基本的增查删改，还提供了了undo/redo的方法，极大的简化了开发时间。</p>
+<h2 id="fault"><a href="#fault" class="headerlink" title="fault"></a>fault</h2><p>moc中的所有object都是lazy loading的，所有注册到moc的object一开始都是出于faulted的状态，只有在引用到object时才会真正从数据库中加载数据至内存中，这个过程叫fire fault。当一个object被从moc中移除后，他会被置为fault状态。</p>
+<h2 id="重头戏：Parent-Store"><a href="#重头戏：Parent-Store" class="headerlink" title="重头戏：Parent Store"></a>重头戏：Parent Store</h2><p>parent store是用来告诉MOC，数据的来源，数据的读取保存操作最终都是在parent store中执行的。<br>在OSX10.7以及iOS5.0时代，Parent Store一直是persisten store coordinator<br>从OSX10.7以及iOS5.0之后，Parent Store就可以是context，相当于定义了一个parent 这个moc的数据操作最终只会影响到其parent context，这极大的简化了不同context之间数据的更新。在这之前一直只能用Notification的方式：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span></div><div class="line">                                      selector:<span class="keyword">@selector</span>(&lt;<span class="meta">#Selector name#&gt;)</span></div><div class="line">                                      name:<span class="built_in">NSManagedObjectContextDidSaveNotification</span></div><div class="line">                                      object:&lt;<span class="meta">#A managed object context#&gt;];</span></div></pre></td></tr></table></figure>
+<p>我们可以在程序运行的断点中查看context的parent store</p>
+<image src="http://drp.io/brC"></image>
+
+<p>这个parent store最终的应用场景是怎样呢？我们在后边的Nested context中介绍</p>
+<h1 id="MagicalRecord概述"><a href="#MagicalRecord概述" class="headerlink" title="MagicalRecord概述"></a>MagicalRecord概述</h1><p><a href="https://github.com/magicalpanda/MagicalRecord" target="_blank" rel="external">Magical Recrod</a>是git的一个第三方库，是一个对Core data数据操作的封装库，常用的core data操作都得到了极大的简化，是在使用core data时提高编程效率的不二之选。<br>除开对操作的封装之外，MR的另一大好处就是为我们封装了多线程之下的context</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">+ (<span class="built_in">NSManagedObjectContext</span> *) MR_contextForCurrentThread;</div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span> ([<span class="built_in">NSThread</span> isMainThread])</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">return</span> [<span class="keyword">self</span> MR_defaultContext];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span></div><div class="line">	&#123;</div><div class="line">		<span class="built_in">NSMutableDictionary</span> *threadDict = [[<span class="built_in">NSThread</span> currentThread] threadDictionary];</div><div class="line">		<span class="built_in">NSManagedObjectContext</span> *threadContext = [threadDict objectForKey:kMagicalRecordManagedObjectContextKey];</div><div class="line">		<span class="keyword">if</span> (threadContext == <span class="literal">nil</span>)</div><div class="line">		&#123;</div><div class="line">			threadContext = [<span class="keyword">self</span> MR_contextWithParent:[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext]];</div><div class="line">			[threadDict setObject:threadContext forKey:kMagicalRecordManagedObjectContextKey];</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> threadContext;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从他的代码，可以很清楚的知道，MR为每个线程都创建了context，并且在线程的<code>threadDictionary</code>中维持context的引用。因此在线程回收之前，我们都可以放心的在这个线程中使用context，并且不用担心何时需要释放context的问题。<br>在MR中，初始化core data时，他的数据结构是这样的：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">+ (<span class="keyword">void</span>) MR_initializeDefaultContextWithCoordinator:(<span class="built_in">NSPersistentStoreCoordinator</span> *)coordinator;</div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (defaultManagedObjectContext_ == <span class="literal">nil</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">NSManagedObjectContext</span> *rootContext = [<span class="keyword">self</span> MR_contextWithStoreCoordinator:coordinator];</div><div class="line">        [<span class="keyword">self</span> MR_setRootSavingContext:rootContext];</div><div class="line">        <span class="built_in">NSManagedObjectContext</span> *defaultContext = [<span class="keyword">self</span> MR_newMainQueueContext];</div><div class="line">        [<span class="keyword">self</span> MR_setDefaultContext:defaultContext];</div><div class="line">        [defaultContext setParentContext:rootContext];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>一个root context，所有的context都会是这个root context的child context。<br>在主线程创建一个default context，其parent context是root context，因此我们在使用core data时，在主线程下的操作都是用的是default context，最终的操作都会是先保存到root context中，再保存到数据库中。<br>具体的解释暂且不表，放在另一篇文章中详细解释使用MR时的一些操作事项</p>
+<p>##多线程下的Core Data</p>
+<p>###MOC的三种类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Confinement (NSConfinementConcurrencyType)</div><div class="line">默认状态，只能在创建的线程中使用，其他线程均不能使用。官方的API文档写到：</div><div class="line">You can only use this concurrency type if the managed object context’s parent store is a persistent store coordinator.</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Private queue (NSPrivateQueueConcurrencyType)</div><div class="line">用在多线程下。MR中的rootContext与threadContext均是这个类型</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Main queue (NSMainQueueConcurrencyType)</div><div class="line">用在主线程下。MR中的defaultContext是这个类型。这个类型的context多用在controller以及一些UI对象上，这些对象只能要求在主线程中操作，因此只能用此类型的context在主线程中操作。</div></pre></td></tr></table></figure>
+<h2 id="使用Magical-Recrod时，多线程下应注意的点"><a href="#使用Magical-Recrod时，多线程下应注意的点" class="headerlink" title="使用Magical Recrod时，多线程下应注意的点"></a>使用Magical Recrod时，多线程下应注意的点</h2><ol>
+<li>在不同的线程，可以使用任意的context进行读的操作，但是写的操作必须保证所有的object均处于同一个context，并且该context所维护的thread就是当前线程。否则在写的时候会出现概率性的崩溃。一个context不能同时被两个线程访问</li>
+<li>不同线程之间的object传递使用objectWithId。在MR中，使用的是existingObjectWithId，也就是已经在context中注册的object才可以拿到<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSManagedObjectContext</span> *moc = [<span class="built_in">NSManagedObjectContext</span> MR_contextWithParent:[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext]];</div><div class="line">Department *d = [Department MR_createInContext:moc];</div><div class="line"><span class="built_in">NSManagedObjectContext</span> *moc2 = [<span class="built_in">NSManagedObjectContext</span> MR_contextWithParent:[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext]];</div><div class="line">Department *t = [d MR_inContext:moc2];</div><div class="line">Department *t2 = (Department *)[moc2 objectWithID:d.objectID];</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"t:%@ and t2:%@"</span>, t, t2);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这个代码的输出结果为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">t:(null) and t2:&lt;Department: 0x109600580&gt; (entity: Department; id: 0x10f507590 &lt;x-coredata:///Department/t8F610E34-B04A-4152-A481-75818DEC7DE12&gt; ; data: &lt;fault&gt;)</div></pre></td></tr></table></figure></p>
+<ol>
+<li>多个context下，使用undo操作时就要慎用，有可能会多undo了某些操作。比如：<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSUndoManager</span> *undoManager = [<span class="built_in">NSUndoManager</span> new];</div><div class="line">    [[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext] setUndoManager:undoManager];</div><div class="line">    [[[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext] undoManager] beginUndoGrouping];</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>当在<code>beginUndoGrouping</code>后，开了一个线程进行了数据操作并保存:<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^&#123;</div><div class="line">        <span class="comment">//somthing data operation</span></div><div class="line">        [[<span class="built_in">NSManagedObjectContext</span> MR_contextForCurrentThread] MR_saveOnlySelfAndWait];</div><div class="line">    &#125;);</div></pre></td></tr></table></figure></p>
+<p>这时候数据会先更新至defaultContext中，再保存至数据库。如果我们只打算undo在主线程中的更改，调用<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[[[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext] undoManager] endUndoGrouping];</div><div class="line">[[[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext] undoManager] undo];</div></pre></td></tr></table></figure></p>
+<p>进行回滚，会把线程中执行的操作一起回滚掉。因此这种业务需求下的undo应该使用另一个MOC进行处理，defaultContext作为最终同时保存的部分。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSUndoManager</span> *undoManager = [<span class="built_in">NSUndoManager</span> new];</div><div class="line"><span class="built_in">NSManagedObjectContext</span> *moc = [<span class="built_in">NSManagedObjectContext</span> MR_contextWithParent:[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext]];</div><div class="line">[moc setUndoManager:undoManager];</div><div class="line">[[moc undoManager] beginUndoGrouping];</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+            <a href="/tags/CoreData/" rel="tag"># CoreData</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/12/02/git-getting-start/" rel="prev" title="git 入门">
+                git 入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="mluffy" />
+          <p class="site-author-name" itemprop="name">mluffy</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/luhui" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NSManagedObjectContext"><span class="nav-number">2.</span> <span class="nav-text">NSManagedObjectContext</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">2.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期"><span class="nav-number">2.2.</span> <span class="nav-text">生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fault"><span class="nav-number">2.3.</span> <span class="nav-text">fault</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重头戏：Parent-Store"><span class="nav-number">2.4.</span> <span class="nav-text">重头戏：Parent Store</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MagicalRecord概述"><span class="nav-number">3.</span> <span class="nav-text">MagicalRecord概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Magical-Recrod时，多线程下应注意的点"><span class="nav-number">3.1.</span> <span class="nav-text">使用Magical Recrod时，多线程下应注意的点</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mluffy</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

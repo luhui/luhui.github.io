@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="程序猿的基本素养,七天入门到精通," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前言每个人都有自己独特的学习技巧。于我来说，学习任何东西，都是先知其用法，再从基础开始，先懂其形，再观其意。这样做的好处就是能够非常快速的先踏入你所学习的领域，并将所得快速的纳入到自己现有的领域中来。这在工作中会非常受用，毕竟一个项目周期内，很难会给你充裕的时间从头到尾的了解新的知识。但是如此有一个很大的缺点，让人很容易浮躁，认为这一门学问很简单，很快就能掌握，到头来踩下无数的坑，每天去擦自己的屁">
+<meta name="keywords" content="程序猿的基本素养,七天入门到精通">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git 入门">
+<meta property="og:url" content="http://yoursite.com/2014/12/02/git-getting-start/index.html">
+<meta property="og:site_name" content="mluffy&#39;s blog">
+<meta property="og:description" content="前言每个人都有自己独特的学习技巧。于我来说，学习任何东西，都是先知其用法，再从基础开始，先懂其形，再观其意。这样做的好处就是能够非常快速的先踏入你所学习的领域，并将所得快速的纳入到自己现有的领域中来。这在工作中会非常受用，毕竟一个项目周期内，很难会给你充裕的时间从头到尾的了解新的知识。但是如此有一个很大的缺点，让人很容易浮躁，认为这一门学问很简单，很快就能掌握，到头来踩下无数的坑，每天去擦自己的屁">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-14T12:42:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="git 入门">
+<meta name="twitter:description" content="前言每个人都有自己独特的学习技巧。于我来说，学习任何东西，都是先知其用法，再从基础开始，先懂其形，再观其意。这样做的好处就是能够非常快速的先踏入你所学习的领域，并将所得快速的纳入到自己现有的领域中来。这在工作中会非常受用，毕竟一个项目周期内，很难会给你充裕的时间从头到尾的了解新的知识。但是如此有一个很大的缺点，让人很容易浮躁，认为这一门学问很简单，很快就能掌握，到头来踩下无数的坑，每天去擦自己的屁">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2014/12/02/git-getting-start/"/>
+
+
+
+
+
+  <title>git 入门 | mluffy's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mluffy's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">诶？不错哟</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/12/02/git-getting-start/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mluffy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mluffy's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">git 入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-12-02T20:18:57+08:00">
+                2014-12-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>每个人都有自己独特的学习技巧。于我来说，学习任何东西，都是先知其用法，再从基础开始，先懂其形，再观其意。这样做的好处就是能够非常快速的先踏入你所学习的领域，并将所得快速的纳入到自己现有的领域中来。这在工作中会非常受用，毕竟一个项目周期内，很难会给你充裕的时间从头到尾的了解新的知识。但是如此有一个很大的缺点，让人很容易浮躁，认为这一门学问很简单，很快就能掌握，到头来踩下无数的坑，每天去擦自己的屁股，于是才有了这篇文章。<br>在把自己的所得写成文章，必然需要把模糊的地方弄明白。慢慢的，不清晰的地方变清晰，对于这份知识的应用也越来越得心应手，终于，在文章结尾之时，这份知识才慢慢沉淀为自己的一部分，人也变得沉稳。这才是这篇文章最初的目的。</p>
+<h1 id="源起"><a href="#源起" class="headerlink" title="源起"></a>源起</h1><p>同生活中的许多伟大事件一样，Git 诞生于一个极富纷争大举创新的年代。Linux 内核开源项目有着为数众广的参与者。绝大多数的 Linux 内核维护工作都花在了提交补丁和保存归档的繁琐事务上（1991－2002年间）。到 2002 年，整个项目组开始启用分布式版本控制系统 BitKeeper 来管理和维护代码。</p>
+<p>到了 2005 年，开发 BitKeeper 的商业公司同 Linux 内核开源社区的合作关系结束，他们收回了免费使用 BitKeeper 的权力。这就迫使 Linux 开源社区（特别是 Linux 的缔造者 Linus Torvalds ）不得不吸取教训，只有开发一套属于自己的版本控制系统才不至于重蹈覆辙。他们对新的系统制订了若干目标：</p>
+<ul>
+<li>速度</li>
+<li>简单的设计</li>
+<li>对非线性开发模式的强力支持（允许上千个并行开发的分支）</li>
+<li>完全分布式</li>
+<li>有能力高效管理类似 Linux 内核一样的超大规模项目（速度和数据量）</li>
+</ul>
+<p>自诞生于 2005 年以来，Git 日臻成熟完善，在高度易用的同时，仍然保留着初期设定的目标。它的速度飞快，极其适合管理大项目，它还有着令人难以置信的非线性分支管理系统，可以应付各种复杂的项目开发需求。</p>
+<p>教科书里说：人和动物的区别就在于人类会使用工具。纵观伟大的产品的历史，都是为了提高工作效率而催生出来的产物。<br>在这个缺乏创新，control+c，control+v大行其道的时代，从身边的小事做起，致力于提高每一个细节的质量，也许一项为的产品就这么不经意间就诞生了。</p>
+<h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><p>基础篇其实是我在学习git时遇到的疑问，并非传统的git基础。</p>
+<h2 id="git特性"><a href="#git特性" class="headerlink" title="git特性"></a>git特性</h2><p>学习一门知识，最先需要了解的就是他的特点在哪里，这是我们能够快速评估他是否符合我们需求的一个方法。</p>
+<h3 id="直接快照记录，而非差异比较"><a href="#直接快照记录，而非差异比较" class="headerlink" title="直接快照记录，而非差异比较"></a>直接快照记录，而非差异比较</h3><p>传统的VCS(如CVS,Subversion,Perforce,Bazaar)都是在各个版本中记录各个文件的具体差异，而git是保存每次更新时的文件快照。如此做法有什么好处呢？我们在分支处再说明</p>
+<h3 id="时刻保持数据完整性"><a href="#时刻保持数据完整性" class="headerlink" title="时刻保持数据完整性"></a>时刻保持数据完整性</h3><p>如之前所说，git直接保存快照记录，那么他是如何判断文件是否更改的呢？<br>我们来看一看他的索引算法：<br>1.保存之前对所有数据进行checksum，并以结果作为数据的唯一标识和索引<br>2.使用SHA-1算法，通过文件内容和目录结构进行计算，得到一个SHA-1哈希值，作为指纹字符串。由40个16进制数组成（如：0e79d26c3c0abc43c135e4a33d2a4a94171d0da4）<br>3.所有保存在git数据库中的文件都是通过哈希值进行索引<br>通过他的索引算法，我们就清楚了为什么git的差异比较是如何实现的。所以git不会放过任何一个修改，即时是加了一个空格，文件的文件名，后缀，last modified属性被修改，git都会认为文件已经被修改。</p>
+<h3 id="多数操作仅是添加数据"><a href="#多数操作仅是添加数据" class="headerlink" title="多数操作仅是添加数据"></a>多数操作仅是添加数据</h3><p>任何一种不可逆的操作，比如删除，都会使回退，或者重现历史版本变得困难重重。想象一下把计算机上的文件删除，而不是放入回收站，想要恢复就必须下载专业的恢复软件。常用的git操作都是只是简单的添加至数据库，然后保存快照。即时是git reset –hard的操作都是如此。这样在回退版本的时候就异常的简单。<br>我们来看一下git reflog的记录：<br>``</p>
+<h2 id="四种文件状态"><a href="#四种文件状态" class="headerlink" title="四种文件状态"></a>四种文件状态</h2><h3 id="committed"><a href="#committed" class="headerlink" title="committed"></a>committed</h3><p>commit状态标识文件已经被快照记录，可以在版本库中回溯了</p>
+<h3 id="staged"><a href="#staged" class="headerlink" title="staged"></a>staged</h3><p>已经被git add标记的文件，使用commit命令时会将处于这个状态的文件加入快照中。相当于预提交，通常我们称为暂存区。</p>
+<h3 id="modified"><a href="#modified" class="headerlink" title="modified"></a>modified</h3><p>在最近的一个commit中存在的文件，当被修改时会处于modified状态。已经处于staged状态的文件，如果再次被修改，会同时出现在staged和modified状态。这个状态我们称为git的工作区</p>
+<h3 id="untracked"><a href="#untracked" class="headerlink" title="untracked"></a>untracked</h3><p>在最近的一个commit中不存在的文件，处于没有被git追踪的状态，此文件git是不会去checksum的</p>
+<h1 id="分支"><a href="#分支" class="headerlink" title="分支"></a>分支</h1><p>branch（分支）被称为git的必杀技。<br>几乎每一种版本控制系统都以某种形式支持分支。使用分支意味着你可以从开发主线上分离开来，然后在不影响主线的同时继续工作。在很多版本控制系统中，这是个昂贵的过程，常常需要创建一个源代码目录的完整副本，对大型项目来说会花费很长时间。<br>git的快照方式很好的支持了branch。新建一个branch，其实仅仅是在当前的commit号上创建了一个新的别名。今后在当前branch的操作中，就与在主分支一样的操作方式。所以每个branch都是相对独立的。从算法效率的角度来看，git的算法是通过牺牲空间来换取了时间。</p>
+<h2 id="分支的操作"><a href="#分支的操作" class="headerlink" title="分支的操作"></a>分支的操作</h2><p>1.branch<br>~创建，查看，删除分支~<br>2.checkout<br>~切换，创建分支~<br>3.merge<br>~合并分支~<br>4.rebase<br>~衍合分支~<br>5.cherry-pick<br>~合并一/多个commit~</p>
+<h1 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h1><p>每个git项目，在其根目录下边都会有一个.git文件，里边存储着所有版本信息。下面我们就通过git的目录结构来研究他的实现机制。<br>一个典型的git目录结构如下所示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$ ls</div><div class="line">HEAD			保存当前分支最新的commit id</div><div class="line">branches/		分支信息，在新版本中已废弃</div><div class="line">config			当前git项目的配置信息</div><div class="line">description		仅供gitweb使用，具体用法还没有去了解</div><div class="line">hooks/			保存客户端或服务器的钩子脚本</div><div class="line">index			文件保存了暂存区的信息</div><div class="line">info/			包含了一份不存在.gitignore文件中管理的忽略模式的全局可执行文件</div><div class="line">objects/		目录存储所有数据内容</div><div class="line">refs/			目录存储指向数据（分支）的提交对象的指针</div></pre></td></tr></table></figure></p>
+<p>refs中的信息如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$cd refs</div><div class="line">$ls</div><div class="line">heads/			保存本地的分支所指向的最新commit</div><div class="line">remote/			远程仓库的分支所指向的最新commit</div><div class="line">tags/			每个tag对应的commit</div></pre></td></tr></table></figure></p>
+<p>我们把git的版本控制想象成对一个单链表的管理。链表中的每一个节点就是每个版本的快照指针（即一个commit）,所有的结点有且只有一个指针，指向其上一个commit。这就是为什么git中只保留HEAD，而没有一个tail的原因。<br>那么以上的文件其实就是一个指针，指向了链表中的某处。<br>链表中的每一个结点都可以延伸出多个结点（对应了不同的分支）<br>以第一个commit作为头节点，那么HEAD就是指向了当前正在操作的分支的一个尾节点的tail pointer<br>refs中的文件就是保存了一些比较特殊的结点，比如某个分支的HEAD结点（heads），某个结点的别名（tags），镜像链表的所有HEAD结点（remote）<br>所以每个git操作都可以认为是对链表的操作。每个结点都保存在.git/objects中，只有在某个时刻，git会运行git gc操作去回收一部分没有被引用的结点。<br>因此理论上，不管做了什么操作（除了删除.git这种脑残操作），只要还保存着commit信息，那么就能够回到任意状态。</p>
+<h1 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h1><h2 id="GUI"><a href="#GUI" class="headerlink" title="GUI"></a>GUI</h2><p>个人感觉，git还是通过命令行去使用更有感觉，但是分支的状态，提交的更改在原始的git下操作是比较复杂的，因此GUI工具还是必不可少。<br>1.在Mac下，通常使用的GUI有source tree，通常是查看git的一个分支状态，以及一些commit的修改信息。<br>2.gitk是一个轻量级的git状态查看工具，还支持查看commit的修改项，通常情况下是满足了平时的业务需求。但是缺点就是没有Retina版本的gitk，Mac党用起来相当难受。</p>
+<h2 id="diff-tool"><a href="#diff-tool" class="headerlink" title="diff tool"></a>diff tool</h2><p>原生的diff方法只能简单查看哪些地方被修改，可操控性，可读性都不是那么好，因此我们还是需要配合一个工具来对比修改。<br>meld是比较常用的difftool。安装方式<a href="http://jonathandean.com/2010/09/installing-meld-diff-tool-on-os-x-snow-leopard-using-fink/" target="_blank" rel="external">请点击这里</a></p>
+<h2 id="命令别名"><a href="#命令别名" class="headerlink" title="命令别名"></a>命令别名</h2><p>在<code>~/.gitconfig</code>文件下，保存着git的全局配置信息，我们可以在这个文件中添加alias来达到为操作制定别名的效果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[alias]</div><div class="line">        ck = checkout</div><div class="line">        st = status</div><div class="line">        ba = branch -av</div><div class="line">        ct = commit</div></pre></td></tr></table></figure></p>
+<p>在文件末尾添加以上操作后，git st就可以查看git当前的状态，git ba就能够看到所有分支的详细信息，快去开始你高效工作的第一步吧：）</p>
+<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><p>伟大的开源，伟大的分享！<br>有大神写了一个git练习教程，图文并茂，对理解git非常有帮助。<a href="http://pcottle.github.io/learnGitBranching/" target="_blank" rel="external">传送门</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/程序猿的基本素养/" rel="tag"># 程序猿的基本素养</a>
+          
+            <a href="/tags/七天入门到精通/" rel="tag"># 七天入门到精通</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/11/24/core-data-with-magical-record/" rel="next" title="CoreData与MagicalRecord的故事">
+                <i class="fa fa-chevron-left"></i> CoreData与MagicalRecord的故事
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/01/09/getting-start-core-data/" rel="prev" title="CoreData 入门">
+                CoreData 入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="mluffy" />
+          <p class="site-author-name" itemprop="name">mluffy</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/luhui" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#源起"><span class="nav-number">2.</span> <span class="nav-text">源起</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础"><span class="nav-number">3.</span> <span class="nav-text">基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#git特性"><span class="nav-number">3.1.</span> <span class="nav-text">git特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直接快照记录，而非差异比较"><span class="nav-number">3.1.1.</span> <span class="nav-text">直接快照记录，而非差异比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时刻保持数据完整性"><span class="nav-number">3.1.2.</span> <span class="nav-text">时刻保持数据完整性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多数操作仅是添加数据"><span class="nav-number">3.1.3.</span> <span class="nav-text">多数操作仅是添加数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四种文件状态"><span class="nav-number">3.2.</span> <span class="nav-text">四种文件状态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#committed"><span class="nav-number">3.2.1.</span> <span class="nav-text">committed</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#staged"><span class="nav-number">3.2.2.</span> <span class="nav-text">staged</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#modified"><span class="nav-number">3.2.3.</span> <span class="nav-text">modified</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#untracked"><span class="nav-number">3.2.4.</span> <span class="nav-text">untracked</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分支"><span class="nav-number">4.</span> <span class="nav-text">分支</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分支的操作"><span class="nav-number">4.1.</span> <span class="nav-text">分支的操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结构"><span class="nav-number">5.</span> <span class="nav-text">结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小技巧"><span class="nav-number">6.</span> <span class="nav-text">小技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GUI"><span class="nav-number">6.1.</span> <span class="nav-text">GUI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#diff-tool"><span class="nav-number">6.2.</span> <span class="nav-text">diff tool</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令别名"><span class="nav-number">6.3.</span> <span class="nav-text">命令别名</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习"><span class="nav-number">7.</span> <span class="nav-text">练习</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mluffy</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前言详细的说明可以参考Background Execution 在APP不支持background mode的前提下，点击home之后，会进入background state，接着经过短短几秒后，会进入suspend state。 iOS提供了一些后台运行的权限申请，用以保证特定场景下的后台执行需求。截止iOS9，所支持的权限如下表： 一般情况下，如果仅需要在进入后台的时候额外做一些操作，则不需要">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 的后台运行机制">
+<meta property="og:url" content="http://yoursite.com/2016/10/22/ios-background-mode/index.html">
+<meta property="og:site_name" content="mluffy&#39;s blog">
+<meta property="og:description" content="前言详细的说明可以参考Background Execution 在APP不支持background mode的前提下，点击home之后，会进入background state，接着经过短短几秒后，会进入suspend state。 iOS提供了一些后台运行的权限申请，用以保证特定场景下的后台执行需求。截止iOS9，所支持的权限如下表： 一般情况下，如果仅需要在进入后台的时候额外做一些操作，则不需要">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2016/10/22/ios-background-mode/1439214114982.png">
+<meta property="og:image" content="http://yoursite.com/2016/10/22/ios-background-mode/1439212569060.png">
+<meta property="og:image" content="http://yoursite.com/2016/10/22/ios-background-mode/1439454966117.png">
+<meta property="og:image" content="http://yoursite.com/2016/10/22/ios-background-mode/1439455184137.png">
+<meta property="og:image" content="http://yoursite.com/2016/10/22/ios-background-mode/1439455776679.png">
+<meta property="og:image" content="http://yoursite.com/2016/10/22/ios-background-mode/1477103337238.png">
+<meta property="og:updated_time" content="2017-09-14T12:41:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 的后台运行机制">
+<meta name="twitter:description" content="前言详细的说明可以参考Background Execution 在APP不支持background mode的前提下，点击home之后，会进入background state，接着经过短短几秒后，会进入suspend state。 iOS提供了一些后台运行的权限申请，用以保证特定场景下的后台执行需求。截止iOS9，所支持的权限如下表： 一般情况下，如果仅需要在进入后台的时候额外做一些操作，则不需要">
+<meta name="twitter:image" content="http://yoursite.com/2016/10/22/ios-background-mode/1439214114982.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/10/22/ios-background-mode/"/>
+
+
+
+
+
+  <title>iOS 的后台运行机制 | mluffy's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mluffy's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">诶？不错哟</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/22/ios-background-mode/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mluffy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mluffy's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS 的后台运行机制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-22T20:01:58+08:00">
+                2016-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>详细的说明可以参考<a href="https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/BackgroundExecution/BackgroundExecution.html#//apple_ref/doc/uid/TP40007072-CH4-SW1" target="_blank" rel="external">Background Execution</a></p>
+<p>在APP不支持background mode的前提下，点击home之后，会进入background state，接着经过短短几秒后，会进入suspend state。</p>
+<p>iOS提供了一些后台运行的权限申请，用以保证特定场景下的后台执行需求。截止iOS9，所支持的权限如下表：<br><img src="./1439214114982.png" alt="Alt text"></p>
+<p>一般情况下，如果仅需要在进入后台的时候额外做一些操作，则不需要申请这些后台权限，仅需要执行一个long-runing task即可。<br>示例代码：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">- (<span class="keyword">void</span>)applicationDidEnterBackground:(<span class="built_in">UIApplication</span> *)application</div><div class="line">&#123;</div><div class="line">    bgTask = [application beginBackgroundTaskWithName:<span class="string">@"MyTask"</span> expirationHandler:^&#123;</div><div class="line">        <span class="comment">// Clean up any unfinished task business by marking where you</span></div><div class="line">        <span class="comment">// stopped or ending the task outright.</span></div><div class="line">        [application endBackgroundTask:bgTask];</div><div class="line">        bgTask = <span class="built_in">UIBackgroundTaskInvalid</span>;</div><div class="line">    &#125;];</div><div class="line"></div><div class="line">    <span class="comment">// Start the long-running task and return immediately.</span></div><div class="line">    <span class="built_in">dispatch_async</span>(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>), ^&#123;</div><div class="line"></div><div class="line">        <span class="comment">// Do the work associated with the task, preferably in chunks.</span></div><div class="line"></div><div class="line">        [application endBackgroundTask:bgTask];</div><div class="line">        bgTask = <span class="built_in">UIBackgroundTaskInvalid</span>;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h1><p>首先需要明确APP的一个生命周期<br><img src="./1439212569060.png" alt="Alt text"></p>
+<h2 id="Activate"><a href="#Activate" class="headerlink" title="Activate"></a>Activate</h2><p>APP处于前台，接受UI的点击事件</p>
+<h2 id="InActivate"><a href="#InActivate" class="headerlink" title="InActivate"></a>InActivate</h2><p>APP仍然处于前台，但不接受UI点击事件</p>
+<h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p>APP处于后台，此时APP完全属于不可见的状态，比如点击home键之后，即进入了background state。此时应用仍然在运行，所有代码均可执行。</p>
+<h2 id="suspend"><a href="#suspend" class="headerlink" title="suspend"></a>suspend</h2><p>挂起，此时iOS会存储当前应用的执行状态，接着释放掉对应的资源。</p>
+<h1 id="iOS后台运行机制分析"><a href="#iOS后台运行机制分析" class="headerlink" title="iOS后台运行机制分析"></a>iOS后台运行机制分析</h1><p>介绍完基础知识，开始进入正题。先从实践入手，目前使用了CentralManager mode和Location update mode两个后台使用权限。从这两个后台模式碰到的一些现象，来尝试分析iOS是如何完成后台运行的。</p>
+<h2 id="Location-update"><a href="#Location-update" class="headerlink" title="Location update"></a>Location update</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><p>Step1.首先做好后台的配置，先在Xcode的capabilities中勾选对应的选项<br><img src="./1439454966117.png" alt="Alt text"></p>
+<p>Step2.接着在plist中添加NSLocationAlawaysUsageDescription<br><img src="./1439455184137.png" alt="Alt text"></p>
+<p>完成这两步才算完成了后台运行的基础。<br>Step3.接着还需要在代码中调用<code>requestAlwaysAuthorization</code>，才算完成了对后台更新location的申请。</p>
+<p>为什么需要做这些配置呢？<br>iOS默认是不支持后台执行的，为的是能够将更多的资源集中在当前运行的应用上。因此需要有step1.运行权限的配置。<br>在iOS7之后，对于location的使用，提供了两种模式<code>Always</code>以及<code>WhenInUse</code>，从命名上也很容易明白，<code>Always</code>即任何情况下都可以使用，而<code>WhenInUse</code>则是在应用开启的时候允许使用。<br>下面一张图会看着比较清晰<br><img src="./1439455776679.png" alt="Alt text"><br>两者的区别无非是对于Location Monitoring的使用权限。那么这两个东西分别是什么鬼？<br><code>Region monitoring</code>，是对一个进出某一个区域的检测。对应的方法是<code>startMonitoringForRegion:</code>。我们可以使用<code>CLRegion</code>设定一个圆，在位置进出这个圆时，会调用<code>didEnterRegion</code>以及<code>didExitRegion</code>的代理。<br><code>Significant location changes</code>，是苹果为了电量的优化做的定位策略。对应的方法是<code>startMonitoringSignificantLocationChanges</code>。<br>摘抄API的描述文档：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Starts the generation of updates based on significant location changes.</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">If you start <span class="keyword">this</span> service and your app is subsequently terminated, the system automatically relaunches the app into the background <span class="keyword">if</span> a new event arrives.</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">Apps can expect a notification as soon as the device moves <span class="number">500</span> meters or more from its previous notification. It should not expect notifications more frequently than once every five minutes.</div></pre></td></tr></table></figure>
+<p>从以上的描述得到两个重要信息，</p>
+<ol>
+<li>这个方法可以在app terminate的时候重启app使其进入后台模式</li>
+<li>这个方法只有在运动了500米并且已经过了5分钟，才会执行一次定位</li>
+</ol>
+<p>从这个描述里，我们已经嗅到iOS的后台运行机制，它不仅仅是保持应用在后台执行。</p>
+<p>接下来我们做个试验：<br>定义个BMLocationManager</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">BMLocationManager</span> : <span class="title">CLLocationManager</span>&lt;<span class="title">CLLocationManagerDelegate</span>&gt;</span></div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>在初始化的时候直接执行定位：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">BMLocationManager</span></span></div><div class="line"></div><div class="line">- (<span class="keyword">instancetype</span>)init</div><div class="line">&#123;</div><div class="line">    <span class="keyword">self</span> = [<span class="keyword">super</span> init];</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>) &#123;</div><div class="line">        <span class="keyword">if</span> ([<span class="built_in">CLLocationManager</span> authorizationStatus] != kCLAuthorizationStatusAuthorizedAlways &amp;&amp; [<span class="keyword">self</span> respondsToSelector:<span class="keyword">@selector</span>(requestAlwaysAuthorization)]) &#123;</div><div class="line">            [<span class="keyword">self</span> requestAlwaysAuthorization];</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">self</span>.distanceFilter = <span class="number">30</span>;</div><div class="line">        <span class="keyword">self</span>.desiredAccuracy = kCLLocationAccuracyBest;</div><div class="line">        <span class="keyword">self</span>.delegate = <span class="keyword">self</span>;</div><div class="line">        <span class="keyword">self</span>.pausesLocationUpdatesAutomatically = <span class="literal">YES</span>;</div><div class="line"></div><div class="line"><span class="comment">//        [self startMonitoringSignificantLocationChanges];</span></div><div class="line">        [<span class="keyword">self</span> startUpdatingLocation];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在<code>didUpdateLocations</code>的代理里加上locationNotification方便查看log。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)locationManager:(<span class="built_in">CLLocationManager</span> *)manager didUpdateLocations:(<span class="built_in">NSArray</span> *)locations</div><div class="line">&#123;</div><div class="line">    <span class="built_in">UILocalNotification</span> *n = [<span class="built_in">UILocalNotification</span> new];</div><div class="line">    n.alertTitle = <span class="string">@"位置"</span>;</div><div class="line">    n.alertBody = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"位置更新：%@"</span>, [<span class="built_in">NSDateFormatter</span> localizedStringFromDate:[<span class="built_in">NSDate</span> date] dateStyle:<span class="built_in">NSDateFormatterNoStyle</span> timeStyle:<span class="built_in">NSDateFormatterShortStyle</span>]];</div><div class="line">    n.soundName = <span class="built_in">UILocalNotificationDefaultSoundName</span>;</div><div class="line">    [[<span class="built_in">UIApplication</span> sharedApplication] scheduleLocalNotification:n];</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"location update:%@"</span>, locations);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在模拟器app启动之后，点击home键进入后台，在debug-&gt;location下选择freeway-drive。（注意不要使用使用调试模式，在这个模式下app是不会被系统杀死的，和真实环境会有所出入。）<br>我们会发现，会不停的有location通知，然而挂着足够长的时间（可以跑这个<a href="https://github.com/ddaddy/BackgroundKill" target="_blank" rel="external">应用</a>让系统内存压力杀死其他app），发现通知停了，打开app一看，经历了闪屏，说明应用被杀掉了。<br>因此，在这里可以进行一个猜想，<strong>使用background mode并不能保证应用不会被系统杀死。</strong></p>
+<p>那么location update的后台执行到底是怎么实现呢？我们来看看<code>startMonitoringSignificantLocationChanges</code>的方式。<br>既然API文档说在应用被终止时会重启app，并且调用<code>didFinishLaunchWithOptions</code>的代理，那么我们就在appDelegate里加上一个notification来做验证</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//收到位置消息时唤醒app</span></div><div class="line">    <span class="keyword">if</span> (launchOptions[<span class="built_in">UIApplicationLaunchOptionsLocationKey</span>]) &#123;</div><div class="line">        <span class="built_in">UILocalNotification</span> *noti = [<span class="built_in">UILocalNotification</span> new];</div><div class="line">        <span class="keyword">self</span>.strongRef = [BMLocationManager new];</div><div class="line">        noti.alertTitle = <span class="string">@"嘿嘿"</span>;</div><div class="line">        noti.alertBody = <span class="string">@"新的位置来了，app后台启动"</span>;</div><div class="line">        noti.soundName = <span class="built_in">UILocalNotificationDefaultSoundName</span>;</div><div class="line">        [application scheduleLocalNotification:noti];</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>更新app，再次启动，接着直接杀死。发现确实调用了appDelegate。那么这个启动过程和一般的启动过程有什么不同呢？我们利用hook，在viewController里增加log，看看其调用过程。<br>log的配置使用了Aspects这个基于AOP的第三方框架。<br>AOP的方式在这类验证性的工作是非常有帮助的，保持了原有代码的整洁性。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">- (<span class="keyword">void</span>)makeHook</div><div class="line">&#123;</div><div class="line">    <span class="built_in">NSArray</span> *selectors = @[<span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(init)),</div><div class="line">                           <span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(awakeFromNib)),</div><div class="line">                           <span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(viewDidLoad)),</div><div class="line">                           <span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(viewWillAppear:)),</div><div class="line">                           <span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(viewDidAppear:)),</div><div class="line">                           <span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(viewWillDisappear:)),</div><div class="line">                           <span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(viewDidDisappear:))];</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="built_in">NSString</span> *selectorStr <span class="keyword">in</span> selectors) &#123;</div><div class="line">        [<span class="keyword">self</span> hookClass:[<span class="built_in">UIViewController</span> <span class="keyword">class</span>] forSelector:<span class="built_in">NSSelectorFromString</span>(selectorStr)];</div><div class="line">    &#125;</div><div class="line">    selectors = @[<span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(init)),</div><div class="line">                  <span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(centralManager:willRestoreState:))];</div><div class="line">    <span class="keyword">for</span> (<span class="built_in">NSString</span> *selectorStr <span class="keyword">in</span> selectors) &#123;</div><div class="line">        [<span class="keyword">self</span> hookClass:[BMCentralManager <span class="keyword">class</span>] forSelector:<span class="built_in">NSSelectorFromString</span>(selectorStr)];</div><div class="line">    &#125;</div><div class="line">    selectors = @[<span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(init)),</div><div class="line">                  <span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(locationManager:didUpdateLocations:))];</div><div class="line">    <span class="keyword">for</span> (<span class="built_in">NSString</span> *selectorStr <span class="keyword">in</span> selectors) &#123;</div><div class="line">        [<span class="keyword">self</span> hookClass:[BMLocationManager <span class="keyword">class</span>] forSelector:<span class="built_in">NSSelectorFromString</span>(selectorStr)];</div><div class="line">    &#125;</div><div class="line">    [<span class="keyword">self</span> hookClass:[<span class="built_in">UIWindow</span> <span class="keyword">class</span>] forSelector:<span class="keyword">@selector</span>(makeKeyAndVisible)];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)hookClass:(Class)aCass forSelector:(SEL)selecotr</div><div class="line">&#123;</div><div class="line">    [aCass aspect_hookSelector:selecotr withOptions:AspectPositionBefore usingBlock:^&#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"%@ call %@"</span>, [aspectInfo instance], <span class="built_in">NSStringFromSelector</span>(selecotr));</div><div class="line">    &#125;error:<span class="literal">nil</span>];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接下来再次执行相同的步骤，看看log都输出了些什么？<br>发现一个viewController的完整生命周期都输出了。说明在后台启动的时候，并没有走什么特殊通道，而是按照正常的流程一直到等待UI输入的步骤。因此我们的app如果需要实现类似的后台运行模式，那么app delegate的设计就需要考虑到后台运行的情况了。</p>
+<p>接下来再看，应用后台启动之后，我们手动打开app，又发生了什么事？<br>app又调用了闪屏，查看log，发现又重新来了一次启动流程。查看application的地址，发现不是同一个地址，说明手动开启app之后，系统把后台启动的应用给释放掉了。</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>在location mode的后台执行模式下，应用并不会常驻在后台，而是与普通应用相同，随时会被killed。<br>想要达到类似常驻后台的效果，需要使用<code>startMonitoringSignificantLocationChanges</code>方法，在更新location时，系统会重启应用，使其处于后台模式。<br>应用启动时，与正常启动直到等待UI输入的流程无异。</p>
+<h1 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h1><h2 id="蓝牙"><a href="#蓝牙" class="headerlink" title="蓝牙"></a>蓝牙</h2><p>在调试蓝牙后台时，需要验证是否真的唤醒了APP，但是调试模式下没办法进入suspend的状态，而双击home健手动杀掉进程，也同样不会唤醒APP，此时连蓝牙也会立即结束。因此需要进入suspend状态时，可以使用<br><code>kill(getpid(), SIGKILL)</code>方法模拟系统因为内存压力等原因结束进程的方式</p>
+<h2 id="APNS"><a href="#APNS" class="headerlink" title="APNS"></a>APNS</h2><p>APNS需要在content-available为true，并且开启remote-notification的时候才会支持后台模式</p>
+<p>当iOS收到一条push消息时，如果payload里包含content-available = true，那么会发生下面的事情</p>
+<ul>
+<li>如果app处于suspended状态，那么系统会把app置为background状态</li>
+<li>如果app是是通过app switcher的方式被用户杀掉了，则不会启动app</li>
+</ul>
+<h2 id="关于后台启动"><a href="#关于后台启动" class="headerlink" title="关于后台启动"></a>关于后台启动</h2><p>后台启动根据不同的模式也会有不同的区别，一般情况下，只有应用处于suspended状态下的时候，才能够启动为background，对于force quit的应用，是不会生效的。目前来说，唯一例外的只有iOS 8之后的location模式会启动应用<br><img src="./1477103337238.png" alt="Alt text"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/09/getting-start-core-data/" rel="next" title="CoreData 入门">
+                <i class="fa fa-chevron-left"></i> CoreData 入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="mluffy" />
+          <p class="site-author-name" itemprop="name">mluffy</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/luhui" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生命周期"><span class="nav-number">2.</span> <span class="nav-text">生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Activate"><span class="nav-number">2.1.</span> <span class="nav-text">Activate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InActivate"><span class="nav-number">2.2.</span> <span class="nav-text">InActivate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Background"><span class="nav-number">2.3.</span> <span class="nav-text">Background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#suspend"><span class="nav-number">2.4.</span> <span class="nav-text">suspend</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#iOS后台运行机制分析"><span class="nav-number">3.</span> <span class="nav-text">iOS后台运行机制分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Location-update"><span class="nav-number">3.1.</span> <span class="nav-text">Location update</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备工作"><span class="nav-number">3.1.1.</span> <span class="nav-text">准备工作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tips"><span class="nav-number">5.</span> <span class="nav-text">tips</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#蓝牙"><span class="nav-number">5.1.</span> <span class="nav-text">蓝牙</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#APNS"><span class="nav-number">5.2.</span> <span class="nav-text">APNS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于后台启动"><span class="nav-number">5.3.</span> <span class="nav-text">关于后台启动</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mluffy</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
