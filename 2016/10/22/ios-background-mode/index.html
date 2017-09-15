@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next muse use-motion" lang="zh-CN">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -98,21 +98,21 @@
 <meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS 的后台运行机制">
-<meta property="og:url" content="http://yoursite.com/2016/10/22/ios-background-mode/index.html">
-<meta property="og:site_name" content="mluffy&#39;s blog">
+<meta property="og:url" content="http://luhui.github.io/2016/10/22/ios-background-mode/index.html">
+<meta property="og:site_name" content="懒人小屋">
 <meta property="og:description" content="前言详细的说明可以参考Background Execution 在APP不支持background mode的前提下，点击home之后，会进入background state，接着经过短短几秒后，会进入suspend state。 iOS提供了一些后台运行的权限申请，用以保证特定场景下的后台执行需求。截止iOS9，所支持的权限如下表： 一般情况下，如果仅需要在进入后台的时候额外做一些操作，则不需要">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2016/10/22/ios-background-mode/1439214114982.png">
-<meta property="og:image" content="http://yoursite.com/2016/10/22/ios-background-mode/1439212569060.png">
-<meta property="og:image" content="http://yoursite.com/2016/10/22/ios-background-mode/1439454966117.png">
-<meta property="og:image" content="http://yoursite.com/2016/10/22/ios-background-mode/1439455184137.png">
-<meta property="og:image" content="http://yoursite.com/2016/10/22/ios-background-mode/1439455776679.png">
-<meta property="og:image" content="http://yoursite.com/2016/10/22/ios-background-mode/1477103337238.png">
-<meta property="og:updated_time" content="2017-09-14T12:41:30.000Z">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://luhui.github.io/images/ios-background-mode/1439214114982.png">
+<meta property="og:image" content="http://luhui.github.io/images/ios-background-mode/1439212569060.png">
+<meta property="og:image" content="http://luhui.github.io/images/ios-background-mode/1439454966117.png">
+<meta property="og:image" content="http://luhui.github.io/images/ios-background-mode/1439455184137.png">
+<meta property="og:image" content="http://luhui.github.io/images/ios-background-mode/1439455776679.png">
+<meta property="og:image" content="http://luhui.github.io/images/ios-background-mode/1477103337238.png">
+<meta property="og:updated_time" content="2017-09-15T02:07:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS 的后台运行机制">
 <meta name="twitter:description" content="前言详细的说明可以参考Background Execution 在APP不支持background mode的前提下，点击home之后，会进入background state，接着经过短短几秒后，会进入suspend state。 iOS提供了一些后台运行的权限申请，用以保证特定场景下的后台执行需求。截止iOS9，所支持的权限如下表： 一般情况下，如果仅需要在进入后台的时候额外做一些操作，则不需要">
-<meta name="twitter:image" content="http://yoursite.com/2016/10/22/ios-background-mode/1439214114982.png">
+<meta name="twitter:image" content="http://luhui.github.io/images/ios-background-mode/1439214114982.png">
 
 
 
@@ -127,7 +127,7 @@
     motion: true,
     duoshuo: {
       userId: '0',
-      author: '博主'
+      author: 'Author'
     },
     algolia: {
       applicationID: '',
@@ -141,13 +141,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/10/22/ios-background-mode/"/>
+  <link rel="canonical" href="http://luhui.github.io/2016/10/22/ios-background-mode/"/>
 
 
 
 
 
-  <title>iOS 的后台运行机制 | mluffy's blog</title>
+  <title>iOS 的后台运行机制 | 懒人小屋</title>
   
 
 
@@ -165,7 +165,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -183,12 +183,12 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">mluffy's blog</span>
+        <span class="site-title">懒人小屋</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle">诶？不错哟</p>
+        <p class="site-subtitle">生命不息，折腾不止......可是我好懒</p>
       
   </div>
 
@@ -213,7 +213,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            首页
+            Startseite
           </a>
         </li>
       
@@ -223,7 +223,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            归档
+            Archiv
           </a>
         </li>
       
@@ -233,7 +233,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
-            标签
+            Tags
           </a>
         </li>
       
@@ -270,7 +270,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/22/ios-background-mode/">
+    <link itemprop="mainEntityOfPage" href="http://luhui.github.io/2016/10/22/ios-background-mode/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -279,7 +279,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="mluffy's blog">
+      <meta itemprop="name" content="懒人小屋">
     </span>
 
     
@@ -297,9 +297,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-22T20:01:58+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-22T20:01:58+08:00">
                 2016-10-22
               </time>
             
@@ -339,20 +339,20 @@
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>详细的说明可以参考<a href="https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/BackgroundExecution/BackgroundExecution.html#//apple_ref/doc/uid/TP40007072-CH4-SW1" target="_blank" rel="external">Background Execution</a></p>
 <p>在APP不支持background mode的前提下，点击home之后，会进入background state，接着经过短短几秒后，会进入suspend state。</p>
-<p>iOS提供了一些后台运行的权限申请，用以保证特定场景下的后台执行需求。截止iOS9，所支持的权限如下表：<br><img src="./1439214114982.png" alt="Alt text"></p>
+<p>iOS提供了一些后台运行的权限申请，用以保证特定场景下的后台执行需求。截止iOS9，所支持的权限如下表：<br><img src="/images/ios-background-mode/1439214114982.png" alt="Alt text"></p>
 <p>一般情况下，如果仅需要在进入后台的时候额外做一些操作，则不需要申请这些后台权限，仅需要执行一个long-runing task即可。<br>示例代码：</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">- (<span class="keyword">void</span>)applicationDidEnterBackground:(<span class="built_in">UIApplication</span> *)application</div><div class="line">&#123;</div><div class="line">    bgTask = [application beginBackgroundTaskWithName:<span class="string">@"MyTask"</span> expirationHandler:^&#123;</div><div class="line">        <span class="comment">// Clean up any unfinished task business by marking where you</span></div><div class="line">        <span class="comment">// stopped or ending the task outright.</span></div><div class="line">        [application endBackgroundTask:bgTask];</div><div class="line">        bgTask = <span class="built_in">UIBackgroundTaskInvalid</span>;</div><div class="line">    &#125;];</div><div class="line"></div><div class="line">    <span class="comment">// Start the long-running task and return immediately.</span></div><div class="line">    <span class="built_in">dispatch_async</span>(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>), ^&#123;</div><div class="line"></div><div class="line">        <span class="comment">// Do the work associated with the task, preferably in chunks.</span></div><div class="line"></div><div class="line">        [application endBackgroundTask:bgTask];</div><div class="line">        bgTask = <span class="built_in">UIBackgroundTaskInvalid</span>;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h1><p>首先需要明确APP的一个生命周期<br><img src="./1439212569060.png" alt="Alt text"></p>
+<h1 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h1><p>首先需要明确APP的一个生命周期<br><img src="/images/ios-background-mode/1439212569060.png" alt="Alt text"></p>
 <h2 id="Activate"><a href="#Activate" class="headerlink" title="Activate"></a>Activate</h2><p>APP处于前台，接受UI的点击事件</p>
 <h2 id="InActivate"><a href="#InActivate" class="headerlink" title="InActivate"></a>InActivate</h2><p>APP仍然处于前台，但不接受UI点击事件</p>
 <h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p>APP处于后台，此时APP完全属于不可见的状态，比如点击home键之后，即进入了background state。此时应用仍然在运行，所有代码均可执行。</p>
 <h2 id="suspend"><a href="#suspend" class="headerlink" title="suspend"></a>suspend</h2><p>挂起，此时iOS会存储当前应用的执行状态，接着释放掉对应的资源。</p>
 <h1 id="iOS后台运行机制分析"><a href="#iOS后台运行机制分析" class="headerlink" title="iOS后台运行机制分析"></a>iOS后台运行机制分析</h1><p>介绍完基础知识，开始进入正题。先从实践入手，目前使用了CentralManager mode和Location update mode两个后台使用权限。从这两个后台模式碰到的一些现象，来尝试分析iOS是如何完成后台运行的。</p>
-<h2 id="Location-update"><a href="#Location-update" class="headerlink" title="Location update"></a>Location update</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><p>Step1.首先做好后台的配置，先在Xcode的capabilities中勾选对应的选项<br><img src="./1439454966117.png" alt="Alt text"></p>
-<p>Step2.接着在plist中添加NSLocationAlawaysUsageDescription<br><img src="./1439455184137.png" alt="Alt text"></p>
+<h2 id="Location-update"><a href="#Location-update" class="headerlink" title="Location update"></a>Location update</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><p>Step1.首先做好后台的配置，先在Xcode的capabilities中勾选对应的选项<br><img src="/images/ios-background-mode/1439454966117.png" alt="Alt text"></p>
+<p>Step2.接着在plist中添加NSLocationAlawaysUsageDescription<br><img src="/images/ios-background-mode/1439455184137.png" alt="Alt text"></p>
 <p>完成这两步才算完成了后台运行的基础。<br>Step3.接着还需要在代码中调用<code>requestAlwaysAuthorization</code>，才算完成了对后台更新location的申请。</p>
-<p>为什么需要做这些配置呢？<br>iOS默认是不支持后台执行的，为的是能够将更多的资源集中在当前运行的应用上。因此需要有step1.运行权限的配置。<br>在iOS7之后，对于location的使用，提供了两种模式<code>Always</code>以及<code>WhenInUse</code>，从命名上也很容易明白，<code>Always</code>即任何情况下都可以使用，而<code>WhenInUse</code>则是在应用开启的时候允许使用。<br>下面一张图会看着比较清晰<br><img src="./1439455776679.png" alt="Alt text"><br>两者的区别无非是对于Location Monitoring的使用权限。那么这两个东西分别是什么鬼？<br><code>Region monitoring</code>，是对一个进出某一个区域的检测。对应的方法是<code>startMonitoringForRegion:</code>。我们可以使用<code>CLRegion</code>设定一个圆，在位置进出这个圆时，会调用<code>didEnterRegion</code>以及<code>didExitRegion</code>的代理。<br><code>Significant location changes</code>，是苹果为了电量的优化做的定位策略。对应的方法是<code>startMonitoringSignificantLocationChanges</code>。<br>摘抄API的描述文档：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Starts the generation of updates based on significant location changes.</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">If you start <span class="keyword">this</span> service and your app is subsequently terminated, the system automatically relaunches the app into the background <span class="keyword">if</span> a new event arrives.</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">Apps can expect a notification as soon as the device moves <span class="number">500</span> meters or more from its previous notification. It should not expect notifications more frequently than once every five minutes.</div></pre></td></tr></table></figure>
+<p>为什么需要做这些配置呢？<br>iOS默认是不支持后台执行的，为的是能够将更多的资源集中在当前运行的应用上。因此需要有step1.运行权限的配置。<br>在iOS7之后，对于location的使用，提供了两种模式<code>Always</code>以及<code>WhenInUse</code>，从命名上也很容易明白，<code>Always</code>即任何情况下都可以使用，而<code>WhenInUse</code>则是在应用开启的时候允许使用。<br>下面一张图会看着比较清晰<br><img src="/images/ios-background-mode/1439455776679.png" alt="Alt text"><br>两者的区别无非是对于Location Monitoring的使用权限。那么这两个东西分别是什么鬼？<br><code>Region monitoring</code>，是对一个进出某一个区域的检测。对应的方法是<code>startMonitoringForRegion:</code>。我们可以使用<code>CLRegion</code>设定一个圆，在位置进出这个圆时，会调用<code>didEnterRegion</code>以及<code>didExitRegion</code>的代理。<br><code>Significant location changes</code>，是苹果为了电量的优化做的定位策略。对应的方法是<code>startMonitoringSignificantLocationChanges</code>。<br>摘抄API的描述文档：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Starts the generation of updates based on significant location changes.</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">If you start this service and your app is subsequently terminated, the system automatically relaunches the app into the background if a new event arrives.</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">Apps can expect a notification as soon as the device moves 500 meters or more from its previous notification. It should not expect notifications more frequently than once every five minutes.</div></pre></td></tr></table></figure>
 <p>从以上的描述得到两个重要信息，</p>
 <ol>
 <li>这个方法可以在app terminate的时候重启app使其进入后台模式</li>
@@ -380,7 +380,7 @@
 <li>如果app处于suspended状态，那么系统会把app置为background状态</li>
 <li>如果app是是通过app switcher的方式被用户杀掉了，则不会启动app</li>
 </ul>
-<h2 id="关于后台启动"><a href="#关于后台启动" class="headerlink" title="关于后台启动"></a>关于后台启动</h2><p>后台启动根据不同的模式也会有不同的区别，一般情况下，只有应用处于suspended状态下的时候，才能够启动为background，对于force quit的应用，是不会生效的。目前来说，唯一例外的只有iOS 8之后的location模式会启动应用<br><img src="./1477103337238.png" alt="Alt text"></p>
+<h2 id="关于后台启动"><a href="#关于后台启动" class="headerlink" title="关于后台启动"></a>关于后台启动</h2><p>后台启动根据不同的模式也会有不同的区别，一般情况下，只有应用处于suspended状态下的时候，才能够启动为background，对于force quit的应用，是不会生效的。目前来说，唯一例外的只有iOS 8之后的location模式会启动应用<br><img src="/images/ios-background-mode/1477103337238.png" alt="Alt text"></p>
 
       
     </div>
@@ -411,8 +411,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/01/09/getting-start-core-data/" rel="next" title="CoreData 入门">
-                <i class="fa fa-chevron-left"></i> CoreData 入门
+              <a href="/2014/12/02/git-getting-start/" rel="next" title="git 入门">
+                <i class="fa fa-chevron-left"></i> git 入门
               </a>
             
           </div>
@@ -473,10 +473,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
+            Inhaltsverzeichnis
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
+            Übersicht
           </li>
         </ul>
       
@@ -496,8 +496,8 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">4</span>
-                <span class="site-state-item-name">日志</span>
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">Artikel</span>
               </a>
             </div>
           
@@ -509,8 +509,8 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">4</span>
-                <span class="site-state-item-name">标签</span>
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">Tags</span>
               </a>
             </div>
           
@@ -589,11 +589,11 @@
 
 
 <div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
-  主题 -
+  Theme -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT.Muse
   </a>

@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next muse use-motion" lang="zh-CN">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -95,12 +95,12 @@
 
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="mluffy&#39;s blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="mluffy&#39;s blog">
-<meta property="og:locale" content="zh-Hans">
+<meta property="og:title" content="懒人小屋">
+<meta property="og:url" content="http://luhui.github.io/index.html">
+<meta property="og:site_name" content="懒人小屋">
+<meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mluffy&#39;s blog">
+<meta name="twitter:title" content="懒人小屋">
 
 
 
@@ -115,7 +115,7 @@
     motion: true,
     duoshuo: {
       userId: '0',
-      author: '博主'
+      author: 'Author'
     },
     algolia: {
       applicationID: '',
@@ -129,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://luhui.github.io/"/>
 
 
 
 
 
-  <title>mluffy's blog</title>
+  <title>懒人小屋</title>
   
 
 
@@ -153,7 +153,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -173,12 +173,12 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">mluffy's blog</span>
+        <span class="site-title">懒人小屋</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle">诶？不错哟</p>
+        <p class="site-subtitle">生命不息，折腾不止......可是我好懒</p>
       
   </div>
 
@@ -203,7 +203,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            首页
+            Startseite
           </a>
         </li>
       
@@ -213,7 +213,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            归档
+            Archiv
           </a>
         </li>
       
@@ -223,7 +223,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
-            标签
+            Tags
           </a>
         </li>
       
@@ -260,7 +260,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/22/ios-background-mode/">
+    <link itemprop="mainEntityOfPage" href="http://luhui.github.io/2016/10/22/ios-background-mode/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -269,7 +269,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="mluffy's blog">
+      <meta itemprop="name" content="懒人小屋">
     </span>
 
     
@@ -289,9 +289,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-22T20:01:58+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-22T20:01:58+08:00">
                 2016-10-22
               </time>
             
@@ -333,20 +333,20 @@
           
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>详细的说明可以参考<a href="https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/BackgroundExecution/BackgroundExecution.html#//apple_ref/doc/uid/TP40007072-CH4-SW1" target="_blank" rel="external">Background Execution</a></p>
 <p>在APP不支持background mode的前提下，点击home之后，会进入background state，接着经过短短几秒后，会进入suspend state。</p>
-<p>iOS提供了一些后台运行的权限申请，用以保证特定场景下的后台执行需求。截止iOS9，所支持的权限如下表：<br><img src="./1439214114982.png" alt="Alt text"></p>
+<p>iOS提供了一些后台运行的权限申请，用以保证特定场景下的后台执行需求。截止iOS9，所支持的权限如下表：<br><img src="/images/ios-background-mode/1439214114982.png" alt="Alt text"></p>
 <p>一般情况下，如果仅需要在进入后台的时候额外做一些操作，则不需要申请这些后台权限，仅需要执行一个long-runing task即可。<br>示例代码：</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">- (<span class="keyword">void</span>)applicationDidEnterBackground:(<span class="built_in">UIApplication</span> *)application</div><div class="line">&#123;</div><div class="line">    bgTask = [application beginBackgroundTaskWithName:<span class="string">@"MyTask"</span> expirationHandler:^&#123;</div><div class="line">        <span class="comment">// Clean up any unfinished task business by marking where you</span></div><div class="line">        <span class="comment">// stopped or ending the task outright.</span></div><div class="line">        [application endBackgroundTask:bgTask];</div><div class="line">        bgTask = <span class="built_in">UIBackgroundTaskInvalid</span>;</div><div class="line">    &#125;];</div><div class="line"></div><div class="line">    <span class="comment">// Start the long-running task and return immediately.</span></div><div class="line">    <span class="built_in">dispatch_async</span>(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>), ^&#123;</div><div class="line"></div><div class="line">        <span class="comment">// Do the work associated with the task, preferably in chunks.</span></div><div class="line"></div><div class="line">        [application endBackgroundTask:bgTask];</div><div class="line">        bgTask = <span class="built_in">UIBackgroundTaskInvalid</span>;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h1><p>首先需要明确APP的一个生命周期<br><img src="./1439212569060.png" alt="Alt text"></p>
+<h1 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h1><p>首先需要明确APP的一个生命周期<br><img src="/images/ios-background-mode/1439212569060.png" alt="Alt text"></p>
 <h2 id="Activate"><a href="#Activate" class="headerlink" title="Activate"></a>Activate</h2><p>APP处于前台，接受UI的点击事件</p>
 <h2 id="InActivate"><a href="#InActivate" class="headerlink" title="InActivate"></a>InActivate</h2><p>APP仍然处于前台，但不接受UI点击事件</p>
 <h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p>APP处于后台，此时APP完全属于不可见的状态，比如点击home键之后，即进入了background state。此时应用仍然在运行，所有代码均可执行。</p>
 <h2 id="suspend"><a href="#suspend" class="headerlink" title="suspend"></a>suspend</h2><p>挂起，此时iOS会存储当前应用的执行状态，接着释放掉对应的资源。</p>
 <h1 id="iOS后台运行机制分析"><a href="#iOS后台运行机制分析" class="headerlink" title="iOS后台运行机制分析"></a>iOS后台运行机制分析</h1><p>介绍完基础知识，开始进入正题。先从实践入手，目前使用了CentralManager mode和Location update mode两个后台使用权限。从这两个后台模式碰到的一些现象，来尝试分析iOS是如何完成后台运行的。</p>
-<h2 id="Location-update"><a href="#Location-update" class="headerlink" title="Location update"></a>Location update</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><p>Step1.首先做好后台的配置，先在Xcode的capabilities中勾选对应的选项<br><img src="./1439454966117.png" alt="Alt text"></p>
-<p>Step2.接着在plist中添加NSLocationAlawaysUsageDescription<br><img src="./1439455184137.png" alt="Alt text"></p>
+<h2 id="Location-update"><a href="#Location-update" class="headerlink" title="Location update"></a>Location update</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><p>Step1.首先做好后台的配置，先在Xcode的capabilities中勾选对应的选项<br><img src="/images/ios-background-mode/1439454966117.png" alt="Alt text"></p>
+<p>Step2.接着在plist中添加NSLocationAlawaysUsageDescription<br><img src="/images/ios-background-mode/1439455184137.png" alt="Alt text"></p>
 <p>完成这两步才算完成了后台运行的基础。<br>Step3.接着还需要在代码中调用<code>requestAlwaysAuthorization</code>，才算完成了对后台更新location的申请。</p>
-<p>为什么需要做这些配置呢？<br>iOS默认是不支持后台执行的，为的是能够将更多的资源集中在当前运行的应用上。因此需要有step1.运行权限的配置。<br>在iOS7之后，对于location的使用，提供了两种模式<code>Always</code>以及<code>WhenInUse</code>，从命名上也很容易明白，<code>Always</code>即任何情况下都可以使用，而<code>WhenInUse</code>则是在应用开启的时候允许使用。<br>下面一张图会看着比较清晰<br><img src="./1439455776679.png" alt="Alt text"><br>两者的区别无非是对于Location Monitoring的使用权限。那么这两个东西分别是什么鬼？<br><code>Region monitoring</code>，是对一个进出某一个区域的检测。对应的方法是<code>startMonitoringForRegion:</code>。我们可以使用<code>CLRegion</code>设定一个圆，在位置进出这个圆时，会调用<code>didEnterRegion</code>以及<code>didExitRegion</code>的代理。<br><code>Significant location changes</code>，是苹果为了电量的优化做的定位策略。对应的方法是<code>startMonitoringSignificantLocationChanges</code>。<br>摘抄API的描述文档：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Starts the generation of updates based on significant location changes.</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">If you start <span class="keyword">this</span> service and your app is subsequently terminated, the system automatically relaunches the app into the background <span class="keyword">if</span> a new event arrives.</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">Apps can expect a notification as soon as the device moves <span class="number">500</span> meters or more from its previous notification. It should not expect notifications more frequently than once every five minutes.</div></pre></td></tr></table></figure>
+<p>为什么需要做这些配置呢？<br>iOS默认是不支持后台执行的，为的是能够将更多的资源集中在当前运行的应用上。因此需要有step1.运行权限的配置。<br>在iOS7之后，对于location的使用，提供了两种模式<code>Always</code>以及<code>WhenInUse</code>，从命名上也很容易明白，<code>Always</code>即任何情况下都可以使用，而<code>WhenInUse</code>则是在应用开启的时候允许使用。<br>下面一张图会看着比较清晰<br><img src="/images/ios-background-mode/1439455776679.png" alt="Alt text"><br>两者的区别无非是对于Location Monitoring的使用权限。那么这两个东西分别是什么鬼？<br><code>Region monitoring</code>，是对一个进出某一个区域的检测。对应的方法是<code>startMonitoringForRegion:</code>。我们可以使用<code>CLRegion</code>设定一个圆，在位置进出这个圆时，会调用<code>didEnterRegion</code>以及<code>didExitRegion</code>的代理。<br><code>Significant location changes</code>，是苹果为了电量的优化做的定位策略。对应的方法是<code>startMonitoringSignificantLocationChanges</code>。<br>摘抄API的描述文档：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Starts the generation of updates based on significant location changes.</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">If you start this service and your app is subsequently terminated, the system automatically relaunches the app into the background if a new event arrives.</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">Apps can expect a notification as soon as the device moves 500 meters or more from its previous notification. It should not expect notifications more frequently than once every five minutes.</div></pre></td></tr></table></figure>
 <p>从以上的描述得到两个重要信息，</p>
 <ol>
 <li>这个方法可以在app terminate的时候重启app使其进入后台模式</li>
@@ -374,7 +374,7 @@
 <li>如果app处于suspended状态，那么系统会把app置为background状态</li>
 <li>如果app是是通过app switcher的方式被用户杀掉了，则不会启动app</li>
 </ul>
-<h2 id="关于后台启动"><a href="#关于后台启动" class="headerlink" title="关于后台启动"></a>关于后台启动</h2><p>后台启动根据不同的模式也会有不同的区别，一般情况下，只有应用处于suspended状态下的时候，才能够启动为background，对于force quit的应用，是不会生效的。目前来说，唯一例外的只有iOS 8之后的location模式会启动应用<br><img src="./1477103337238.png" alt="Alt text"></p>
+<h2 id="关于后台启动"><a href="#关于后台启动" class="headerlink" title="关于后台启动"></a>关于后台启动</h2><p>后台启动根据不同的模式也会有不同的区别，一般情况下，只有应用处于suspended状态下的时候，才能够启动为background，对于force quit的应用，是不会生效的。目前来说，唯一例外的只有iOS 8之后的location模式会启动应用<br><img src="/images/ios-background-mode/1477103337238.png" alt="Alt text"></p>
 
           
         
@@ -423,7 +423,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/01/09/getting-start-core-data/">
+    <link itemprop="mainEntityOfPage" href="http://luhui.github.io/2014/12/02/git-getting-start/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -432,181 +432,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="mluffy's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/01/09/getting-start-core-data/" itemprop="url">CoreData 入门</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-01-09T20:26:18+08:00">
-                2015-01-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本篇文章对平时项目开发中容易理解错误，以及碰到的坑进行了归纳总结，理解完本篇文章的内容算不上精通，但是已经算是正确入门了吧。</p>
-<h1 id="CoreData的特性"><a href="#CoreData的特性" class="headerlink" title="CoreData的特性"></a>CoreData的特性</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>官网里对core data的表述是这样的：</p>
-<blockquote>
-<p>The Core Data framework provides generalized and automated solutions<br>to common tasks associated with object life-cycle and object graph<br>management, including persistence.</p>
-</blockquote>
-<p>所以呢，core data，是一个关于数据的解决方案，他帮助我们定义并管理一个对象的生命周期和数据之间的关系。数据关系很好理解，他定义的关系和SQL相似，略有区别的地方在于CoreData中的数据关系都是双向的，具体在下边的开始使用章节会提到。</p>
-<h2 id="CoreData组件"><a href="#CoreData组件" class="headerlink" title="CoreData组件"></a>CoreData组件</h2><p>CoreData有三大组件，理解三个组件的关系对了解CoreData的全貌有非常大的帮助。<br><img src="./1416815008789.png" alt="Alt text"></p>
-<h3 id="NSPersistenStoreCoordinator"><a href="#NSPersistenStoreCoordinator" class="headerlink" title="NSPersistenStoreCoordinator"></a>NSPersistenStoreCoordinator</h3><p>官网描述是这么说的：</p>
-<blockquote>
-<p>Instances of NSPersistentStoreCoordinator associate persistent stores<br>(by type) with a model (or more accurately, a configuration of a<br>model) and serve to mediate between the persistent store or stores and<br>the managed object context or contexts. Instances of<br>NSManagedObjectContext use a coordinator to save object graphs to<br>persistent storage and to retrieve model information. A context<br>without a coordinator is not fully functional as it cannot access a<br>model except through a coordinator. The coordinator is designed to<br>present a façade to the managed object contexts such that a group of<br>persistent stores appears as an aggregate store. A managed object<br>context can then create an object graph based on the union of all the<br>data stores the coordinator covers.</p>
-</blockquote>
-<p><code>NSPersistentStoreCoordinator</code>顾名思义，是一个持久化层（如SQL数据库）和内存（<code>NSManagedObjectContext</code>）之间的一个数据解析层。他的职责就是根据<code>NSManagedObjectModel</code>里的配置信息，将数据转化成对应层能够解析的样子。<br>从他的使用里，也证实了这一点。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSPersistentStoreCoordinator</span> *persistentStoreCoordinator = [[<span class="built_in">NSPersistentStoreCoordinator</span> alloc] initWithManagedObjectModel:[<span class="keyword">self</span> managedObjectModel]];<span class="comment">//根据NSManagedObjectModel初始化一个解释器</span></div><div class="line">[persistentStoreCoordinator addPersistentStoreWithType:<span class="built_in">NSSQLiteStoreType</span> configuration:<span class="literal">nil</span> URL:storeURL options:<span class="literal">nil</span> error:&amp;error]<span class="comment">//为解释器设置一个持久化存储类型，这里把持久化存储设置为了SQLite类型。</span></div></pre></td></tr></table></figure>
-<p>从这个接口也能够发现，CoreData是可以支持SQL以外的存储方式的！<br>注意<code>addPersistentStoreWithType:</code>的命名，参照章节开始的图，我们发现<code>NSPersistentStoreCoordinator</code>是可以支持多一个持久化类型的，当然多个持久化类型的方式在iOS的开发中并不多见。<br>目前CoreData所支持的类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">COREDATA_EXTERN NSString * const NSSQLiteStoreType NS_AVAILABLE(10_4, 3_0);</div><div class="line">COREDATA_EXTERN NSString * const NSXMLStoreType NS_AVAILABLE(10_4, NA);</div><div class="line">COREDATA_EXTERN NSString * const NSBinaryStoreType NS_AVAILABLE(10_4, 3_0);</div><div class="line">COREDATA_EXTERN NSString * const NSInMemoryStoreType NS_AVAILABLE(10_4, 3_0);</div></pre></td></tr></table></figure></p>
-<h3 id="NSManagedObjectModel"><a href="#NSManagedObjectModel" class="headerlink" title="NSManagedObjectModel"></a>NSManagedObjectModel</h3><p>官方描述如下：</p>
-<blockquote>
-<p>Models describe object graphs to be managed. Models (and their<br>entities/properties/fetch request templates) are editable until they<br>are used by a persistent store coordinator, allowing developers to<br>create/modify them dynamically. However, once a model is being used,<br>it MUST NOT be changed. When the persistent store coordinator first<br>fetches data using a model, it will become uneditable. Any attempt to<br>mutate a model or any of its subobjects after that point will cause an<br>exception to be thrown. If you need to modify a model that is in use,<br>create a copy, modify the copy, and then discard the objects with the<br>old model.</p>
-</blockquote>
-<p><code>NSManagedObjectModel</code>顾名思义，是一个对象模板，他描述了对象的数据结构以及数据之间的关系</p>
-<h3 id="NSMnagedObjectContext"><a href="#NSMnagedObjectContext" class="headerlink" title="NSMnagedObjectContext"></a>NSMnagedObjectContext</h3><p>官方描述：</p>
-<blockquote>
-<p>An instance of NSManagedObjectContext represents a single “object<br>space” or scratch pad in an application. Its primary responsibility is<br>to manage a collection of managed objects. These objects form a group<br>of related model objects that represent an internally consistent view<br>of one or more persistent stores. A single managed object instance<br>exists in one and only one context, but multiple copies of an object<br>can exist in different contexts. Thus object uniquing is scoped to a<br>particular context.</p>
-</blockquote>
-<p>他是对象的管理者，管理内存中<code>注册</code>在这个context下的所有对象，包括他的生命周期和状态。注册这个地方很有意思，在一个application中，可以存在不止一个context，持久化层里的同一个数据也可以被注册在不同的context中。这么做有什么好处呢，在context的章节会详细表述</p>
-<h1 id="开始使用CoreData"><a href="#开始使用CoreData" class="headerlink" title="开始使用CoreData"></a>开始使用CoreData</h1><p>关于入门的使用，网上有很多，随便一搜就是一大把，可参考<a href="http://www.cnblogs.com/xiaodao/archive/2012/10/08/2715477.html" target="_blank" rel="external">这个</a></p>
-<h2 id="使用MagicalRecord"><a href="#使用MagicalRecord" class="headerlink" title="使用MagicalRecord"></a>使用MagicalRecord</h2><p>一般情况下，core data在使用时会出现非常多重复的代码，身为程序猿，都有有一颗偷懒的心，拒绝重复的工作，所以MagicalRecord（业界简称MR）应运而生。<br>MR提供了非常简便的API，帮助我们创建，保存，检索对象。并且他在初始化时定义了一个基本的context架构，具体会在<strong><em>Context</em></strong>章节中提到。<br>关于MR的具体操作，他的<a href="https://github.com/magicalpanda/MagicalRecord/blob/develop/Docs/Getting-Started.md" target="_blank" rel="external">wiki</a>有着详细的描述。<br>关于 MR 的一些坑，可以参考<a href="/core-data-with-magical-record">CoreData 与 MagicalRecord的故事这篇文章</a></p>
-<h2 id="使用Mogenerator"><a href="#使用Mogenerator" class="headerlink" title="使用Mogenerator"></a>使用Mogenerator</h2><p>由于<code>NSManagedObject</code>的生成是一个手动的过程，因此在我们修改<code>DataModel</code>后，之前已经生成的<code>NSManagedObject</code>并不能及时更新，必须要手动重新生成新的类文件。但是问题来了，我们可能在对应的object class里新增了一些通用方法以便我们更容易的操作object，但是重新生成类文件并不会保留我们的修改。因此在更新<code>DataModel</code>的操作变得尤其麻烦。<br>偷懒的程序员们由此写了一个工具，根据<code>DataModel</code>自动生成<code>NSManagedObject</code>，并且通过继承的方式，将core data自动生成的属性方法和人为添加的属性方法区别开来。这就是<a href="http://rentzsch.github.io/mogenerator/" target="_blank" rel="external">Mogenrator</a></p>
-<p>Mogenrator可以根据预设的模板，生成对应的<code>NSManagedObject class</code>，我们可以通过Xcode的runscript脚本，实现在编译期间更新<code>DataModel</code></p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">MODELS_DIR=<span class="string">"<span class="variable">$&#123;PROJECT_DIR&#125;</span>/<span class="variable">$PROJECT_NAME</span>"</span></div><div class="line">DATA_MODEL_PACKAGE=<span class="string">"<span class="variable">$MODELS_DIR</span>/CoreDataDemo.xcdatamodeld/CoreDataDemo.xcdatamodel"</span></div><div class="line"><span class="comment"># - 替换相应的 xxxxx.xcdatamodeld名称</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> [ -x /usr/<span class="built_in">local</span>/bin/mogenerator ]; <span class="keyword">then</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"mogenerator exists in /usr/local/bin path"</span>;</div><div class="line">MOGENERATOR_DIR=<span class="string">"/usr/local/bin"</span>;</div><div class="line"><span class="keyword">elif</span> [ -x /usr/bin/mogenerator ]; <span class="keyword">then</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"mogenerator exists in /usr/bin path"</span>;</div><div class="line">MOGENERATOR_DIR=<span class="string">"/usr/bin"</span>;</div><div class="line"><span class="keyword">else</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"mogenerator not found"</span>; <span class="built_in">exit</span> 1;</div><div class="line"><span class="keyword">fi</span></div><div class="line"><span class="variable">$MOGENERATOR_DIR</span>/mogenerator --template-var arc=<span class="literal">true</span> -m <span class="string">"<span class="variable">$DATA_MODEL_PACKAGE</span>"</span> -M <span class="string">"<span class="variable">$MODELS_DIR</span>/CoreData/Machine/"</span> -H <span class="string">"<span class="variable">$MODELS_DIR</span>/CoreData/Human/"</span></div><div class="line"><span class="comment"># 如果是ARC工程，加上 --template-var arc=true就行了，即mogenerator命令换成：</span></div><div class="line"><span class="comment"># $MOGENERATOR_DIR/mogenerator --template-var arc=true -m "$DATA_MODEL_PACKAGE" -M "$MODELS_DIR/CoreData/Machine/" -H "$MODELS_DIR/CoreData/Human/"</span></div></pre></td></tr></table></figure>
-<p>顺便做一个广告，在<a href="http://x.gz.cvte.cn/luhui/iosprojectscript" target="_blank" rel="external">gitlab</a>的项目集合了一些项目相关的脚本，你又可以再偷懒一点了：）</p>
-<h1 id="Context"><a href="#Context" class="headerlink" title="Context"></a>Context</h1><p>Context是贯穿在整个应用之间的core data组件，在实际的项目中，只有在初始化的时候才会用到其他两个组件，甚至在使用MR后，我们都不再需要关心除开context外的组件了。</p>
-<h2 id="多个context下的数据更新"><a href="#多个context下的数据更新" class="headerlink" title="多个context下的数据更新"></a>多个context下的数据更新</h2><p>每个context都是一块独立的内存空间，那么如何把一个context中某个对象的修改通知到另一个context中呢？<br>在<code>NSManagedObjectContext.h</code>中定义了以下几个notification<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// Notifications immediately before and immediately after the context saves.  The user info dictionary contains information about the objects that changed and what changed</div><div class="line">COREDATA_EXTERN NSString * const NSManagedObjectContextWillSaveNotification NS_AVAILABLE(10_5, 3_0);</div><div class="line">COREDATA_EXTERN NSString * const NSManagedObjectContextDidSaveNotification NS_AVAILABLE(10_4, 3_0);</div><div class="line"></div><div class="line">// Notification when objects in a context changed:  the user info dictionary contains information about the objects that changed and what changed</div><div class="line">COREDATA_EXTERN NSString * const NSManagedObjectContextObjectsDidChangeNotification NS_AVAILABLE(10_4, 3_0);</div></pre></td></tr></table></figure></p>
-<p>保存的通知很好理解，就是调用context的save接口时调用。那么<code>NSManagedObjectContextObjectsDidChangeNotification</code>是在何时调用呢？<br>他不是在某个对象被修改时调用，而是在调用<code>processPendingChanges</code>时触发的。那么<code>processPendingChanges</code>又是在什么时候调用呢？只有这个context是一个main thread的context时才会自动触发。而属于其他线程的context，则必须要自己调用。<br>在<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreData/Articles/cdConcurrency.html" target="_blank" rel="external">这篇文章</a>的<strong>Track Changes in Other Threads Using Notifications</strong>章节有提到。<br>并且在这个过程中，有一个地方需要注意。假设某个实体对象发生了改变，而这个实体对象在一个main thread context中是<code>Fault</code>状态，那么这个notification也不会触发。因为在<code>Fault</code>状态说明这个实体对象还没有被使用，那么也就没有触发这个通知的必要了。则一点在平时的使用过程中一般不会在意，而在单元测试中，需要模拟一些数据操作并侦听这个通知时，是需要注意的地方。</p>
-<h2 id="层级结构"><a href="#层级结构" class="headerlink" title="层级结构"></a>层级结构</h2><p>context的层级结构在复杂的项目中尤其重要。他是iOS5之后出来的，称为Nested Context，为了解决多线程下的数据同步问题。<br>在一个简单的项目里，可能只需要一个context就能够解决所有的问题，但是在涉及到多线程后，一个context会造成主线程的阻塞，并且在高并发的情况下，有可能造成死锁<br>关于context的架构，先看<a href="http://www.nsguy.com/blog/2014/02/09/learning-core-data/" target="_blank" rel="external">这篇文章</a></p>
-<h3 id="MR中的层级结构"><a href="#MR中的层级结构" class="headerlink" title="MR中的层级结构"></a>MR中的层级结构</h3><p>在MR中，他使用的context结构是：<br><img src="./1416820705812.png" alt="Alt text"><br><img src="./1416820847757.png" alt="Alt text"><br>两个策略的结合体。<br>首先，在<code>[MagicalRecord setup]</code>中，会创建rootContext和defaultContext，<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">+ (<span class="keyword">void</span>) MR_initializeDefaultContextWithCoordinator:(<span class="built_in">NSPersistentStoreCoordinator</span> *)coordinator;</div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (defaultManagedObjectContext_ == <span class="literal">nil</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">NSManagedObjectContext</span> *rootContext = [<span class="keyword">self</span> MR_contextWithStoreCoordinator:coordinator];</div><div class="line">        [<span class="keyword">self</span> MR_setRootSavingContext:rootContext];</div><div class="line"></div><div class="line">        <span class="built_in">NSManagedObjectContext</span> *defaultContext = [<span class="keyword">self</span> MR_newMainQueueContext];</div><div class="line">        [<span class="keyword">self</span> MR_setDefaultContext:defaultContext];</div><div class="line"></div><div class="line">        [defaultContext setParentContext:rootContext];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>接着，在其context的便捷构造器中，返回的是defaultContext的childContext</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">+ (<span class="built_in">NSManagedObjectContext</span> *) MR_context;</div><div class="line">&#123;</div><div class="line">    <span class="built_in">NSManagedObjectContext</span> *context = [[<span class="keyword">self</span> alloc] initWithConcurrencyType:<span class="built_in">NSPrivateQueueConcurrencyType</span>];</div><div class="line">    [context setParentContext:[<span class="keyword">self</span> MR_defaultContext]];</div><div class="line">    <span class="keyword">return</span> context;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这个顺序的方式，提供了一个stack2的context架构<br>最后MR在<code>[MagicalRecord save]</code>方法中，使用的是stack3的方式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">+ (void) saveWithBlock:(void(^)(NSManagedObjectContext *localContext))block completion:(MRSaveCompletionHandler)completion;</div><div class="line">&#123;</div><div class="line">    NSManagedObjectContext *mainContext  = [NSManagedObjectContext MR_rootSavingContext];</div><div class="line">    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:mainContext];</div><div class="line"></div><div class="line">    [localContext performBlock:^&#123;</div><div class="line">        if (block) &#123;</div><div class="line">            block(localContext);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        [localContext MR_saveWithOptions:MRSaveParentContexts completion:completion];</div><div class="line">    &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>MR中，在<code>setDefaultContext:</code>时会增加一个rootContext的<code>NSManagedObjectContextDidSaveNotification</code>事件侦听，并在在主线程中merge这些修改</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">+ (<span class="keyword">void</span>)rootContextChanged:(<span class="built_in">NSNotification</span> *)notification &#123;</div><div class="line">    <span class="keyword">if</span> ([<span class="built_in">NSThread</span> isMainThread] == <span class="literal">NO</span>) &#123;</div><div class="line">        <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^&#123;</div><div class="line">            [<span class="keyword">self</span> rootContextChanged:notification];</div><div class="line">        &#125;);</div><div class="line"></div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    [[<span class="keyword">self</span> MR_defaultContext] mergeChangesFromContextDidSaveNotification:notification];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="我们在用的层级结构"><a href="#我们在用的层级结构" class="headerlink" title="我们在用的层级结构"></a>我们在用的层级结构</h3><p>结合MR，推荐使用的是如下的结构<br><img src="./1416819723339.png" alt="Alt text"></p>
-<p>MR在setup时会创建一个Root context和default context，如上图左边部分。在应用中，我们通过default context进行读的操作，在editing context中进行读写操作。<br>在需要更新UI的部分，通过侦听<code>NSManagedObjectContextDidChangeNotification</code>以更新UI<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[<span class="keyword">self</span> addObserverForName:<span class="built_in">NSManagedObjectContextObjectsDidChangeNotification</span> object:[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext] usingBlock:^(<span class="built_in">NSNotification</span> *notification) &#123;</div><div class="line"><span class="comment">// Update UI operation</span></div><div class="line">        &#125;</div><div class="line">    &#125;];</div></pre></td></tr></table></figure></p>
-<p>但是如此的侦听会有个问题，所有在defaultContext注册的object在change时都会触发这个通知，因此还需要在更新UI之前做一个判断：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">BOOL</span>)contextChange:(<span class="built_in">NSNotification</span> *)notification forEntityName:(<span class="built_in">NSString</span> *)entityName</div><div class="line">&#123;</div><div class="line">    <span class="built_in">NSSet</span> *deleteObject = notification.userInfo[<span class="built_in">NSDeletedObjectsKey</span>];</div><div class="line">    <span class="built_in">NSSet</span> *updateObject = notification.userInfo[<span class="built_in">NSUpdatedObjectsKey</span>];</div><div class="line">    <span class="built_in">NSSet</span> *insertObject = notification.userInfo[<span class="built_in">NSInsertedObjectsKey</span>];</div><div class="line"></div><div class="line">    <span class="built_in">NSPredicate</span> *predicate = [<span class="built_in">NSPredicate</span> predicateWithFormat:<span class="string">@"entity.name == %@"</span>, entityName];</div><div class="line"></div><div class="line">    <span class="built_in">NSUInteger</span> deleteCount = [[[deleteObject allObjects] filteredArrayUsingPredicate:predicate] count];</div><div class="line">    <span class="built_in">NSUInteger</span> updateCount = [[[updateObject allObjects] filteredArrayUsingPredicate:predicate] count];</div><div class="line">    <span class="built_in">NSUInteger</span> insertCount = [[[insertObject allObjects] filteredArrayUsingPredicate:predicate] count];</div><div class="line"></div><div class="line">    <span class="keyword">return</span> (deleteCount + updateCount + insertCount != <span class="number">0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>抛出通知时，CoreData会将当前context所有变动的对象通过userInfo返回。因此我们可以通过检测这些对象中是否包含我们所需要侦听改变的对象来决定是否需要更新UI。</p>
-<h1 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h1><p>CoreData下的多线程，官方有很好的<a href="https://developer.apple.com/library/mac/documentation/cocoa/conceptual/CoreData/Articles/cdConcurrency.html" target="_blank" rel="external">解释</a><br>使用Thread Confinement的方式可以避免死锁。但这并不是必须的，所以这是一个编程规范，而不是规则。因此在使用多线程时是需要注意的。<br>如何保证Thread Confinement？使用context的performBlock方法。<br>那么这些context的thread是否需要维护呢？<br>看一个实验.<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSManagedObjectContext</span> *c1 = [<span class="built_in">NSManagedObjectContext</span> MR_context];</div><div class="line">    <span class="built_in">NSManagedObjectContext</span> *c2 = [<span class="built_in">NSManagedObjectContext</span> MR_rootSavingContext];</div><div class="line">    <span class="built_in">NSManagedObjectContext</span> *c3 = [<span class="built_in">NSManagedObjectContext</span> MR_contextWithParent:c2];</div><div class="line">    [c1 performBlock:^&#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"c1 Thread:%@"</span>, [<span class="built_in">NSThread</span> currentThread]);</div><div class="line">    &#125;];</div><div class="line">    [c2 performBlock:^&#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"c2 Thread:%@"</span>, [<span class="built_in">NSThread</span> currentThread]);</div><div class="line">    &#125;];</div><div class="line">    [c3 performBlock:^&#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"c3 Thread:%@"</span>, [<span class="built_in">NSThread</span> currentThread]);</div><div class="line">    &#125;];</div><div class="line">    <span class="built_in">dispatch_async</span>(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>), ^&#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"Thread in dispatch:%@"</span>, [<span class="built_in">NSThread</span> currentThread]);</div><div class="line">        [c1 performBlock:^&#123;</div><div class="line">            <span class="built_in">NSLog</span>(<span class="string">@"c1 Thread in dispatch:%@"</span>, [<span class="built_in">NSThread</span> currentThread]);</div><div class="line">        &#125;];</div><div class="line">    &#125;);</div><div class="line">    [[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext] performBlock:^&#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"default thread:%@ and main thread:%@"</span>, [<span class="built_in">NSThread</span> currentThread], [<span class="built_in">NSThread</span> mainThread]);</div><div class="line">    &#125;];</div></pre></td></tr></table></figure></p>
-<p>三个context均在主线程中创建，打印结果如下：<br><img src="./1416823640132.png" alt="Alt text"></p>
-<p>###Context的初始化<br>Context的初始化有三种类型</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSConfinementConcurrencyType</span>		= <span class="number">0x00</span>,    <span class="comment">/* this option is obsolete and not recommended for new code. */</span></div><div class="line">    <span class="built_in">NSPrivateQueueConcurrencyType</span>		= <span class="number">0x01</span>,</div><div class="line">    <span class="built_in">NSMainQueueConcurrencyType</span>			= <span class="number">0x02</span></div></pre></td></tr></table></figure>
-<p>第一种是不支持多线程，context只能在当前线程下使用，现在已经不推荐使用了。后两个是当前常用的方式。在MR中，defaultContext是<code>NSMainQueueConcurrencyType</code><br>其他的context是<code>NSPrivateQueueConcurrencyType</code><br>在MR下，除非使用defaultContext，其余context中注册的object，在访问时最好使用performBlock调用会context的线程中，避免产生死锁。</p>
-<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><ol>
-<li><p>使用MR时，在其他线程调用defaultContext进行保存会产生死锁。因为save时锁了主线程，而save后会触发<code>NSManagedObjectContextDidChangeNotification</code>，这时MR会调用<code>mergeChangeWithDidSaveNotification:</code>把修改更新到主线程上，这就导致死锁</p>
- <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[account.managedObjectContext performBlockAndWait:^&#123;</div><div class="line">    [account MR_deleteEntity];</div><div class="line">    [[account managedObjectContext] MR_saveToPersistentStoreAndWait];</div><div class="line">&#125;];</div><div class="line">因此保存上述代码风格是个好习惯</div></pre></td></tr></table></figure>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/12/02/git-getting-start/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mluffy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="mluffy's blog">
+      <meta itemprop="name" content="懒人小屋">
     </span>
 
     
@@ -626,9 +452,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-12-02T20:18:57+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-12-02T20:18:57+08:00">
                 2014-12-02
               </time>
             
@@ -734,159 +560,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/11/24/core-data-with-magical-record/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mluffy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="mluffy's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014/11/24/core-data-with-magical-record/" itemprop="url">CoreData与MagicalRecord的故事</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-11-24T20:38:08+08:00">
-                2014-11-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近使用Core data在多线程下遇到了不少的坑，多数都是因为使用不规范所引起的，这里将从最常用的MOC做展开，谈谈多线程下如何正确的使用context。<br>p.s.这篇博客会持续不断的更新，主要是记录core data中踩到的坑，在踩坑中慢慢成长，不断规范core data的使用方法。</p>
-<h1 id="NSManagedObjectContext"><a href="#NSManagedObjectContext" class="headerlink" title="NSManagedObjectContext"></a>NSManagedObjectContext</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>说到MOC，当然先要贴上一副描述</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">An instance of NSManagedObjectContext represents a single “object space” or scratch pad in an application. Its primary responsibility is to manage a collection of managed objects. These objects form a group of related model objects that represent an internally consistent view of one or more persistent stores. A single managed object instance exists in one and only one context, but multiple copies of an object can exist in different contexts. Thus object uniquing is scoped to a particular context.</div></pre></td></tr></table></figure>
-<p>从字义上来说，他就是一个数据库的上下文，并且维持在内存中。<br>context可以创建多个，说明一个进程中，可以拥有多个数据库的内存副本，并且每个副本之间都是相对独立的。<br>其实从这一点来看，Core data的设计结构和git是相似的。persistent store类似git的中心仓库，每个moc都是git的分支，moc内的操作都互不影响，只有在save（git的push）时才会保存到persistent store（git中心仓库）中。</p>
-<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">The context is a powerful object with a central role in the life-cycle of managed objects, with responsibilities from life-cycle management (including faulting) to validation, inverse relationship handling, and undo/redo. Through a context you can retrieve or “fetch” objects from a persistent store, make changes to those objects, and then either discard the changes or—again through the context—commit them back to the persistent store. The context is responsible for watching for changes in its objects and maintains an undo manager so you can have finer-grained control over undo and redo. You can insert new objects and delete ones you have fetched, and commit these modifications to the persistent store.</div><div class="line"></div><div class="line">All objects fetched from an external store are registered in a context together with a global identifier (an instance of NSManagedObjectID) that’s used to uniquely identify each object to the external store.</div></pre></td></tr></table></figure>
-<p>作为对象的管理者，moc管理着所有注册在这个moc下的对象的生命周期（包括faulting）。并且提供了非常丰富的数据操作，基本的增查删改，还提供了了undo/redo的方法，极大的简化了开发时间。</p>
-<h2 id="fault"><a href="#fault" class="headerlink" title="fault"></a>fault</h2><p>moc中的所有object都是lazy loading的，所有注册到moc的object一开始都是出于faulted的状态，只有在引用到object时才会真正从数据库中加载数据至内存中，这个过程叫fire fault。当一个object被从moc中移除后，他会被置为fault状态。</p>
-<h2 id="重头戏：Parent-Store"><a href="#重头戏：Parent-Store" class="headerlink" title="重头戏：Parent Store"></a>重头戏：Parent Store</h2><p>parent store是用来告诉MOC，数据的来源，数据的读取保存操作最终都是在parent store中执行的。<br>在OSX10.7以及iOS5.0时代，Parent Store一直是persisten store coordinator<br>从OSX10.7以及iOS5.0之后，Parent Store就可以是context，相当于定义了一个parent 这个moc的数据操作最终只会影响到其parent context，这极大的简化了不同context之间数据的更新。在这之前一直只能用Notification的方式：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span></div><div class="line">                                      selector:<span class="keyword">@selector</span>(&lt;<span class="meta">#Selector name#&gt;)</span></div><div class="line">                                      name:<span class="built_in">NSManagedObjectContextDidSaveNotification</span></div><div class="line">                                      object:&lt;<span class="meta">#A managed object context#&gt;];</span></div></pre></td></tr></table></figure>
-<p>我们可以在程序运行的断点中查看context的parent store</p>
-<image src="http://drp.io/brC"></image>
-
-<p>这个parent store最终的应用场景是怎样呢？我们在后边的Nested context中介绍</p>
-<h1 id="MagicalRecord概述"><a href="#MagicalRecord概述" class="headerlink" title="MagicalRecord概述"></a>MagicalRecord概述</h1><p><a href="https://github.com/magicalpanda/MagicalRecord" target="_blank" rel="external">Magical Recrod</a>是git的一个第三方库，是一个对Core data数据操作的封装库，常用的core data操作都得到了极大的简化，是在使用core data时提高编程效率的不二之选。<br>除开对操作的封装之外，MR的另一大好处就是为我们封装了多线程之下的context</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">+ (<span class="built_in">NSManagedObjectContext</span> *) MR_contextForCurrentThread;</div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span> ([<span class="built_in">NSThread</span> isMainThread])</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">return</span> [<span class="keyword">self</span> MR_defaultContext];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span></div><div class="line">	&#123;</div><div class="line">		<span class="built_in">NSMutableDictionary</span> *threadDict = [[<span class="built_in">NSThread</span> currentThread] threadDictionary];</div><div class="line">		<span class="built_in">NSManagedObjectContext</span> *threadContext = [threadDict objectForKey:kMagicalRecordManagedObjectContextKey];</div><div class="line">		<span class="keyword">if</span> (threadContext == <span class="literal">nil</span>)</div><div class="line">		&#123;</div><div class="line">			threadContext = [<span class="keyword">self</span> MR_contextWithParent:[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext]];</div><div class="line">			[threadDict setObject:threadContext forKey:kMagicalRecordManagedObjectContextKey];</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> threadContext;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>从他的代码，可以很清楚的知道，MR为每个线程都创建了context，并且在线程的<code>threadDictionary</code>中维持context的引用。因此在线程回收之前，我们都可以放心的在这个线程中使用context，并且不用担心何时需要释放context的问题。<br>在MR中，初始化core data时，他的数据结构是这样的：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">+ (<span class="keyword">void</span>) MR_initializeDefaultContextWithCoordinator:(<span class="built_in">NSPersistentStoreCoordinator</span> *)coordinator;</div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (defaultManagedObjectContext_ == <span class="literal">nil</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">NSManagedObjectContext</span> *rootContext = [<span class="keyword">self</span> MR_contextWithStoreCoordinator:coordinator];</div><div class="line">        [<span class="keyword">self</span> MR_setRootSavingContext:rootContext];</div><div class="line">        <span class="built_in">NSManagedObjectContext</span> *defaultContext = [<span class="keyword">self</span> MR_newMainQueueContext];</div><div class="line">        [<span class="keyword">self</span> MR_setDefaultContext:defaultContext];</div><div class="line">        [defaultContext setParentContext:rootContext];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>一个root context，所有的context都会是这个root context的child context。<br>在主线程创建一个default context，其parent context是root context，因此我们在使用core data时，在主线程下的操作都是用的是default context，最终的操作都会是先保存到root context中，再保存到数据库中。<br>具体的解释暂且不表，放在另一篇文章中详细解释使用MR时的一些操作事项</p>
-<p>##多线程下的Core Data</p>
-<p>###MOC的三种类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Confinement (NSConfinementConcurrencyType)</div><div class="line">默认状态，只能在创建的线程中使用，其他线程均不能使用。官方的API文档写到：</div><div class="line">You can only use this concurrency type if the managed object context’s parent store is a persistent store coordinator.</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Private queue (NSPrivateQueueConcurrencyType)</div><div class="line">用在多线程下。MR中的rootContext与threadContext均是这个类型</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Main queue (NSMainQueueConcurrencyType)</div><div class="line">用在主线程下。MR中的defaultContext是这个类型。这个类型的context多用在controller以及一些UI对象上，这些对象只能要求在主线程中操作，因此只能用此类型的context在主线程中操作。</div></pre></td></tr></table></figure>
-<h2 id="使用Magical-Recrod时，多线程下应注意的点"><a href="#使用Magical-Recrod时，多线程下应注意的点" class="headerlink" title="使用Magical Recrod时，多线程下应注意的点"></a>使用Magical Recrod时，多线程下应注意的点</h2><ol>
-<li>在不同的线程，可以使用任意的context进行读的操作，但是写的操作必须保证所有的object均处于同一个context，并且该context所维护的thread就是当前线程。否则在写的时候会出现概率性的崩溃。一个context不能同时被两个线程访问</li>
-<li>不同线程之间的object传递使用objectWithId。在MR中，使用的是existingObjectWithId，也就是已经在context中注册的object才可以拿到<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSManagedObjectContext</span> *moc = [<span class="built_in">NSManagedObjectContext</span> MR_contextWithParent:[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext]];</div><div class="line">Department *d = [Department MR_createInContext:moc];</div><div class="line"><span class="built_in">NSManagedObjectContext</span> *moc2 = [<span class="built_in">NSManagedObjectContext</span> MR_contextWithParent:[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext]];</div><div class="line">Department *t = [d MR_inContext:moc2];</div><div class="line">Department *t2 = (Department *)[moc2 objectWithID:d.objectID];</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"t:%@ and t2:%@"</span>, t, t2);</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>这个代码的输出结果为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">t:(null) and t2:&lt;Department: 0x109600580&gt; (entity: Department; id: 0x10f507590 &lt;x-coredata:///Department/t8F610E34-B04A-4152-A481-75818DEC7DE12&gt; ; data: &lt;fault&gt;)</div></pre></td></tr></table></figure></p>
-<ol>
-<li>多个context下，使用undo操作时就要慎用，有可能会多undo了某些操作。比如：<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSUndoManager</span> *undoManager = [<span class="built_in">NSUndoManager</span> new];</div><div class="line">    [[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext] setUndoManager:undoManager];</div><div class="line">    [[[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext] undoManager] beginUndoGrouping];</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>当在<code>beginUndoGrouping</code>后，开了一个线程进行了数据操作并保存:<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^&#123;</div><div class="line">        <span class="comment">//somthing data operation</span></div><div class="line">        [[<span class="built_in">NSManagedObjectContext</span> MR_contextForCurrentThread] MR_saveOnlySelfAndWait];</div><div class="line">    &#125;);</div></pre></td></tr></table></figure></p>
-<p>这时候数据会先更新至defaultContext中，再保存至数据库。如果我们只打算undo在主线程中的更改，调用<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[[[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext] undoManager] endUndoGrouping];</div><div class="line">[[[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext] undoManager] undo];</div></pre></td></tr></table></figure></p>
-<p>进行回滚，会把线程中执行的操作一起回滚掉。因此这种业务需求下的undo应该使用另一个MOC进行处理，defaultContext作为最终同时保存的部分。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSUndoManager</span> *undoManager = [<span class="built_in">NSUndoManager</span> new];</div><div class="line"><span class="built_in">NSManagedObjectContext</span> *moc = [<span class="built_in">NSManagedObjectContext</span> MR_contextWithParent:[<span class="built_in">NSManagedObjectContext</span> MR_defaultContext]];</div><div class="line">[moc setUndoManager:undoManager];</div><div class="line">[[moc undoManager] beginUndoGrouping];</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -933,8 +606,8 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">4</span>
-                <span class="site-state-item-name">日志</span>
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">Artikel</span>
               </a>
             </div>
           
@@ -946,8 +619,8 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">4</span>
-                <span class="site-state-item-name">标签</span>
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">Tags</span>
               </a>
             </div>
           
@@ -1010,11 +683,11 @@
 
 
 <div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
-  主题 -
+  Theme -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT.Muse
   </a>
