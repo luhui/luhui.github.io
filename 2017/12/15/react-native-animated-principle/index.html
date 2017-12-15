@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="react-native,animation,android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前言在上篇：android 动画原理 说到，要对比 android 本身的动画实现以及 react-native 的动画实现来对比分析。本篇主要分析 react-native 的 Animated 控件是如何实现动画的，包含 Animated 中使用 nativeDriver 的 native 层动画实现方案以及不使用 nativeDriver 的纯 JS 动画实现方案 P.S. 本篇源码分析是基">
+<meta name="keywords" content="react-native,animation,android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react-native animated 动画实现原理">
+<meta property="og:url" content="http://luhui.github.io/2017/12/15/react-native-animated-principle/index.html">
+<meta property="og:site_name" content="懒人小屋">
+<meta property="og:description" content="前言在上篇：android 动画原理 说到，要对比 android 本身的动画实现以及 react-native 的动画实现来对比分析。本篇主要分析 react-native 的 Animated 控件是如何实现动画的，包含 Animated 中使用 nativeDriver 的 native 层动画实现方案以及不使用 nativeDriver 的纯 JS 动画实现方案 P.S. 本篇源码分析是基">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://luhui.github.io/2017/12/15/react-native-animated-principle/images/react-native-animated-principle/1DC392BFD58B05CE38DEE4B2F20343B4.jpg">
+<meta property="og:image" content="http://luhui.github.io/2017/12/15/react-native-animated-principle/images/react-native-animated-principle/50718B4E2D7D2CA7828B0CCA001E729D.jpg">
+<meta property="og:updated_time" content="2017-12-15T11:57:46.820Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="react-native animated 动画实现原理">
+<meta name="twitter:description" content="前言在上篇：android 动画原理 说到，要对比 android 本身的动画实现以及 react-native 的动画实现来对比分析。本篇主要分析 react-native 的 Animated 控件是如何实现动画的，包含 Animated 中使用 nativeDriver 的 native 层动画实现方案以及不使用 nativeDriver 的纯 JS 动画实现方案 P.S. 本篇源码分析是基">
+<meta name="twitter:image" content="http://luhui.github.io/2017/12/15/react-native-animated-principle/images/react-native-animated-principle/1DC392BFD58B05CE38DEE4B2F20343B4.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://luhui.github.io/2017/12/15/react-native-animated-principle/"/>
+
+
+
+
+
+  <title>react-native animated 动画实现原理 | 懒人小屋</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">懒人小屋</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生命不息，折腾不止......可是我好懒</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://luhui.github.io/2017/12/15/react-native-animated-principle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mluffy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="懒人小屋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">react-native animated 动画实现原理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-15T19:32:54+08:00">
+                2017-12-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上篇：<a href="/2017/12/15/android-animation-principle/" title="android 动画原理">android 动画原理</a> 说到，要对比 android 本身的动画实现以及 react-native 的动画实现来对比分析。本篇主要分析 react-native 的 Animated 控件是如何实现动画的，包含 Animated 中使用 nativeDriver 的 native 层动画实现方案以及不使用 nativeDriver 的纯 JS 动画实现方案</p>
+<p>P.S. 本篇源码分析是基于 react-native-0.47.2 进行解析的</p>
+<h1 id="react-native-动画实现原理"><a href="#react-native-动画实现原理" class="headerlink" title="react-native 动画实现原理"></a>react-native 动画实现原理</h1><p>react-native 的动画也有两种方案，一种是纯 JS 方案，仅在 JS 层通过 <code>requestAnimationFrame</code> 来实现定时渲染，以此来实现动画。<br>另一种是 native 方案，在 js 层配置好视图（ AnimatedNode ）与数据（ AnimatedValue ）的绑定，再把配置信息以及动画信息传递给 native 层，由 native 层来实现动画，而 native 层则利用与原生Animator 相似的方案来执行动画。稍微有些区别的是，Animator 是直接针对 view 的属性进行更新，而 native 方案是通过更新 node 来实现的，native 方案几乎和 Animator 等价，区别是在于native 方案中间需要 findNode 之类的操作找到最终需要操作的 view，他们之间的性能差距取决于 react-native 对于布局的更新处理机制。<br>值得注意的是，虽然 native 方案利用了 Choreographer 来实现定时器，但如果系统版本不支持，则其使用自定义的 Handler 来实现，时间是17ms，而原生的 Choreographer，在不支持 VSYNC 的设备中，自定义的 handler 的间隔是10ms，因此在低版本（api &lt; 16, android 3.0以下）的设备上，react-native 的动画在 android 上可能不会很流畅。</p>
+<p>建议先阅读<a href="http://www.alloyteam.com/2016/01/reactnative-animated/" target="_blank" rel="external">react-native animated 动画原理</a>，以此来对动画是如何实现的有个基本的认知，因为核心思路都是一致的，不同的只是在具体的环境中，如何对模块进行划分，模块之间如何通讯协作。</p>
+<h2 id="纯-JS-的动画实现"><a href="#纯-JS-的动画实现" class="headerlink" title="纯 JS 的动画实现"></a>纯 JS 的动画实现</h2><p>动画的入口很多，比如 AnimatedComponent，或者手动 start 一个 animation，这里我们通过手动的 start animator 来分析整个流程，核心流程都是一致的，不同的入口只是在初始化配置的部分有些差异。</p>
+<h3 id="js-层流程图"><a href="#js-层流程图" class="headerlink" title="js 层流程图"></a>js 层流程图</h3><p>先来核心的调用流程，了解其中涉及的模块。</p>
+<p><img src="images/react-native-animated-principle/1DC392BFD58B05CE38DEE4B2F20343B4.jpg" alt="ReactNative 动画流程__Animated 动画流程__AnimatedValue 流程_3.jpg"></p>
+<p>在执行动画流程里，包含纯 js 流程（上半部分）和 native 流程（下半部分），这里我们只需要先关注上半部分的 js流程即可。</p>
+<p>核心的通讯流程包含3个部分</p>
+<ul>
+<li>TimingAnimation: 执行动画的具体类，包括实现动画的周期，循环等等</li>
+<li>AnimatedImplementation：Animated 的实现类。</li>
+<li>AnimatedValue：动画数值的映射类，负责动画数值的更新，以及视图的更新。</li>
+</ul>
+<p>先由 AnimatedImplmentation 触发动画的开始，接着由 AnimatedValue 触发 TimingAnimation 开始执行动画，TimingAnimation 通过<code>requestAnimationFrame</code>来触发 <code>_onUpdate</code> 方法，<code>_onUpdate</code> 方法本质上是一个 delegate，由 AnimatedValue 来实现，相当于 TimingAnimation 触发动画渲染后，把渲染这个动作委托给 AnimatedValue 来实现，最终 AnimatedValue 通过 <code>_flush</code> 方法进行更新。<code>_flush</code>方法是通过 setNativeProps 的方式，直接操作 dom 进行view 的更新。</p>
+<h2 id="Native-方案实现"><a href="#Native-方案实现" class="headerlink" title="Native 方案实现"></a>Native 方案实现</h2><p>Native 方案中，与 JS 方案不同的是，TimingAnimation 不控制动画的渲染频率了，而是从 AnimatedValue 中获取对应的 TAG（在 react-native 中，每一个 view 都有一个唯一的 tag 与之对应，和 android 里的 id 是一个道理），通过<code>startAnimatingNode</code>方法，把 animationConfig 和 tag 传给 <code>NativeAnimatedHelper</code>，由 <code>NativeAnimatedHelper</code> 调用 native 层的 <code>NativeAnimatedModule</code>，由 <code>NativeAnimatedModule</code> 在 native 层实现动画。</p>
+<h3 id="native-层流程图"><a href="#native-层流程图" class="headerlink" title="native 层流程图"></a>native 层流程图</h3><p><img src="images/react-native-animated-principle/50718B4E2D7D2CA7828B0CCA001E729D.jpg" alt="ReactNative 动画流程__Animated 动画流程__NativeAnimated 流程_4.jpg"><br>和原生方案类似，都是通过注册 frameCallback，在每一帧心跳到来时，执行视图的更新。</p>
+<p>核心的通讯流程包含4个部分</p>
+<ul>
+<li>NativeAnimatedModule：对 js 层的接口，负责接收 js 层的 animate 信息，把信息添加到 operation 队列中，等待下一次frame 心跳触发。该模块同时负责实现循环心跳的侦听</li>
+<li>ReactChoreographer：android 的 Choreographer 的一个封装，3.0版本以下使用自己的 handler 实现，间隔是17ms</li>
+<li>NativeAnimatedNodesManager：负责遍历所有 AnimatedNode，通过 AnimationDriver 获取当前帧需要更新的值，然后调用 AnimatedNode 的 update 方法更新 Node</li>
+<li>AnimatedNode：类似 Animator 中的 ValueAnimator，绑定 view 和 value，value 变更时更新 view</li>
+</ul>
+<h4 id="NativeAnimatedModule"><a href="#NativeAnimatedModule" class="headerlink" title="NativeAnimatedModule"></a>NativeAnimatedModule</h4><p><code>NativeAnimatedModule</code>有两个职责，一个是作为对 js 的接口，另一个是负责侦听心跳，执行队列中的操作。</p>
+<p>以<code>startAnimatingNode</code>为例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@ReactMethod</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startAnimatingNode</span><span class="params">(</span></span></div><div class="line"><span class="function"><span class="params">    <span class="keyword">final</span> <span class="keyword">int</span> animationId,</span></span></div><div class="line"><span class="function"><span class="params">    <span class="keyword">final</span> <span class="keyword">int</span> animatedNodeTag,</span></span></div><div class="line"><span class="function"><span class="params">    <span class="keyword">final</span> ReadableMap animationConfig,</span></span></div><div class="line"><span class="function"><span class="params">    <span class="keyword">final</span> Callback endCallback)</span> </span>&#123;</div><div class="line">  mOperations.add(<span class="keyword">new</span> UIThreadOperation() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(NativeAnimatedNodesManager animatedNodesManager)</span> </span>&#123;</div><div class="line">      animatedNodesManager.startAnimatingNode(</div><div class="line">        animationId,</div><div class="line">        animatedNodeTag,</div><div class="line">        animationConfig,</div><div class="line">        endCallback);</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>NativeAnimatedModule</code> 在收到 js 请求后，并不立即执行对应的方法，而是封装为一 个<code>UIThreadOperation</code>，放到 <code>mOperations</code> 的队列里，等待 <code>ReactChoreagrapher</code> 的心跳触发。</p>
+<p>该模块是通过在 callback 中进行递归调用实现的心跳侦听机制，代码调用流程如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//1. 利用 LifeCircleEventlistener，在 HostActivity resume时 enqueueFrameCallback</span></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onHostResume</span><span class="params">()</span> </span>&#123;</div><div class="line">  enqueueFrameCallback();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//2. 向 ReactChoreographer postFameCallback，侦听下一个心跳</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">enqueueFrameCallback</span><span class="params">()</span> </span>&#123;</div><div class="line">  Assertions.assertNotNull(mReactChoreographer).postFrameCallback(</div><div class="line">    ReactChoreographer.CallbackType.NATIVE_ANIMATED_MODULE,</div><div class="line">    mAnimatedFrameCallback);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//3. 在 AnimatedFrameCallback 的最后，直接postFrameCallback，通过递归实现循环侦听。Facebook 也觉得这样不好，但是他还没在这一块做优化</span></div><div class="line">  mAnimatedFrameCallback = <span class="keyword">new</span> GuardedFrameCallback(reactContext) &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doFrameGuarded</span><span class="params">(<span class="keyword">final</span> <span class="keyword">long</span> frameTimeNanos)</span> </span>&#123;</div><div class="line">      <span class="comment">//3.1 lazy load NativeAnimatedNodeManager</span></div><div class="line">      <span class="keyword">if</span> (mNodesManager == <span class="keyword">null</span>) &#123;</div><div class="line">        UIManagerModule uiManager = getReactApplicationContext()</div><div class="line">          .getNativeModule(UIManagerModule.class);</div><div class="line">        mNodesManager = <span class="keyword">new</span> NativeAnimatedNodesManager(uiManager);</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      <span class="comment">//3.2 把 mReadyOperations 放到局部变量然后置空，这里是为了保证这一次 frameCallback 不会有其他 operation 添加进来，保证线程安全。因为这个 callback 是在主线程中执行的，js 接口是在 native ModuleThread 执行的</span></div><div class="line">      ArrayList&lt;UIThreadOperation&gt; operations;</div><div class="line">      <span class="keyword">synchronized</span> (mOperationsCopyLock) &#123;</div><div class="line">        operations = mReadyOperations;</div><div class="line">        mReadyOperations = <span class="keyword">null</span>;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      <span class="keyword">if</span> (operations != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, size = operations.size(); i &lt; size; i++) &#123;</div><div class="line">          <span class="comment">//3.3 在这里执行刚才 startAnimatingNode 的方法，实际上调用了 mNodeManager 的startAnimatingNode 方法</span></div><div class="line">          operations.get(i).execute(mNodesManager);</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      <span class="comment">//3.4 调用了 mNodeManager 的 startAnimatingNode 方法后，这里的值变为 true，因此最终会执行 mNodeManager 的 runUpdates 方法来执行动画更新</span></div><div class="line">      <span class="keyword">if</span> (mNodesManager.hasActiveAnimations()) &#123;</div><div class="line">        mNodesManager.runUpdates(frameTimeNanos);</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      <span class="comment">// <span class="doctag">TODO:</span> Would be great to avoid adding this callback in case there are no active animations</span></div><div class="line">      <span class="comment">// and no outstanding tasks on the operations queue. Apparently frame callbacks can only</span></div><div class="line">      <span class="comment">// be posted from the UI thread and therefore we cannot schedule them directly from</span></div><div class="line">      <span class="comment">// @ReactMethod methods</span></div><div class="line">      <span class="comment">//3.5 再次post callback，递归实现循环心跳</span></div><div class="line">      Assertions.assertNotNull(mReactChoreographer).postFrameCallback(</div><div class="line">        ReactChoreographer.CallbackType.NATIVE_ANIMATED_MODULE,</div><div class="line">        mAnimatedFrameCallback);</div><div class="line">    &#125;</div><div class="line">  &#125;;</div></pre></td></tr></table></figure>
+<h4 id="ReactChoreographer"><a href="#ReactChoreographer" class="headerlink" title="ReactChoreographer"></a>ReactChoreographer</h4><p>ReactChoreographer 代码比较简单，它实际上是一个 proxy，真正的实现是 ChoreographerCompat</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ReactChoreographer.java</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="title">ReactChoreographer</span><span class="params">()</span> </span>&#123;</div><div class="line">  mChoreographer = ChoreographerCompat.getInstance();</div><div class="line">  mReactChoreographerDispatcher = <span class="keyword">new</span> ReactChoreographerDispatcher();</div><div class="line">  mCallbackQueues = <span class="keyword">new</span> ArrayDeque[CallbackType.values().length];</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mCallbackQueues.length; i++) &#123;</div><div class="line">    mCallbackQueues[i] = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//ChoreographerCompat.java</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="title">ChoreographerCompat</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">if</span> (IS_JELLYBEAN_OR_HIGHER) &#123;</div><div class="line">    mChoreographer = getChoreographer();</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    mHandler = <span class="keyword">new</span> Handler(Looper.getMainLooper());</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="NativeAnimatedNodesManager"><a href="#NativeAnimatedNodesManager" class="headerlink" title="NativeAnimatedNodesManager"></a>NativeAnimatedNodesManager</h4><p>由 NativeAnimatedModule 的 frameCallback 可以看到，核心的代码便是 <code>startAnimatingNode</code>和<code>runUpdates</code></p>
+<p>在 NativeAnimatedNodesManager 中，有两个 map，一个是 mUpdateNodes，这个是用于存储刚创建的 AnimatedNode 以及手动更新 animatedValue 的操作，mActiveAnimations用于存储正在执行的动画<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1. 在 nativeAnimatedModule 的 callback 中，startAnimatingNode,实际上是构造了一个 AnimatedNode，然后放到 mActiveAnimations 的 map 中</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startAnimatingNode</span><span class="params">(</span></span></div><div class="line"><span class="function"><span class="params">  <span class="keyword">int</span> animationId,</span></span></div><div class="line"><span class="function"><span class="params">  <span class="keyword">int</span> animatedNodeTag,</span></span></div><div class="line"><span class="function"><span class="params">  ReadableMap animationConfig,</span></span></div><div class="line"><span class="function"><span class="params">  Callback endCallback)</span> </span>&#123;</div><div class="line">  AnimatedNode node = mAnimatedNodes.get(animatedNodeTag);</div><div class="line">  <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> JSApplicationIllegalArgumentException(<span class="string">"Animated node with tag "</span> + animatedNodeTag +</div><div class="line">      <span class="string">" does not exists"</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (!(node <span class="keyword">instanceof</span> ValueAnimatedNode)) &#123;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> JSApplicationIllegalArgumentException(<span class="string">"Animated node should be of type "</span> +</div><div class="line">      ValueAnimatedNode.class.getName());</div><div class="line">  &#125;</div><div class="line">  String type = animationConfig.getString(<span class="string">"type"</span>);</div><div class="line">  <span class="keyword">final</span> AnimationDriver animation;</div><div class="line">  <span class="keyword">if</span> (<span class="string">"frames"</span>.equals(type)) &#123;</div><div class="line">    animation = <span class="keyword">new</span> FrameBasedAnimationDriver(animationConfig);</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"spring"</span>.equals(type)) &#123;</div><div class="line">    animation = <span class="keyword">new</span> SpringAnimation(animationConfig);</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"decay"</span>.equals(type)) &#123;</div><div class="line">    animation = <span class="keyword">new</span> DecayAnimation(animationConfig);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> JSApplicationIllegalArgumentException(<span class="string">"Unsupported animation type: "</span> + type);</div><div class="line">  &#125;</div><div class="line">  animation.mId = animationId;</div><div class="line">  animation.mEndCallback = endCallback;</div><div class="line">  animation.mAnimatedValue = (ValueAnimatedNode) node;</div><div class="line">  mActiveAnimations.put(animationId, animation);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//2.遍历 mActiveAnimations，放到 mRunUpdateNodeList 中，然后执行 updateNodes 方法</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">runUpdates</span><span class="params">(<span class="keyword">long</span> frameTimeNanos)</span> </span>&#123;</div><div class="line">  UiThreadUtil.assertOnUiThread();</div><div class="line">  <span class="keyword">boolean</span> hasFinishedAnimations = <span class="keyword">false</span>;</div><div class="line"></div><div class="line">  <span class="comment">//2.1 先保证 Node 的创建、人为的更新</span></div><div class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mUpdatedNodes.size(); i++) &#123;</div><div class="line">    AnimatedNode node = mUpdatedNodes.valueAt(i);</div><div class="line">    mRunUpdateNodeList.add(node);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// Clean mUpdatedNodes queue</span></div><div class="line">  mUpdatedNodes.clear();</div><div class="line"></div><div class="line">  <span class="comment">//2.2 取得当前帧的动画值，放到更新队列里</span></div><div class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mActiveAnimations.size(); i++) &#123;</div><div class="line">    <span class="comment">//这个 AnimationDriver 是一个abstract class，具体的实现类是SpringAnimation 等，具体是哪个实现类要看在 js 里的动画配置，使用的是哪个类型的Animated</span></div><div class="line">    AnimationDriver animation = mActiveAnimations.valueAt(i);</div><div class="line">    <span class="comment">//通过 currentValue、toValue、时间函数、当前时间，计算下一个mAnimatedValue</span></div><div class="line">    animation.runAnimationStep(frameTimeNanos);</div><div class="line">    AnimatedNode valueNode = animation.mAnimatedValue;</div><div class="line">    mRunUpdateNodeList.add(valueNode);</div><div class="line">    <span class="keyword">if</span> (animation.mHasFinished) &#123;</div><div class="line">      hasFinishedAnimations = <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">//2.3 遍历 mRunUpdateNodeList，更新里边所有的 Node</span></div><div class="line">  updateNodes(mRunUpdateNodeList);</div><div class="line">  mRunUpdateNodeList.clear();</div><div class="line"></div><div class="line">  <span class="comment">// Cleanup finished animations. Iterate over the array of animations and override ones that has</span></div><div class="line">  <span class="comment">// finished, then resize `mActiveAnimations`.</span></div><div class="line">  <span class="comment">// 2.4 如果有动画结束了，找到对应结束的动画，回调 callback</span></div><div class="line">  <span class="keyword">if</span> (hasFinishedAnimations) &#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = mActiveAnimations.size() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</div><div class="line">      AnimationDriver animation = mActiveAnimations.valueAt(i);</div><div class="line">      <span class="keyword">if</span> (animation.mHasFinished) &#123;</div><div class="line">        WritableMap endCallbackResponse = Arguments.createMap();</div><div class="line">        endCallbackResponse.putBoolean(<span class="string">"finished"</span>, <span class="keyword">true</span>);</div><div class="line">        animation.mEndCallback.invoke(endCallbackResponse);</div><div class="line">        mActiveAnimations.removeAt(i);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//3. 执行 AnimatedNode 的更新。nodes 里实际上是一个无向图，通过 BFS（广度优先）的方式进行遍历 遍历这个图，对每个节点进行更新。nodes 的元素属于头结点，AnimatedNode.mchildren 属于子节点。核心思想就是先更新头结点，再更新子节点，最后再次更新头结点，最后一步是确保子节点对父节点的影响也更新了。</span></div><div class="line"><span class="comment">// 比如 nodes 有3个节点，n1，n2，n3，每个节点有一个子节点，n1的子节点n11，n2的子节点n22，n3的子节点n33，那么更新顺序就是 n1-&gt;n2-&gt;n3-&gt;n11-&gt;n22-&gt;n33-&gt;n1-&gt;n2-&gt;n3</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">updateNodes</span><span class="params">(List&lt;AnimatedNode&gt; nodes)</span> </span>&#123;</div><div class="line">  <span class="keyword">int</span> activeNodesCount = <span class="number">0</span>;</div><div class="line">  <span class="keyword">int</span> updatedNodesCount = <span class="number">0</span>;</div><div class="line"></div><div class="line">  <span class="comment">// STEP 1.</span></div><div class="line">  <span class="comment">// BFS over graph of nodes. Update `mIncomingNodes` attribute for each node during that BFS.</span></div><div class="line">  <span class="comment">// Store number of visited nodes in `activeNodesCount`. We "execute" active animations as a part</span></div><div class="line">  <span class="comment">// of this step.</span></div><div class="line"></div><div class="line">  <span class="comment">//BFSColor 相当于标记当前遍历时的类型，主要是用于标记 node 是否已经被遍历过了（visited）。</span></div><div class="line">  mAnimatedGraphBFSColor++; <span class="comment">/* use new color */</span></div><div class="line">  <span class="keyword">if</span> (mAnimatedGraphBFSColor == AnimatedNode.INITIAL_BFS_COLOR) &#123;</div><div class="line">    <span class="comment">// value "0" is used as an initial color for a new node, using it in BFS may cause some nodes</span></div><div class="line">    <span class="comment">// to be skipped.</span></div><div class="line">    mAnimatedGraphBFSColor++;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">//3.1 以 BFS 遍历整个图，计算所有的 node 个数（activeNodesCount），并给所有子节点标记 mActiveIncomingNode = 1</span></div><div class="line"></div><div class="line">  Queue&lt;AnimatedNode&gt; nodesQueue = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</div><div class="line">  <span class="keyword">for</span> (AnimatedNode node : nodes) &#123;</div><div class="line">    <span class="keyword">if</span> (node.mBFSColor != mAnimatedGraphBFSColor) &#123;</div><div class="line">      node.mBFSColor = mAnimatedGraphBFSColor;</div><div class="line">      activeNodesCount++;</div><div class="line">      nodesQueue.add(node);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">while</span> (!nodesQueue.isEmpty()) &#123;</div><div class="line">    AnimatedNode nextNode = nodesQueue.poll();</div><div class="line">    <span class="keyword">if</span> (nextNode.mChildren != <span class="keyword">null</span>) &#123;</div><div class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nextNode.mChildren.size(); i++) &#123;</div><div class="line">        AnimatedNode child = nextNode.mChildren.get(i);</div><div class="line">        child.mActiveIncomingNodes++;</div><div class="line">        <span class="keyword">if</span> (child.mBFSColor != mAnimatedGraphBFSColor) &#123;</div><div class="line">          child.mBFSColor = mAnimatedGraphBFSColor;</div><div class="line">          activeNodesCount++;</div><div class="line">          nodesQueue.add(child);</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">//3.2 以 BFS 遍历整个图，对访问到的每个 node 进行更新</span></div><div class="line">  <span class="comment">// STEP 2</span></div><div class="line">  <span class="comment">// BFS over the graph of active nodes in topological order -&gt; visit node only when all its</span></div><div class="line">  <span class="comment">// "predecessors" in the graph have already been visited. It is important to visit nodes in that</span></div><div class="line">  <span class="comment">// order as they may often use values of their predecessors in order to calculate "next state"</span></div><div class="line">  <span class="comment">// of their own. We start by determining the starting set of nodes by looking for nodes with</span></div><div class="line">  <span class="comment">// `mActiveIncomingNodes = 0` (those can only be the ones that we start BFS in the previous</span></div><div class="line">  <span class="comment">// step). We store number of visited nodes in this step in `updatedNodesCount`</span></div><div class="line"></div><div class="line">  mAnimatedGraphBFSColor++;</div><div class="line">  <span class="keyword">if</span> (mAnimatedGraphBFSColor == AnimatedNode.INITIAL_BFS_COLOR) &#123;</div><div class="line">    <span class="comment">// see reasoning for this check a few lines above</span></div><div class="line">    mAnimatedGraphBFSColor++;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// find nodes with zero "incoming nodes", those can be either nodes from `mUpdatedNodes` or</span></div><div class="line">  <span class="comment">// ones connected to active animations</span></div><div class="line">  <span class="comment">//遍历所有 node，找到所有头节点，把头节点添加到队列尾部。这里的目的是为了让所有子节点更新完毕后，再次更新头节点，因为有可能头节点会因为子节点的变动而有新的改变</span></div><div class="line">  <span class="keyword">for</span> (AnimatedNode node : nodes) &#123;</div><div class="line">    <span class="keyword">if</span> (node.mActiveIncomingNodes == <span class="number">0</span> &amp;&amp; node.mBFSColor != mAnimatedGraphBFSColor) &#123;</div><div class="line">      node.mBFSColor = mAnimatedGraphBFSColor;</div><div class="line">      updatedNodesCount++;</div><div class="line">      nodesQueue.add(node);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">//BFS 的遍历顺序更新所有节点。</span></div><div class="line">  <span class="comment">// Run main "update" loop</span></div><div class="line">  <span class="keyword">while</span> (!nodesQueue.isEmpty()) &#123;</div><div class="line">    AnimatedNode nextNode = nodesQueue.poll();</div><div class="line">    nextNode.update();</div><div class="line">    <span class="keyword">if</span> (nextNode <span class="keyword">instanceof</span> PropsAnimatedNode) &#123;</div><div class="line">      <span class="comment">// Send property updates to native view manager</span></div><div class="line">      <span class="keyword">try</span> &#123;</div><div class="line">      <span class="comment">//如果是 PropsAnimatedNode，通过 updateView 直接更新对应的参数</span></div><div class="line">        ((PropsAnimatedNode) nextNode).updateView(mUIImplementation);</div><div class="line">      &#125; <span class="keyword">catch</span> (IllegalViewOperationException e) &#123;</div><div class="line">          <span class="comment">// An exception is thrown if the view hasn't been created yet. This can happen because views are</span></div><div class="line">          <span class="comment">// created in batches. If this particular view didn't make it into a batch yet, the view won't</span></div><div class="line">          <span class="comment">// exist and an exception will be thrown when attempting to start an animation on it.</span></div><div class="line">          <span class="comment">//</span></div><div class="line">          <span class="comment">// Eat the exception rather than crashing. The impact is that we may drop one or more frames of the</span></div><div class="line">          <span class="comment">// animation.</span></div><div class="line">          FLog.e(ReactConstants.TAG, <span class="string">"Native animation workaround, frame lost as result of race condition"</span>, e);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (nextNode <span class="keyword">instanceof</span> ValueAnimatedNode) &#123;</div><div class="line">      <span class="comment">//把值回调给 js 层</span></div><div class="line">      <span class="comment">// Potentially send events to JS when the node's value is updated</span></div><div class="line">      ((ValueAnimatedNode) nextNode).onValueUpdate();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (nextNode.mChildren != <span class="keyword">null</span>) &#123;</div><div class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nextNode.mChildren.size(); i++) &#123;</div><div class="line">        AnimatedNode child = nextNode.mChildren.get(i);</div><div class="line">        child.mActiveIncomingNodes--;</div><div class="line">        <span class="comment">//没有遍历过的子节点，才添加到 nodeQueue 进行更新。这里是为了避免上一步，再次更新头节点时，又把子节点重新更新一遍</span></div><div class="line">        <span class="keyword">if</span> (child.mBFSColor != mAnimatedGraphBFSColor &amp;&amp; child.mActiveIncomingNodes == <span class="number">0</span>) &#123;</div><div class="line">          child.mBFSColor = mAnimatedGraphBFSColor;</div><div class="line">          updatedNodesCount++;</div><div class="line">          nodesQueue.add(child);</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// Verify that we've visited *all* active nodes. Throw otherwise as this would mean there is a</span></div><div class="line">  <span class="comment">// cycle in animated node graph. We also take advantage of the fact that all active nodes are</span></div><div class="line">  <span class="comment">// visited in the step above so that all the nodes properties `mActiveIncomingNodes` are set to</span></div><div class="line">  <span class="comment">// zero</span></div><div class="line">  <span class="keyword">if</span> (activeNodesCount != updatedNodesCount) &#123;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Looks like animated nodes graph has cycles, there are "</span></div><div class="line">      + activeNodesCount + <span class="string">" but toposort visited only "</span> + updatedNodesCount);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="AnimatedNode"><a href="#AnimatedNode" class="headerlink" title="AnimatedNode"></a>AnimatedNode</h4><p>从上边 <code>updateNodes</code> 的源码，我们可以看到，最终是调用 PropsAnimatedNode 的 updateView 来更新的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//PropsAnimatedNode.java</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">updateView</span><span class="params">(UIImplementation uiImplementation)</span> </span>&#123;</div><div class="line">  <span class="keyword">if</span> (mConnectedViewTag == -<span class="number">1</span>) &#123;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Node has not been attached to a view"</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="comment">//1. 根据不同的 AnimatedNode，生成需要更新的 props</span></div><div class="line">  JavaOnlyMap propsMap = <span class="keyword">new</span> JavaOnlyMap();</div><div class="line">  <span class="keyword">for</span> (Map.Entry&lt;String, Integer&gt; entry : mPropMapping.entrySet()) &#123;</div><div class="line">    <span class="meta">@Nullable</span> AnimatedNode node = mNativeAnimatedNodesManager.getNodeById(entry.getValue());</div><div class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</div><div class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Mapped property node does not exists"</span>);</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (node <span class="keyword">instanceof</span> StyleAnimatedNode) &#123;</div><div class="line">      ((StyleAnimatedNode) node).collectViewUpdates(propsMap);</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (node <span class="keyword">instanceof</span> ValueAnimatedNode) &#123;</div><div class="line">      propsMap.putDouble(entry.getKey(), ((ValueAnimatedNode) node).getValue());</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Unsupported type of node used in property node "</span> +</div><div class="line">          node.getClass());</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// <span class="doctag">TODO:</span> Reuse propsMap and stylesDiffMap objects - note that in subsequent animation steps</span></div><div class="line">  <span class="comment">// for a given node most of the time we will be creating the same set of props (just with</span></div><div class="line">  <span class="comment">// different values). We can take advantage on that and optimize the way we allocate property</span></div><div class="line">  <span class="comment">// maps (we also know that updating view props doesn't retain a reference to the styles object).</span></div><div class="line">  <span class="comment">//2. 执行 view 的更新</span></div><div class="line">  uiImplementation.synchronouslyUpdateViewOnUIThread(</div><div class="line">    mConnectedViewTag,</div><div class="line">    <span class="keyword">new</span> ReactStylesDiffMap(propsMap));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>而在 UIImplementation 中，最终是调用了 NativeViewHierarchyManager.updateProperty 方法来更新 view 的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//UIImplementation.java</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">synchronouslyUpdateViewOnUIThread</span><span class="params">(<span class="keyword">int</span> tag, ReactStylesDiffMap props)</span> </span>&#123;</div><div class="line">  UiThreadUtil.assertOnUiThread();</div><div class="line">  mOperationsQueue.getNativeViewHierarchyManager().updateProperties(tag, props);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在 NativeViewHierachyManager 中，通过 tag 找到对应的 view manager，然后通过 setter，调用对应的方法。比如以 transform 为例，最终会调用到 BaseViewManager 中的 setTransform 方法。至于 ViewManager 如果通过 setter 代理实现的，后续再另开文章剖析里边的设计思路。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//NativeViewHierarchyManager.java</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">updateProperties</span><span class="params">(<span class="keyword">int</span> tag, ReactStylesDiffMap props)</span> </span>&#123;</div><div class="line">  UiThreadUtil.assertOnUiThread();</div><div class="line"></div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    ViewManager viewManager = resolveViewManager(tag);</div><div class="line">    View viewToUpdate = resolveView(tag);</div><div class="line">    viewManager.updateProperties(viewToUpdate, props);</div><div class="line">  &#125; <span class="keyword">catch</span> (IllegalViewOperationException e) &#123;</div><div class="line">    Log.e(TAG, <span class="string">"Unable to update properties for view tag "</span> + tag, e);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//BaseViewManager.java</span></div><div class="line"><span class="meta">@ReactProp</span>(name = PROP_TRANSFORM)</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTransform</span><span class="params">(T view, ReadableArray matrix)</span> </span>&#123;</div><div class="line">  <span class="keyword">if</span> (matrix == <span class="keyword">null</span>) &#123;</div><div class="line">    resetTransformProperty(view);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    setTransformProperty(view, matrix);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>react-native 提供了在 js 层的纯动画实现，利用 requestAnimationFrame 来作为计时器，每个计时周期计算对应的值并更新相应的视图。</li>
+<li>react-native 在 native 层使用了 Choreographer 作为计时器实现 nativeDriver，在 js 层把 animation 信息传到 native 层，由 native 层在主线程中更新 view，避免 js 层执行耗时任务导致动画卡顿。如果低于3.0版本，则使用自定义的 Handler，间隔为16ms 作为计时器。</li>
+<li>react-native 的动画实现，其核心思想和 animator 是相似的，利用显示心跳，周期性的更新动画 View 的值，性能上的差距就在于view 的查找，style 到 view property 的转化上，和react-native 的布局机制相关</li>
+</ol>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="http://www.alloyteam.com/2016/01/reactnative-animated/" target="_blank" rel="external">react-native animated 动画原理</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/react-native/" rel="tag"># react-native</a>
+          
+            <a href="/tags/animation/" rel="tag"># animation</a>
+          
+            <a href="/tags/android/" rel="tag"># android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/15/android-animation-principle/" rel="next" title="android 动画原理">
+                <i class="fa fa-chevron-left"></i> android 动画原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/15/react-navigation-animation-principle/" rel="prev" title="react-navigation 动画实现原理">
+                react-navigation 动画实现原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="mluffy" />
+          <p class="site-author-name" itemprop="name">mluffy</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/luhui" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#react-native-动画实现原理"><span class="nav-number">2.</span> <span class="nav-text">react-native 动画实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#纯-JS-的动画实现"><span class="nav-number">2.1.</span> <span class="nav-text">纯 JS 的动画实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#js-层流程图"><span class="nav-number">2.1.1.</span> <span class="nav-text">js 层流程图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Native-方案实现"><span class="nav-number">2.2.</span> <span class="nav-text">Native 方案实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#native-层流程图"><span class="nav-number">2.2.1.</span> <span class="nav-text">native 层流程图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NativeAnimatedModule"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">NativeAnimatedModule</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ReactChoreographer"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">ReactChoreographer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NativeAnimatedNodesManager"><span class="nav-number">2.2.1.3.</span> <span class="nav-text">NativeAnimatedNodesManager</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AnimatedNode"><span class="nav-number">2.2.1.4.</span> <span class="nav-text">AnimatedNode</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mluffy</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
