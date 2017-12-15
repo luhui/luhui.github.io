@@ -102,14 +102,14 @@
 <meta property="og:site_name" content="懒人小屋">
 <meta property="og:description" content="前言最近在项目中发现 react-native 的项目在实现转场动画的过程中，部分国产 android 机型出现转场时有不流畅的感觉，因此需要对动画过程进行分析，定位问题。本篇文章是定位问题过程衍生出来的第一篇文章。这一系列文章，会涉及到  react-native 下，Android动画性能分析工具-systrace android 动画原理 react-native animated 动画实现">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://luhui.github.io/2017/12/15/react-native-animation-performance-tool-systrace/images/react-native-animation-performance-tool-systrace/CE7AF2EB29354FF79D54A3E05F310D01.jpg">
-<meta property="og:image" content="http://luhui.github.io/2017/12/15/react-native-animation-performance-tool-systrace/images/react-native-animation-performance-tool-systrace/3871F6AC03A57304753B84964C56E564.jpg">
-<meta property="og:image" content="http://luhui.github.io/2017/12/15/react-native-animation-performance-tool-systrace/images/react-native-animation-performance-tool-systrace/CBE4145B3B4BF25025077BF9909556BF.jpg">
-<meta property="og:updated_time" content="2017-12-15T11:37:47.574Z">
+<meta property="og:image" content="http://luhui.github.io/images/react-native-animation-performance-tool-systrace/CE7AF2EB29354FF79D54A3E05F310D01.jpg">
+<meta property="og:image" content="http://luhui.github.io/images/react-native-animation-performance-tool-systrace/3871F6AC03A57304753B84964C56E564.jpg">
+<meta property="og:image" content="http://luhui.github.io/images/react-native-animation-performance-tool-systrace/CBE4145B3B4BF25025077BF9909556BF.jpg">
+<meta property="og:updated_time" content="2017-12-15T12:12:17.425Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="react-native 下，Android动画性能分析工具-systrace">
 <meta name="twitter:description" content="前言最近在项目中发现 react-native 的项目在实现转场动画的过程中，部分国产 android 机型出现转场时有不流畅的感觉，因此需要对动画过程进行分析，定位问题。本篇文章是定位问题过程衍生出来的第一篇文章。这一系列文章，会涉及到  react-native 下，Android动画性能分析工具-systrace android 动画原理 react-native animated 动画实现">
-<meta name="twitter:image" content="http://luhui.github.io/2017/12/15/react-native-animation-performance-tool-systrace/images/react-native-animation-performance-tool-systrace/CE7AF2EB29354FF79D54A3E05F310D01.jpg">
+<meta name="twitter:image" content="http://luhui.github.io/images/react-native-animation-performance-tool-systrace/CE7AF2EB29354FF79D54A3E05F310D01.jpg">
 
 
 
@@ -354,9 +354,9 @@
 <li>-o <file.html> 用于指定分析结果的输出位置，输出结果最好用 chrome 打开，其他浏览器不保证兼容性</file.html></li>
 </ul>
 <h2 id="阅读分析结果"><a href="#阅读分析结果" class="headerlink" title="阅读分析结果"></a>阅读分析结果</h2><p>在 chrome 打开文件后，可以在右上角的<code>View Options</code>里，打开 Hightlight VSync，用于标记显示系统（display subsystem）渲染每一帧的时间点。</p>
-<p>一个测试结果如下：<br><img src="images/react-native-animation-performance-tool-systrace/CE7AF2EB29354FF79D54A3E05F310D01.jpg" alt="IMAGE"><br><a href="images/react-native-animation-performance-tool-systrace/268FACA41EBCD174731B1A95B7C68AA7.zip">测试结果源文件</a></p>
+<p>一个测试结果如下：<br><img src="/images/react-native-animation-performance-tool-systrace/CE7AF2EB29354FF79D54A3E05F310D01.jpg" alt="IMAGE"><br><a href="/images/react-native-animation-performance-tool-systrace/268FACA41EBCD174731B1A95B7C68AA7.zip">测试结果源文件</a></p>
 <p>左侧是进程以及进程下正在执行的线程（并不是所有线程，而是在记录时活跃的线程）。中间的图形则是渲染的分析结果，F 表示视图开始渲染的时间点，即 view 执行<code>performTraversals</code>时的时间点。F 标记为绿色，说明视图渲染的时间不超过一帧，不是绿色，说明已经有丢帧出现。这时就可以查看丢帧严重的地方，看看是哪个部分占用耗时。</p>
-<p><img src="images/react-native-animation-performance-tool-systrace/3871F6AC03A57304753B84964C56E564.jpg" alt="IMAGE"><br>比如上图红色的 frame，可以看到大部分是在 performTraversals 耗时较多，说明视图的渲染比较耗时。虽然说是在渲染视图时耗时，但是并不一定完全是因为 view 太过复杂引起的，实际上，在上述例子中，这个界面只是简单的几个按钮，view 并不复杂，这时候需要同步分析 cpu 中线程的执行情况，看看是否是因为 CPU 负载过高，导致任务等待。点击 DrawFrame，我们可以看到执行时间实际只有13ms（CPU Duration），但是等待 cpu 资源达到了20ms（Wall Duration - CPU Duration），这就 与应用的环境、系统的环境有关系了。<br><img src="images/react-native-animation-performance-tool-systrace/CBE4145B3B4BF25025077BF9909556BF.jpg" alt="IMAGE"></p>
+<p><img src="/images/react-native-animation-performance-tool-systrace/3871F6AC03A57304753B84964C56E564.jpg" alt="IMAGE"><br>比如上图红色的 frame，可以看到大部分是在 performTraversals 耗时较多，说明视图的渲染比较耗时。虽然说是在渲染视图时耗时，但是并不一定完全是因为 view 太过复杂引起的，实际上，在上述例子中，这个界面只是简单的几个按钮，view 并不复杂，这时候需要同步分析 cpu 中线程的执行情况，看看是否是因为 CPU 负载过高，导致任务等待。点击 DrawFrame，我们可以看到执行时间实际只有13ms（CPU Duration），但是等待 cpu 资源达到了20ms（Wall Duration - CPU Duration），这就 与应用的环境、系统的环境有关系了。<br><img src="/images/react-native-animation-performance-tool-systrace/CBE4145B3B4BF25025077BF9909556BF.jpg" alt="IMAGE"></p>
 <h2 id="有关丢帧"><a href="#有关丢帧" class="headerlink" title="有关丢帧"></a>有关丢帧</h2><p>在上节分析结果，我们说到 F 标记为黄色或者红色时，说明有丢帧出现，但从实际体验上看，只是黄色的丢帧并没有令人感觉到不流畅，或者说短时间的动画，让人感受不到那细微的差异。因为从本质上说，30FPS（人眼能够感知的最低动画频率是24FPS） 的动画也是让人感受不到异常的，当然这要具体情况具体分析，不同场景下，对帧率的要求也是不同的（比如射击游戏对帧率的要求就比较高，不然会让人有眩晕感）。总的来说，我们不能单纯的以 profile 的结果来判定动画的性能，需要结合实际情况进行分析，profile 只是一个辅助定位的手段。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
 <li>[performance]（<a href="https://facebook.github.io/react-native/docs/performance.html）章节中，提到了很多性能分析的方法，定位动画问题最常用到的是" target="_blank" rel="external">https://facebook.github.io/react-native/docs/performance.html）章节中，提到了很多性能分析的方法，定位动画问题最常用到的是</a> systrace</li>

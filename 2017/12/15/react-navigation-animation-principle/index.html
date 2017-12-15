@@ -102,12 +102,12 @@
 <meta property="og:site_name" content="懒人小屋">
 <meta property="og:description" content="前言这是android 动画性能分析系列文章中有关源码分析的最后一章，我们通过对比android 动画原理以及react-native animated 动画实现原理发现，两者的实现并无本质区别，其中的性能差距是可以预期的，不会与项目中出现的卡顿现象相关（部分高性能 android 机子上也出现了不流畅问题，反而低配置机子表现正常）。因此只能再看看项目中使用到的 react navigation，">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://luhui.github.io/2017/12/15/react-navigation-animation-principle/images/react-navigation-animation-principle/1DDD56B3F959824C9ADDECC4829DCE4A.jpg">
-<meta property="og:updated_time" content="2017-12-15T11:52:14.527Z">
+<meta property="og:image" content="http://luhui.github.io/images/react-navigation-animation-principle/1DDD56B3F959824C9ADDECC4829DCE4A.jpg">
+<meta property="og:updated_time" content="2017-12-15T12:12:17.430Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="react-navigation 动画实现原理">
 <meta name="twitter:description" content="前言这是android 动画性能分析系列文章中有关源码分析的最后一章，我们通过对比android 动画原理以及react-native animated 动画实现原理发现，两者的实现并无本质区别，其中的性能差距是可以预期的，不会与项目中出现的卡顿现象相关（部分高性能 android 机子上也出现了不流畅问题，反而低配置机子表现正常）。因此只能再看看项目中使用到的 react navigation，">
-<meta name="twitter:image" content="http://luhui.github.io/2017/12/15/react-navigation-animation-principle/images/react-navigation-animation-principle/1DDD56B3F959824C9ADDECC4829DCE4A.jpg">
+<meta name="twitter:image" content="http://luhui.github.io/images/react-navigation-animation-principle/1DDD56B3F959824C9ADDECC4829DCE4A.jpg">
 
 
 
@@ -333,7 +333,7 @@
 
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是android 动画性能分析系列文章中有关源码分析的最后一章，我们通过对比<a href="/2017/12/15/android-animation-principle/" title="android 动画原理">android 动画原理</a>以及<a href="/2017/12/15/react-native-animated-principle/" title="react-native animated 动画实现原理">react-native animated 动画实现原理</a>发现，两者的实现并无本质区别，其中的性能差距是可以预期的，不会与项目中出现的卡顿现象相关（部分高性能 android 机子上也出现了不流畅问题，反而低配置机子表现正常）。因此只能再看看项目中使用到的 react navigation，看看里边是如何使用的 Animated 源码。</p>
-<h1 id="React-Navigation-的布局结构"><a href="#React-Navigation-的布局结构" class="headerlink" title="React Navigation 的布局结构"></a>React Navigation 的布局结构</h1><p>一个使用 StackNavigator 的布局，大概会是这样：<br>StackNavigator -&gt; CardStackTransitioner -&gt; Transitioner -&gt; CardStack -&gt; Card -&gt; SceneView -&gt; Component<br><img src="images/react-navigation-animation-principle/1DDD56B3F959824C9ADDECC4829DCE4A.jpg" alt="ReactNative 动画流程__ReactNavigagtion 动画流程__StackNavigator 渲染流程_5.jpg"></p>
+<h1 id="React-Navigation-的布局结构"><a href="#React-Navigation-的布局结构" class="headerlink" title="React Navigation 的布局结构"></a>React Navigation 的布局结构</h1><p>一个使用 StackNavigator 的布局，大概会是这样：<br>StackNavigator -&gt; CardStackTransitioner -&gt; Transitioner -&gt; CardStack -&gt; Card -&gt; SceneView -&gt; Component<br><img src="/images/react-navigation-animation-principle/1DDD56B3F959824C9ADDECC4829DCE4A.jpg" alt="ReactNative 动画流程__ReactNavigagtion 动画流程__StackNavigator 渲染流程_5.jpg"></p>
 <ul>
 <li>StackNavigator：类似于工厂类，提供上层的 api 接口，CardStackTransitioner 由它来构造</li>
 <li>CardStackTransitioner：Transitioner 的渲染代理，提供动画的配置</li>
