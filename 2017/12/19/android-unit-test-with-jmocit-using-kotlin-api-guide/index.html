@@ -97,14 +97,14 @@
 <meta name="description" content="前言这是一篇有关 JMockit 常用API的介绍，以及在 kotlin 中的一些注意事项。此文章是基于 JMockit 1.37版本，Kotlin 1.2版本编写的。 JMockit tutorial其实写得很详细了，这里只是把平常在项目中用到的方式列举出来详细说明，以及官网上没提到的 kotlin 下的一些坑。所以这里算是个导读，想要精通，还是建议把 tutorial 看完。 Annoatio">
 <meta name="keywords" content="Android,UnitTest">
 <meta property="og:type" content="article">
-<meta property="og:title" content="android_unit_test_with_jmocit_using_kotlin">
-<meta property="og:url" content="http://mlazy.club/2017/12/19/android-unit-test-with-jmocit-using-kotlin/index.html">
+<meta property="og:title" content="Android UnitTest with JMockit using Kotlin - API Guide">
+<meta property="og:url" content="http://mlazy.club/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/index.html">
 <meta property="og:site_name" content="懒人小屋">
 <meta property="og:description" content="前言这是一篇有关 JMockit 常用API的介绍，以及在 kotlin 中的一些注意事项。此文章是基于 JMockit 1.37版本，Kotlin 1.2版本编写的。 JMockit tutorial其实写得很详细了，这里只是把平常在项目中用到的方式列举出来详细说明，以及官网上没提到的 kotlin 下的一些坑。所以这里算是个导读，想要精通，还是建议把 tutorial 看完。 Annoatio">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-19T01:45:53.006Z">
+<meta property="og:updated_time" content="2017-12-19T09:06:17.729Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="android_unit_test_with_jmocit_using_kotlin">
+<meta name="twitter:title" content="Android UnitTest with JMockit using Kotlin - API Guide">
 <meta name="twitter:description" content="前言这是一篇有关 JMockit 常用API的介绍，以及在 kotlin 中的一些注意事项。此文章是基于 JMockit 1.37版本，Kotlin 1.2版本编写的。 JMockit tutorial其实写得很详细了，这里只是把平常在项目中用到的方式列举出来详细说明，以及官网上没提到的 kotlin 下的一些坑。所以这里算是个导读，想要精通，还是建议把 tutorial 看完。 Annoatio">
 
 
@@ -134,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://mlazy.club/2017/12/19/android-unit-test-with-jmocit-using-kotlin/"/>
+  <link rel="canonical" href="http://mlazy.club/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/"/>
 
 
 
 
 
-  <title>android_unit_test_with_jmocit_using_kotlin | 懒人小屋</title>
+  <title>Android UnitTest with JMockit using Kotlin - API Guide | 懒人小屋</title>
   
 
 
@@ -310,7 +310,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/19/android-unit-test-with-jmocit-using-kotlin/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -327,7 +327,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">android_unit_test_with_jmocit_using_kotlin</h1>
+          <h1 class="post-title" itemprop="name headline">Android UnitTest with JMockit using Kotlin - API Guide</h1>
         
 
         <div class="post-meta">
@@ -359,8 +359,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/19/android-unit-test-with-jmocit-using-kotlin/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/12/19/android-unit-test-with-jmocit-using-kotlin/" itemprop="commentsCount"></span>
+                <a href="/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -369,7 +369,7 @@
 
           
           
-             <span id="/2017/12/19/android-unit-test-with-jmocit-using-kotlin/" class="leancloud_visitors" data-flag-title="android_unit_test_with_jmocit_using_kotlin">
+             <span id="/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/" class="leancloud_visitors" data-flag-title="Android UnitTest with JMockit using Kotlin - API Guide">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -797,7 +797,7 @@
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99034, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
 		
-		_hcwp.push({widget:"Stream", widget_id: 99034, xid: "2017/12/19/android-unit-test-with-jmocit-using-kotlin/"});
+		_hcwp.push({widget:"Stream", widget_id: 99034, xid: "2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/"});
 		
 
 		(function() {
