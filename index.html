@@ -307,6 +307,191 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mluffy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="懒人小屋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/" itemprop="url">Android UnitTest with JMockit using Kotlin - In Practice</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-20T19:23:59+08:00">
+                2017-12-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+            <!--noindex-->
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+              <!--/noindex-->
+            
+          
+
+          
+          
+             <span id="/2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/" class="leancloud_visitors" data-flag-title="Android UnitTest with JMockit using Kotlin - In Practice">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上篇：<a href="/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/" title="Android UnitTest with JMockit using Kotlin - API Guide">Android UnitTest with JMockit using Kotlin - API Guide</a> 里，我们列举了 JMockit 中一些常用的 api，及其用法，本篇主要是提出一些真实的项目场景，探讨如何利用上篇提到的 api 来实现单元测试。</p>
+<h1 id="record-replay-verify"><a href="#record-replay-verify" class="headerlink" title="record-replay-verify"></a>record-replay-verify</h1><p>工欲善其事必先利其器，在开始编写单元测试前，我们需要先了解一般单元测试编写的基本规则，如何实现 APP 应用前先了解 MVC 架构是怎么回事，提前做好设计是一个道理。</p>
+<p>通常来说，我们的一个 testcase 可以这么写：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">someTestMethod</span><span class="params">()</span></span> &#123;</div><div class="line">  <span class="comment">//1. 准备阶段：测试环境的初始化</span></div><div class="line">  ...</div><div class="line">  <span class="comment">//2. 执行阶段：测试代码的调用，一般是调用 public 方法</span></div><div class="line">  ...</div><div class="line">  <span class="comment">//3. 验证阶段：验证执行结果的正确性</span></div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这也是传说中的 Arrange, Act, Assert syntax（AAA）。<br>如同 MVC 一样，这只是一个指导思想。在实际的项目中，一个类的行为可能不只是单纯的输入输出，还有一些复杂的副作用（side-effect）。因此 JMockit 中，为了满足这样相对复杂的类，他提出了升级版的 AAA，利用 mock 实现基于行为的单元测试方法，即 record-replay-verify:</p>
+<ol>
+<li>record，在准备阶段，设定 mocked 对象的行为，以便代码执行可以达到预期的结果</li>
+<li>replay，和 AAA 一致，执行需要测试的代码。</li>
+<li>verify，在验证阶段，验证 mocked 对象是否已经执行了特定的方法，即被测试对象是否进行了某些动作，例如保存数据库等</li>
+</ol>
+<p>一个 record-replay-verify testcase 可以这么写：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">someTestMethod</span><span class="params">()</span></span> &#123;</div><div class="line">  <span class="comment">//1. record 阶段，使用 expectation 控制 mocked 对象的行为</span></div><div class="line">  <span class="keyword">object</span> : Expectations() &#123;</div><div class="line">    init &#123;</div><div class="line">      <span class="comment">//一些 mock 方法，相当于标记这些方法被 recorded，在执行的时候会匹配这些 recorded 方法，返回我们预期的结果</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">//2. replay 阶段，执行需要测试的代码</span></div><div class="line"></div><div class="line">  <span class="comment">//3. verify 阶段，验证对象行为</span></div><div class="line">  <span class="keyword">object</span> : Verification() &#123;</div><div class="line">    init &#123;</div><div class="line">      <span class="comment">//验证 mocked 对象是否执行了某些方法，他们的顺序等等</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>上述testcase 中，1和3并不一定是必要的，他相当于 AAA 模式的补充。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li>JMockit 基于传统的单元测试模式 AAA（准备-&gt;执行-&gt;验证），提出了 record-replay-verify 模式，他相当于 AAA 模式的增强。</li>
+<li>其中 record 是对准备阶段的增强，使用 expectation 去控制 mocked 对象的行为，replay 阶段等价于执行阶段，verify 是对验证阶段的增强，通过 verification 去判断 mocked 对象的行为是否符合预期</li>
+<li>record 和 verify 阶段并不是必须的，和具体的测试对象的实现有关</li>
+<li>Expectations 的本质是<strong>记录方法，以及预期的结果</strong>。在 replay 阶段，会去匹配记录的方法，返回<strong>记录</strong>中的结果</li>
+<li>Verification 的本质是<strong>验证mocked 对象的行为</strong>，检查 replay 阶段的执行过程是否符合预期</li>
+</ol>
+<h1 id="小试牛刀"><a href="#小试牛刀" class="headerlink" title="小试牛刀"></a>小试牛刀</h1><p>一般来说，单元测试是以 TDD（单元测试驱动）的方式进行的，用 TDD 的方式可以辅助我们思考整个功能的设计，明确类的边界和依赖。给已经写好的代码编写单元测试的投入产出比是不高的，一般适合给初次接触单元测试的新手来练练手。除非是当需要优化原有代码的时候，可以以此为契机补充单元测试，以此保证后续的修改不会引出其他问题。</p>
+<h2 id="需求说明"><a href="#需求说明" class="headerlink" title="需求说明"></a>需求说明</h2><p>我们来模拟一遍 ServiceController 的设计及实现。在项目中，我们抽象了一个 service 层，用于实现相关的业务逻辑。因为不同的业务逻辑有其自己的生命周期，我们需要设计一套支持生命周期的业务层对象，以便业务层可以自由控制资源的持有和释放。</p>
+<h2 id="接口设计"><a href="#接口设计" class="headerlink" title="接口设计"></a>接口设计</h2><p>基于以上的需求，我们可以抽象出一个 service 接口，他提供基本的生命周期<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IService</span> </span>&#123;</div><div class="line">  <span class="comment">//服务启动时调用，可以在这里初始化服务的各种资源</span></div><div class="line">  <span class="function"><span class="keyword">fun</span> <span class="title">onStart</span><span class="params">()</span></span></div><div class="line">  <span class="comment">//服务器停止时调用，err 不为0时，说明是因为某些异常退出。比如账号在其他地点登录，和用户相关的服务需要停止</span></div><div class="line">  <span class="function"><span class="keyword">fun</span> <span class="title">onStop</span><span class="params">(err: <span class="type">Int</span>)</span></span></div><div class="line">  <span class="comment">//服务的优先级，因为处于同一周期里的服务可能会有多个，不同服务之间初始化可能有顺序要求，因此提供一个优先级的设定，以便满足此需求。在这里，我们提供默认的优先级，方便不需要设定顺序的实现类</span></div><div class="line">  <span class="function"><span class="keyword">fun</span> <span class="title">priority</span><span class="params">()</span></span> = <span class="number">500</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>接着，应该有个控制类，管理这些 service 的启动和释放，这个控制类本质上也属于一个 service，只是他的职责比较特殊，是控制其他业务模块的生命周期。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//这里传入 set，是为了表明后续的服务调用顺序，和传入的 collection 顺序无关。</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ServiceController</span></span>(serviceSet: Set&lt;IService&gt;): IService &#123;</div><div class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onStart</span><span class="params">()</span></span> &#123;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onStop</span><span class="params">()</span></span> &#123;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>到这里，基本的服务层雏形就出来了。所有的业务模块，都实现 IService 的接口，以支持生命周期的管理。各自模块处理自己生命周期下的资源初始化和释放。另外，我们定义了 ServiceController，他是一个特殊的服务层模块，用于管理处于他管辖下的生命周期，外部通过管理 service controller 的生命周期，进而管理所有 service 的生命周期。</p>
+<p>比如，用户登录后:<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> userController = ServiceController(userServiceSet)</div><div class="line">userController.onStart()</div></pre></td></tr></table></figure></p>
+<p>用户登出后：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">userController.onStop(<span class="number">0</span>)</div></pre></td></tr></table></figure></p>
+<p>那么 ServiceController 的行为基本就可以明确下来：</p>
+<ol>
+<li>当服务启动时，调用自己所管辖的服务一起启动</li>
+<li>当服务停止时，调用自己所管辖的服务一起停止</li>
+<li>启动和停止的顺序依照 priority 来排序</li>
+</ol>
+<p>接下来就可以编写单元测试。先看 onStart 测试，当 controller.onStart()调用的时候，我们预期的行为是serviceSet 里的 service，按照优先级从高到低的顺序调用 onStart 方法。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">@RunWith(JMockit::class)</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ServiceControllerTestExample</span> </span>&#123;</div><div class="line">    <span class="class"><span class="keyword">interface</span> <span class="title">IService</span> </span>&#123;</div><div class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">onStart</span><span class="params">()</span></span></div><div class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">onStop</span><span class="params">(err: <span class="type">Int</span>)</span></span></div><div class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">priority</span><span class="params">()</span></span> = <span class="number">500</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//待测试的 ServiceController</span></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">ServiceController</span></span>(serviceSet: Set&lt;IService&gt;): IService &#123;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">val</span> orderSet: List&lt;IService&gt; = serviceSet.sortedByDescending &#123; it.priority() &#125;</div><div class="line">        <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onStart</span><span class="params">()</span></span> &#123;</div><div class="line">            orderSet.onEach &#123; it.onStart() &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onStop</span><span class="params">(err: <span class="type">Int</span>)</span></span> &#123;</div><div class="line">            orderSet.onEach &#123; it.onStop(err) &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">lateinit</span> <span class="keyword">var</span> orderService: MutableList&lt;SimpleService&gt;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">lateinit</span> <span class="keyword">var</span> controller: ServiceController</div><div class="line"></div><div class="line">    <span class="meta">@Before</span></div><div class="line">    <span class="comment">//测试准备阶段，准备好测试环境，待测试对象</span></div><div class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">setup</span><span class="params">()</span></span> &#123;</div><div class="line">        orderService = ArrayList(<span class="number">10</span>)</div><div class="line">        <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">10</span> downTo <span class="number">1</span>) &#123;</div><div class="line">            orderService.add(SimpleService(i))</div><div class="line">        &#125;</div><div class="line">        controller = ServiceController(orderService.toSet())</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">onStartTest</span><span class="params">()</span></span> &#123;</div><div class="line">        <span class="comment">//record 阶段，定义 mocked 对象</span></div><div class="line">        <span class="keyword">val</span> anyService = SimpleService(<span class="number">0</span>)</div><div class="line">        <span class="comment">//让 SimpleService 变为 Partial Mocked 对象，使其方法调用可以被 recorded</span></div><div class="line">        <span class="keyword">object</span> : Expectations(SimpleService::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>) </span>&#123;</div><div class="line">            init &#123;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">//replay 阶段，执行测试代码</span></div><div class="line">        controller.onStart()</div><div class="line"></div><div class="line">        <span class="comment">//verify 阶段，验证输出</span></div><div class="line">        <span class="keyword">object</span> : VerificationsInOrder() &#123;</div><div class="line">            init &#123;</div><div class="line">                <span class="keyword">val</span> priorityList = ArrayList&lt;<span class="built_in">Int</span>&gt;(<span class="number">10</span>)</div><div class="line">                <span class="comment">//service 在 onStart 时，会调用 doSomething，参数是该 service 的 priority，我们把参数给 capture 下来，然后对比这个调用顺序是否符合预期</span></div><div class="line">                anyService.doSomething(withCapture(priorityList))</div><div class="line">                <span class="comment">//onStart 方法理应调用了10次，因为我们有10个 service</span></div><div class="line">                times = <span class="number">10</span></div><div class="line">                <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">0</span> until <span class="number">10</span>) &#123;</div><div class="line">                    <span class="comment">//doSomething 参数调用的顺序应当符合10, 9, ..., 2, 1</span></div><div class="line">                    Assert.assertEquals(<span class="number">10</span> - i, priorityList[i])</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">SimpleService</span></span>(<span class="keyword">private</span> <span class="keyword">val</span> priority: <span class="built_in">Int</span>): IService &#123;</div><div class="line">        <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onStart</span><span class="params">()</span></span> &#123;</div><div class="line">            <span class="comment">//因为 verification 无法验证同一个方法的调用顺序，因此我们需要通过其他额外的手段验证</span></div><div class="line">            doSomething(priority())</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onStop</span><span class="params">(err: <span class="type">Int</span>)</span></span> &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">priority</span><span class="params">()</span></span>: <span class="built_in">Int</span> = priority</div><div class="line"></div><div class="line">        <span class="comment">//这里 Int 必须是 option 的，因为 withCapture 返回的是一个 null</span></div><div class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">doSomething</span><span class="params">(priority: <span class="type">Int</span>?)</span></span> &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在上述的例子中，用了一些小技巧。因为在 JMockit 中，同一个 class 的不同实例的同一方法，其 signature 是一样的，即 JMockit 是不能区分方法调用是不是来自不同的实例，也就是说，在<code>Verifications</code>中，我们是无法直接verify：<code>不同的 service 实例，按照特定的顺序调用了 onStart 方法</code>，即<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">object</span> : Verifications() &#123;</div><div class="line">  init &#123;</div><div class="line">    <span class="keyword">for</span> (s <span class="keyword">in</span> orderService) &#123;</div><div class="line">      s.onStart()</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这样的实现是验证不到的，会提示 <code>unexpect method invoke</code></p>
+<p>因此我们利用在 verify 中可以验证调用参数的特性，在 SimpleService 的 onStart 实现中，让其调用一个函数，参数为该 service 的 priority，然后通过 withCapture 捕获到所有的参数，对比参数的调用顺序，即能从侧面验证，service 是不是按照优先级去执行了。</p>
+<p>至于 onStop 方法，原理都是类似的，这里就不再赘述。</p>
+<p>另外，ServiceController 是在单元测试编写完之后才实现的，这里强调实现顺序，主要是想说明单元测试是一个辅助设计、保障质量的方法，保障质量总所周知，而辅助设计就是 TDD 的核心概念，通过先编写单元测试，你就能够明白实现类的输入和输出，边界条件，在先思考了这些之后，再去编写实现，自然事半功倍。</p>
+<h2 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h2><ol>
+<li>写单元测试最好的时机是新功能或者是代码重构时，以 TDD 方式开发</li>
+<li>record 实际上只能记录的是方法的调用，而不能区分是哪个实例执行的方法调用，因此需要验证不同实例对同一个方法的调用顺序时，需要另辟蹊径，利用 withCapture 或其他方式（比如自己写一个全局变量来记录调用顺序）来实现</li>
+<li>单元测试是一个辅助设计、保障质量的方法，先编写单元测试，再写实现，可以让我们提前考虑好输入输出、边界条件，把以上信息想清楚后，编写效率自然有所提高。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1955,7 +2140,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
