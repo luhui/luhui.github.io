@@ -307,7 +307,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/android-unit-test-with-jmocit-using-kotlin-in-practice.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -326,7 +326,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/" itemprop="url">Android UnitTest with JMockit using Kotlin - In Practice</a></h1>
+                <a class="post-title-link" href="/android-unit-test-with-jmocit-using-kotlin-in-practice.html" itemprop="url">Android UnitTest with JMockit using Kotlin - In Practice</a></h1>
         
 
         <div class="post-meta">
@@ -358,8 +358,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/" itemprop="commentsCount"></span>
+                <a href="/android-unit-test-with-jmocit-using-kotlin-in-practice.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="android-unit-test-with-jmocit-using-kotlin-in-practice.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -368,7 +368,7 @@
 
           
           
-             <span id="/2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/" class="leancloud_visitors" data-flag-title="Android UnitTest with JMockit using Kotlin - In Practice">
+             <span id="/android-unit-test-with-jmocit-using-kotlin-in-practice.html" class="leancloud_visitors" data-flag-title="Android UnitTest with JMockit using Kotlin - In Practice">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -401,7 +401,7 @@
       
         
           
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上篇：<a href="/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/" title="Android UnitTest with JMockit using Kotlin - API Guide">Android UnitTest with JMockit using Kotlin - API Guide</a> 里，我们列举了 JMockit 中一些常用的 api，及其用法，本篇主要是提出一些真实的项目场景，探讨如何利用上篇提到的 api 来实现单元测试。</p>
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上篇：<a href="/android-unit-test-with-jmocit-using-kotlin-api-guide.html" title="Android UnitTest with JMockit using Kotlin - API Guide">Android UnitTest with JMockit using Kotlin - API Guide</a> 里，我们列举了 JMockit 中一些常用的 api，及其用法，本篇主要是提出一些真实的项目场景，探讨如何利用上篇提到的 api 来实现单元测试。</p>
 <h1 id="record-replay-verify"><a href="#record-replay-verify" class="headerlink" title="record-replay-verify"></a>record-replay-verify</h1><p>工欲善其事必先利其器，在开始编写单元测试前，我们需要先了解一般单元测试编写的基本规则，如何实现 APP 应用前先了解 MVC 架构是怎么回事，提前做好设计是一个道理。</p>
 <p>通常来说，我们的一个 testcase 可以这么写：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">someTestMethod</span><span class="params">()</span></span> &#123;</div><div class="line">  <span class="comment">//1. 准备阶段：测试环境的初始化</span></div><div class="line">  ...</div><div class="line">  <span class="comment">//2. 执行阶段：测试代码的调用，一般是调用 public 方法</span></div><div class="line">  ...</div><div class="line">  <span class="comment">//3. 验证阶段：验证执行结果的正确性</span></div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>这也是传说中的 Arrange, Act, Assert syntax（AAA）。<br>如同 MVC 一样，这只是一个指导思想。在实际的项目中，一个类的行为可能不只是单纯的输入输出，还有一些复杂的副作用（side-effect）。因此 JMockit 中，为了满足这样相对复杂的类，他提出了升级版的 AAA，利用 mock 实现基于行为的单元测试方法，即 record-replay-verify:</p>
@@ -492,7 +492,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/android-unit-test-with-jmocit-using-kotlin-api-guide.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -511,7 +511,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/" itemprop="url">Android UnitTest with JMockit using Kotlin - API Guide</a></h1>
+                <a class="post-title-link" href="/android-unit-test-with-jmocit-using-kotlin-api-guide.html" itemprop="url">Android UnitTest with JMockit using Kotlin - API Guide</a></h1>
         
 
         <div class="post-meta">
@@ -543,8 +543,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/" itemprop="commentsCount"></span>
+                <a href="/android-unit-test-with-jmocit-using-kotlin-api-guide.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="android-unit-test-with-jmocit-using-kotlin-api-guide.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -553,7 +553,7 @@
 
           
           
-             <span id="/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/" class="leancloud_visitors" data-flag-title="Android UnitTest with JMockit using Kotlin - API Guide">
+             <span id="/android-unit-test-with-jmocit-using-kotlin-api-guide.html" class="leancloud_visitors" data-flag-title="Android UnitTest with JMockit using Kotlin - API Guide">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -697,7 +697,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/15/react-native-animation-anlaysis-summary/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/react-native-animation-anlaysis-summary.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -716,7 +716,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/15/react-native-animation-anlaysis-summary/" itemprop="url">react-native 动画性能分析总结</a></h1>
+                <a class="post-title-link" href="/react-native-animation-anlaysis-summary.html" itemprop="url">react-native 动画性能分析总结</a></h1>
         
 
         <div class="post-meta">
@@ -748,8 +748,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/15/react-native-animation-anlaysis-summary/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/12/15/react-native-animation-anlaysis-summary/" itemprop="commentsCount"></span>
+                <a href="/react-native-animation-anlaysis-summary.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="react-native-animation-anlaysis-summary.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -758,7 +758,7 @@
 
           
           
-             <span id="/2017/12/15/react-native-animation-anlaysis-summary/" class="leancloud_visitors" data-flag-title="react-native 动画性能分析总结">
+             <span id="/react-native-animation-anlaysis-summary.html" class="leancloud_visitors" data-flag-title="react-native 动画性能分析总结">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -791,7 +791,7 @@
       
         
           
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在文章 <a href="/2017/12/15/react-native-animation-performance-tool-systrace/" title="react-native 下，Android动画性能分析工具-systrace">react-native 下，Android动画性能分析工具-systrace</a> 中，发现在当前项目，动画的不流畅感不是因为丢帧的因素影响到的。接着猜测可能是 react-native 的动画实现可能存在权限，因此对比了<a href="/2017/12/15/android-animation-principle/" title="android 动画原理">android 动画原理</a>、<a href="/2017/12/15/react-native-animated-principle/" title="react-native animated 动画实现原理">react-native animated 动画实现原理</a>。但是发现两边的实现思路是雷同的，性能差别也不会太大。接着猜测是否是因为导航库在动画使用上出现问题，我们分析了<a href="/2017/12/15/react-navigation-animation-principle/" title="react-navigation 动画实现原理">react-navigation 动画实现原理</a>，发现其使用方法也没问题。总结发现，以上的分析中，主要是分析了动画频率是否出现了问题，并没有验证中间生成的画面是否是连续的，因此猜测可能是在 react-native 的动画中，中间帧的渲染是异常的，导致动画过程中，虽然没有丢帧，但是由于画面不是连续的，让人产生不流畅的错觉。</p>
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在文章 <a href="/react-native-animation-performance-tool-systrace.html" title="react-native 下，Android动画性能分析工具-systrace">react-native 下，Android动画性能分析工具-systrace</a> 中，发现在当前项目，动画的不流畅感不是因为丢帧的因素影响到的。接着猜测可能是 react-native 的动画实现可能存在权限，因此对比了<a href="/android-animation-principle.html" title="android 动画原理">android 动画原理</a>、<a href="/react-native-animated-principle.html" title="react-native animated 动画实现原理">react-native animated 动画实现原理</a>。但是发现两边的实现思路是雷同的，性能差别也不会太大。接着猜测是否是因为导航库在动画使用上出现问题，我们分析了<a href="/react-navigation-animation-principle.html" title="react-navigation 动画实现原理">react-navigation 动画实现原理</a>，发现其使用方法也没问题。总结发现，以上的分析中，主要是分析了动画频率是否出现了问题，并没有验证中间生成的画面是否是连续的，因此猜测可能是在 react-native 的动画中，中间帧的渲染是异常的，导致动画过程中，虽然没有丢帧，但是由于画面不是连续的，让人产生不流畅的错觉。</p>
 <h1 id="画面过程分析"><a href="#画面过程分析" class="headerlink" title="画面过程分析"></a>画面过程分析</h1><p>由于转场动画只涉及到了 translationX，因此可以看看是否是 translationX 的值有异常导致的。那么我们需要分别对比在 native 下，使用 animator 的 translationX 方案以及使用 react-native animated 的 translationX 方案在计算值的过程中是否有差别。</p>
 <p>native 层很简单，通过 updateListener 记录中间值即可<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@TargetApi</span>(Build.VERSION_CODES.KITKAT)</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">final</span> View view = <span class="keyword">new</span> View(<span class="keyword">this</span>);</div><div class="line">    view.setBackgroundColor(Color.BLUE);</div><div class="line">    <span class="keyword">final</span> FrameLayout container = (FrameLayout) findViewById(R.id.container);</div><div class="line">    FrameLayout.LayoutParams params = <span class="keyword">new</span> FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);</div><div class="line">    container.addView(view, params);</div><div class="line">    mLastTranlationX = container.getWidth();</div><div class="line">    view.setTranslationX(container.getWidth());</div><div class="line">    view.animate().translationX(<span class="number">0</span>).setDuration(<span class="number">1000</span>).setUpdateListener(<span class="keyword">new</span> ValueAnimator.AnimatorUpdateListener() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationUpdate</span><span class="params">(ValueAnimator animation)</span> </span>&#123;</div><div class="line">            <span class="keyword">float</span> between = view.getTranslationX() - mLastTranlationX;</div><div class="line">            mLastTranlationX = view.getTranslationX();</div><div class="line">            Log.e(<span class="string">"lh"</span>, mLastTranlationX + <span class="string">"\t"</span> + between);</div><div class="line">        &#125;</div><div class="line">    &#125;).start();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>其 translationX 的曲线如下：</p>
@@ -854,7 +854,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/15/react-navigation-animation-principle/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/react-navigation-animation-principle.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -873,7 +873,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/15/react-navigation-animation-principle/" itemprop="url">react-navigation 动画实现原理</a></h1>
+                <a class="post-title-link" href="/react-navigation-animation-principle.html" itemprop="url">react-navigation 动画实现原理</a></h1>
         
 
         <div class="post-meta">
@@ -905,8 +905,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/15/react-navigation-animation-principle/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/12/15/react-navigation-animation-principle/" itemprop="commentsCount"></span>
+                <a href="/react-navigation-animation-principle.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="react-navigation-animation-principle.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -915,7 +915,7 @@
 
           
           
-             <span id="/2017/12/15/react-navigation-animation-principle/" class="leancloud_visitors" data-flag-title="react-navigation 动画实现原理">
+             <span id="/react-navigation-animation-principle.html" class="leancloud_visitors" data-flag-title="react-navigation 动画实现原理">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -948,7 +948,7 @@
       
         
           
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是android 动画性能分析系列文章中有关源码分析的最后一章，我们通过对比<a href="/2017/12/15/android-animation-principle/" title="android 动画原理">android 动画原理</a>以及<a href="/2017/12/15/react-native-animated-principle/" title="react-native animated 动画实现原理">react-native animated 动画实现原理</a>发现，两者的实现并无本质区别，其中的性能差距是可以预期的，不会与项目中出现的卡顿现象相关（部分高性能 android 机子上也出现了不流畅问题，反而低配置机子表现正常）。因此只能再看看项目中使用到的 react navigation，看看里边是如何使用的 Animated 源码。</p>
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是android 动画性能分析系列文章中有关源码分析的最后一章，我们通过对比<a href="/android-animation-principle.html" title="android 动画原理">android 动画原理</a>以及<a href="/react-native-animated-principle.html" title="react-native animated 动画实现原理">react-native animated 动画实现原理</a>发现，两者的实现并无本质区别，其中的性能差距是可以预期的，不会与项目中出现的卡顿现象相关（部分高性能 android 机子上也出现了不流畅问题，反而低配置机子表现正常）。因此只能再看看项目中使用到的 react navigation，看看里边是如何使用的 Animated 源码。</p>
 <h1 id="React-Navigation-的布局结构"><a href="#React-Navigation-的布局结构" class="headerlink" title="React Navigation 的布局结构"></a>React Navigation 的布局结构</h1><p>一个使用 StackNavigator 的布局，大概会是这样：<br>StackNavigator -&gt; CardStackTransitioner -&gt; Transitioner -&gt; CardStack -&gt; Card -&gt; SceneView -&gt; Component<br><img src="/images/react-navigation-animation-principle/1DDD56B3F959824C9ADDECC4829DCE4A.jpg" alt="ReactNative 动画流程__ReactNavigagtion 动画流程__StackNavigator 渲染流程_5.jpg"></p>
 <ul>
 <li>StackNavigator：类似于工厂类，提供上层的 api 接口，CardStackTransitioner 由它来构造</li>
@@ -1022,7 +1022,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/15/react-native-animated-principle/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/react-native-animated-principle.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -1041,7 +1041,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/15/react-native-animated-principle/" itemprop="url">react-native animated 动画实现原理</a></h1>
+                <a class="post-title-link" href="/react-native-animated-principle.html" itemprop="url">react-native animated 动画实现原理</a></h1>
         
 
         <div class="post-meta">
@@ -1073,8 +1073,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/15/react-native-animated-principle/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/12/15/react-native-animated-principle/" itemprop="commentsCount"></span>
+                <a href="/react-native-animated-principle.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="react-native-animated-principle.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -1083,7 +1083,7 @@
 
           
           
-             <span id="/2017/12/15/react-native-animated-principle/" class="leancloud_visitors" data-flag-title="react-native animated 动画实现原理">
+             <span id="/react-native-animated-principle.html" class="leancloud_visitors" data-flag-title="react-native animated 动画实现原理">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1116,7 +1116,7 @@
       
         
           
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上篇：<a href="/2017/12/15/android-animation-principle/" title="android 动画原理">android 动画原理</a> 说到，要对比 android 本身的动画实现以及 react-native 的动画实现来对比分析。本篇主要分析 react-native 的 Animated 控件是如何实现动画的，包含 Animated 中使用 nativeDriver 的 native 层动画实现方案以及不使用 nativeDriver 的纯 JS 动画实现方案</p>
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上篇：<a href="/android-animation-principle.html" title="android 动画原理">android 动画原理</a> 说到，要对比 android 本身的动画实现以及 react-native 的动画实现来对比分析。本篇主要分析 react-native 的 Animated 控件是如何实现动画的，包含 Animated 中使用 nativeDriver 的 native 层动画实现方案以及不使用 nativeDriver 的纯 JS 动画实现方案</p>
 <p>P.S. 本篇源码分析是基于 react-native-0.47.2 进行解析的</p>
 <h1 id="react-native-动画实现原理"><a href="#react-native-动画实现原理" class="headerlink" title="react-native 动画实现原理"></a>react-native 动画实现原理</h1><p>react-native 的动画也有两种方案，一种是纯 JS 方案，仅在 JS 层通过 <code>requestAnimationFrame</code> 来实现定时渲染，以此来实现动画。<br>另一种是 native 方案，在 js 层配置好视图（ AnimatedNode ）与数据（ AnimatedValue ）的绑定，再把配置信息以及动画信息传递给 native 层，由 native 层来实现动画，而 native 层则利用与原生Animator 相似的方案来执行动画。稍微有些区别的是，Animator 是直接针对 view 的属性进行更新，而 native 方案是通过更新 node 来实现的，native 方案几乎和 Animator 等价，区别是在于native 方案中间需要 findNode 之类的操作找到最终需要操作的 view，他们之间的性能差距取决于 react-native 对于布局的更新处理机制。<br>值得注意的是，虽然 native 方案利用了 Choreographer 来实现定时器，但如果系统版本不支持，则其使用自定义的 Handler 来实现，时间是17ms，而原生的 Choreographer，在不支持 VSYNC 的设备中，自定义的 handler 的间隔是10ms，因此在低版本（api &lt; 16, android 3.0以下）的设备上，react-native 的动画在 android 上可能不会很流畅。</p>
 <p>建议先阅读<a href="http://www.alloyteam.com/2016/01/reactnative-animated/" target="_blank" rel="external">react-native animated 动画原理</a>，以此来对动画是如何实现的有个基本的认知，因为核心思路都是一致的，不同的只是在具体的环境中，如何对模块进行划分，模块之间如何通讯协作。</p>
@@ -1209,7 +1209,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/15/android-animation-principle/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/android-animation-principle.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -1228,7 +1228,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/15/android-animation-principle/" itemprop="url">android 动画原理</a></h1>
+                <a class="post-title-link" href="/android-animation-principle.html" itemprop="url">android 动画原理</a></h1>
         
 
         <div class="post-meta">
@@ -1260,8 +1260,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/15/android-animation-principle/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/12/15/android-animation-principle/" itemprop="commentsCount"></span>
+                <a href="/android-animation-principle.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="android-animation-principle.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -1270,7 +1270,7 @@
 
           
           
-             <span id="/2017/12/15/android-animation-principle/" class="leancloud_visitors" data-flag-title="android 动画原理">
+             <span id="/android-animation-principle.html" class="leancloud_visitors" data-flag-title="android 动画原理">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1303,7 +1303,7 @@
       
         
           
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上一篇：<a href="/2017/12/15/react-native-animation-performance-tool-systrace/" title="react-native 下，Android动画性能分析工具-systrace">react-native 下，Android动画性能分析工具-systrace</a> 中，为了定位 react-native 项目中部分 android 机型动画效果不流畅问题，提到最终定位的结果是因为<code>画面不连续</code>导致的，实际上分析的过程并没有那么简单。我们通过<code>systrace</code>对比 demo 项目（RN实现及 native 实现），分析排查出动画不流畅不是因为丢帧，CPU 负债问题引起的，那么只能是 react-native 的动画实现有问题，为了定位问题点，需要对比 android 的动画实现及 react-native 的动画实现，通过对比双方实现的差一点来定位问题可能出现的位置。</p>
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上一篇：<a href="/react-native-animation-performance-tool-systrace.html" title="react-native 下，Android动画性能分析工具-systrace">react-native 下，Android动画性能分析工具-systrace</a> 中，为了定位 react-native 项目中部分 android 机型动画效果不流畅问题，提到最终定位的结果是因为<code>画面不连续</code>导致的，实际上分析的过程并没有那么简单。我们通过<code>systrace</code>对比 demo 项目（RN实现及 native 实现），分析排查出动画不流畅不是因为丢帧，CPU 负债问题引起的，那么只能是 react-native 的动画实现有问题，为了定位问题点，需要对比 android 的动画实现及 react-native 的动画实现，通过对比双方实现的差一点来定位问题可能出现的位置。</p>
 <p>因此，本篇主要是针对 android 的实现原理（api-26）进行解析。</p>
 <h1 id="Android-动画原理"><a href="#Android-动画原理" class="headerlink" title="Android 动画原理"></a>Android 动画原理</h1><p>Android 的动画实现目前有两种，一种是古老的 Animation （3.0之前）方式，另一种是 Animator</p>
 <p>Animation 是在 draw 方法中被使用的，那么看看 draw 方法里具体做了些什么事情：</p>
@@ -1380,7 +1380,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/15/react-native-animation-performance-tool-systrace/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/react-native-animation-performance-tool-systrace.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -1399,7 +1399,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/15/react-native-animation-performance-tool-systrace/" itemprop="url">react-native 下，Android动画性能分析工具-systrace</a></h1>
+                <a class="post-title-link" href="/react-native-animation-performance-tool-systrace.html" itemprop="url">react-native 下，Android动画性能分析工具-systrace</a></h1>
         
 
         <div class="post-meta">
@@ -1431,8 +1431,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/15/react-native-animation-performance-tool-systrace/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/12/15/react-native-animation-performance-tool-systrace/" itemprop="commentsCount"></span>
+                <a href="/react-native-animation-performance-tool-systrace.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="react-native-animation-performance-tool-systrace.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -1441,7 +1441,7 @@
 
           
           
-             <span id="/2017/12/15/react-native-animation-performance-tool-systrace/" class="leancloud_visitors" data-flag-title="react-native 下，Android动画性能分析工具-systrace">
+             <span id="/react-native-animation-performance-tool-systrace.html" class="leancloud_visitors" data-flag-title="react-native 下，Android动画性能分析工具-systrace">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1476,11 +1476,11 @@
           
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近在项目中发现 react-native 的项目在实现转场动画的过程中，部分国产 android 机型出现转场时有不流畅的感觉，因此需要对动画过程进行分析，定位问题。本篇文章是定位问题过程衍生出来的第一篇文章。这一系列文章，会涉及到</p>
 <ol>
-<li><a href="/2017/12/15/react-native-animation-performance-tool-systrace/" title="react-native 下，Android动画性能分析工具-systrace">react-native 下，Android动画性能分析工具-systrace</a></li>
-<li><a href="/2017/12/15/android-animation-principle/" title="android 动画原理">android 动画原理</a></li>
-<li><a href="/2017/12/15/react-native-animated-principle/" title="react-native animated 动画实现原理">react-native animated 动画实现原理</a></li>
-<li><a href="/2017/12/15/react-navigation-animation-principle/" title="react-navigation 动画实现原理">react-navigation 动画实现原理</a></li>
-<li><a href="/2017/12/15/react-native-animation-anlaysis-summary/" title="react-native 动画性能分析总结">react-native 动画性能分析总结</a>
+<li><a href="/react-native-animation-performance-tool-systrace.html" title="react-native 下，Android动画性能分析工具-systrace">react-native 下，Android动画性能分析工具-systrace</a></li>
+<li><a href="/android-animation-principle.html" title="android 动画原理">android 动画原理</a></li>
+<li><a href="/react-native-animated-principle.html" title="react-native animated 动画实现原理">react-native animated 动画实现原理</a></li>
+<li><a href="/react-navigation-animation-principle.html" title="react-navigation 动画实现原理">react-navigation 动画实现原理</a></li>
+<li><a href="/react-native-animation-anlaysis-summary.html" title="react-native 动画性能分析总结">react-native 动画性能分析总结</a>
 </li>
 </ol>
 <h1 id="systrace"><a href="#systrace" class="headerlink" title="systrace"></a>systrace</h1><p>官方文档的 <a href="https://facebook.github.io/react-native/docs/performance.html" target="_blank" rel="external">performance</a> 里，提到了不少分析工具，在定位的过程中，更多使用的是 android 提供的 systrace 方法，其使用说明在 <a href="https://facebook.github.io/react-native/docs/performance.html#Profiling" target="_blank" rel="external">performance</a> 的 <code>profiling</code> 章节中也有提到</p>
@@ -1503,7 +1503,7 @@
 <li>利用 systrace，我们可以得到每一帧中视图的渲染情况、线程的执行情况及 CPU 的负载情况，综合上述的几个指标，可以分析定位可能影响动画性能的地方</li>
 <li>丢帧并不一定会影响最终的展现效果，手机一般的帧率是60FPS，远大于人眼能够感知的最低帧率（24FPS），因此单纯靠分析结果去判定动画性能是不靠谱的。某些丢帧的部分可能是影响不大的地方，对最终的动画效果并不能产生决定性的影响。我们应该把 profile 的结果作为一个分析参数，最终还要综合其他因素进行考量</li>
 </ol>
-<h1 id="有个坑"><a href="#有个坑" class="headerlink" title="有个坑"></a>有个坑</h1><p>虽然有了如此多的分析工具，但是这些工具本质上是在分析动画的渲染频率，并没有对中间过程的动画进行分析。动画，本质上是一组<code>连续的</code>画面，按照<code>一定频率</code>播放的结果，这些工具主要是在验证动画是否是按照<code>一定频率</code>进行渲染，而在本次分析的结果中，发现，实际上发现是因为画面<code>不连续</code>导致的。那么这个结果是如何发现的？其看下集：<a href="/2017/12/15/android-animation-principle/" title="android 动画原理">android 动画原理</a></p>
+<h1 id="有个坑"><a href="#有个坑" class="headerlink" title="有个坑"></a>有个坑</h1><p>虽然有了如此多的分析工具，但是这些工具本质上是在分析动画的渲染频率，并没有对中间过程的动画进行分析。动画，本质上是一组<code>连续的</code>画面，按照<code>一定频率</code>播放的结果，这些工具主要是在验证动画是否是按照<code>一定频率</code>进行渲染，而在本次分析的结果中，发现，实际上发现是因为画面<code>不连续</code>导致的。那么这个结果是如何发现的？其看下集：<a href="/android-animation-principle.html" title="android 动画原理">android 动画原理</a></p>
 
           
         
@@ -1552,7 +1552,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/09/21/thought-of-android-performance-anlaysis/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/thought-of-android-performance-anlaysis.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -1571,7 +1571,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/21/thought-of-android-performance-anlaysis/" itemprop="url">Android 性能分析（道篇）</a></h1>
+                <a class="post-title-link" href="/thought-of-android-performance-anlaysis.html" itemprop="url">Android 性能分析（道篇）</a></h1>
         
 
         <div class="post-meta">
@@ -1603,8 +1603,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/09/21/thought-of-android-performance-anlaysis/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/09/21/thought-of-android-performance-anlaysis/" itemprop="commentsCount"></span>
+                <a href="/thought-of-android-performance-anlaysis.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="thought-of-android-performance-anlaysis.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -1613,7 +1613,7 @@
 
           
           
-             <span id="/2017/09/21/thought-of-android-performance-anlaysis/" class="leancloud_visitors" data-flag-title="Android 性能分析（道篇）">
+             <span id="/thought-of-android-performance-anlaysis.html" class="leancloud_visitors" data-flag-title="Android 性能分析（道篇）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1748,7 +1748,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2016/10/22/ios-background-mode/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/ios-background-mode.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -1767,7 +1767,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/10/22/ios-background-mode/" itemprop="url">iOS 的后台运行机制</a></h1>
+                <a class="post-title-link" href="/ios-background-mode.html" itemprop="url">iOS 的后台运行机制</a></h1>
         
 
         <div class="post-meta">
@@ -1799,8 +1799,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/10/22/ios-background-mode/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2016/10/22/ios-background-mode/" itemprop="commentsCount"></span>
+                <a href="/ios-background-mode.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="ios-background-mode.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -1809,7 +1809,7 @@
 
           
           
-             <span id="/2016/10/22/ios-background-mode/" class="leancloud_visitors" data-flag-title="iOS 的后台运行机制">
+             <span id="/ios-background-mode.html" class="leancloud_visitors" data-flag-title="iOS 的后台运行机制">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1934,7 +1934,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2014/12/02/git-getting-start/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/git-getting-start.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -1953,7 +1953,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2014/12/02/git-getting-start/" itemprop="url">git 入门</a></h1>
+                <a class="post-title-link" href="/git-getting-start.html" itemprop="url">git 入门</a></h1>
         
 
         <div class="post-meta">
@@ -1985,8 +1985,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2014/12/02/git-getting-start/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2014/12/02/git-getting-start/" itemprop="commentsCount"></span>
+                <a href="/git-getting-start.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="git-getting-start.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -1995,7 +1995,7 @@
 
           
           
-             <span id="/2014/12/02/git-getting-start/" class="leancloud_visitors" data-flag-title="git 入门">
+             <span id="/git-getting-start.html" class="leancloud_visitors" data-flag-title="git 入门">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -2167,7 +2167,7 @@
           
             
               <span class="links-of-author-item">
-                <a href="https://github.com/luhui" target="_blank" title="GitHub">
+                <a href="https://github.com/luhui" target="_blank" title="GitHub" rel="external nofollow">
                   
                     <i class="fa fa-fw fa-github"></i>
                   
@@ -2217,12 +2217,12 @@
 
 
 <div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  由 <a class="theme-link" href="https://hexo.io" rel="external nofollow">Hexo</a> 强力驱动
 </div>
 
 <div class="theme-info">
   主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" rel="external nofollow">
     NexT.Gemini
   </a>
 </div>

@@ -98,7 +98,7 @@
 <meta name="keywords" content="react-native,animation,android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="react-native 动画性能分析总结">
-<meta property="og:url" content="http://mlazy.club/2017/12/15/react-native-animation-anlaysis-summary/index.html">
+<meta property="og:url" content="http://mlazy.club/react-native-animation-anlaysis-summary.html">
 <meta property="og:site_name" content="懒人小屋">
 <meta property="og:description" content="前言在文章 react-native 下，Android动画性能分析工具-systrace 中，发现在当前项目，动画的不流畅感不是因为丢帧的因素影响到的。接着猜测可能是 react-native 的动画实现可能存在权限，因此对比了android 动画原理、react-native animated 动画实现原理。但是发现两边的实现思路是雷同的，性能差别也不会太大。接着猜测是否是因为导航库在动画使用">
 <meta property="og:locale" content="zh-Hans">
@@ -138,7 +138,7 @@
 
 
 
-  <link rel="canonical" href="http://mlazy.club/2017/12/15/react-native-animation-anlaysis-summary/"/>
+  <link rel="canonical" href="http://mlazy.club/react-native-animation-anlaysis-summary.html"/>
 
 
 
@@ -314,7 +314,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/15/react-native-animation-anlaysis-summary/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/react-native-animation-anlaysis-summary.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -363,8 +363,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/15/react-native-animation-anlaysis-summary/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/12/15/react-native-animation-anlaysis-summary/" itemprop="commentsCount"></span>
+                <a href="/react-native-animation-anlaysis-summary.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="react-native-animation-anlaysis-summary.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -373,7 +373,7 @@
 
           
           
-             <span id="/2017/12/15/react-native-animation-anlaysis-summary/" class="leancloud_visitors" data-flag-title="react-native 动画性能分析总结">
+             <span id="/react-native-animation-anlaysis-summary.html" class="leancloud_visitors" data-flag-title="react-native 动画性能分析总结">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -404,7 +404,7 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在文章 <a href="/2017/12/15/react-native-animation-performance-tool-systrace/" title="react-native 下，Android动画性能分析工具-systrace">react-native 下，Android动画性能分析工具-systrace</a> 中，发现在当前项目，动画的不流畅感不是因为丢帧的因素影响到的。接着猜测可能是 react-native 的动画实现可能存在权限，因此对比了<a href="/2017/12/15/android-animation-principle/" title="android 动画原理">android 动画原理</a>、<a href="/2017/12/15/react-native-animated-principle/" title="react-native animated 动画实现原理">react-native animated 动画实现原理</a>。但是发现两边的实现思路是雷同的，性能差别也不会太大。接着猜测是否是因为导航库在动画使用上出现问题，我们分析了<a href="/2017/12/15/react-navigation-animation-principle/" title="react-navigation 动画实现原理">react-navigation 动画实现原理</a>，发现其使用方法也没问题。总结发现，以上的分析中，主要是分析了动画频率是否出现了问题，并没有验证中间生成的画面是否是连续的，因此猜测可能是在 react-native 的动画中，中间帧的渲染是异常的，导致动画过程中，虽然没有丢帧，但是由于画面不是连续的，让人产生不流畅的错觉。</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在文章 <a href="/react-native-animation-performance-tool-systrace.html" title="react-native 下，Android动画性能分析工具-systrace">react-native 下，Android动画性能分析工具-systrace</a> 中，发现在当前项目，动画的不流畅感不是因为丢帧的因素影响到的。接着猜测可能是 react-native 的动画实现可能存在权限，因此对比了<a href="/android-animation-principle.html" title="android 动画原理">android 动画原理</a>、<a href="/react-native-animated-principle.html" title="react-native animated 动画实现原理">react-native animated 动画实现原理</a>。但是发现两边的实现思路是雷同的，性能差别也不会太大。接着猜测是否是因为导航库在动画使用上出现问题，我们分析了<a href="/react-navigation-animation-principle.html" title="react-navigation 动画实现原理">react-navigation 动画实现原理</a>，发现其使用方法也没问题。总结发现，以上的分析中，主要是分析了动画频率是否出现了问题，并没有验证中间生成的画面是否是连续的，因此猜测可能是在 react-native 的动画中，中间帧的渲染是异常的，导致动画过程中，虽然没有丢帧，但是由于画面不是连续的，让人产生不流畅的错觉。</p>
 <h1 id="画面过程分析"><a href="#画面过程分析" class="headerlink" title="画面过程分析"></a>画面过程分析</h1><p>由于转场动画只涉及到了 translationX，因此可以看看是否是 translationX 的值有异常导致的。那么我们需要分别对比在 native 下，使用 animator 的 translationX 方案以及使用 react-native animated 的 translationX 方案在计算值的过程中是否有差别。</p>
 <p>native 层很简单，通过 updateListener 记录中间值即可<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@TargetApi</span>(Build.VERSION_CODES.KITKAT)</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">final</span> View view = <span class="keyword">new</span> View(<span class="keyword">this</span>);</div><div class="line">    view.setBackgroundColor(Color.BLUE);</div><div class="line">    <span class="keyword">final</span> FrameLayout container = (FrameLayout) findViewById(R.id.container);</div><div class="line">    FrameLayout.LayoutParams params = <span class="keyword">new</span> FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);</div><div class="line">    container.addView(view, params);</div><div class="line">    mLastTranlationX = container.getWidth();</div><div class="line">    view.setTranslationX(container.getWidth());</div><div class="line">    view.animate().translationX(<span class="number">0</span>).setDuration(<span class="number">1000</span>).setUpdateListener(<span class="keyword">new</span> ValueAnimator.AnimatorUpdateListener() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationUpdate</span><span class="params">(ValueAnimator animation)</span> </span>&#123;</div><div class="line">            <span class="keyword">float</span> between = view.getTranslationX() - mLastTranlationX;</div><div class="line">            mLastTranlationX = view.getTranslationX();</div><div class="line">            Log.e(<span class="string">"lh"</span>, mLastTranlationX + <span class="string">"\t"</span> + between);</div><div class="line">        &#125;</div><div class="line">    &#125;).start();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>其 translationX 的曲线如下：</p>
@@ -453,7 +453,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/15/react-navigation-animation-principle/" rel="next" title="react-navigation 动画实现原理">
+              <a href="/react-navigation-animation-principle.html" rel="next" title="react-navigation 动画实现原理">
                 <i class="fa fa-chevron-left"></i> react-navigation 动画实现原理
               </a>
             
@@ -463,7 +463,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/" rel="prev" title="Android UnitTest with JMockit using Kotlin - API Guide">
+              <a href="/android-unit-test-with-jmocit-using-kotlin-api-guide.html" rel="prev" title="Android UnitTest with JMockit using Kotlin - API Guide">
                 Android UnitTest with JMockit using Kotlin - API Guide <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -571,7 +571,7 @@
           
             
               <span class="links-of-author-item">
-                <a href="https://github.com/luhui" target="_blank" title="GitHub">
+                <a href="https://github.com/luhui" target="_blank" title="GitHub" rel="external nofollow">
                   
                     <i class="fa fa-fw fa-github"></i>
                   
@@ -637,12 +637,12 @@
 
 
 <div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  由 <a class="theme-link" href="https://hexo.io" rel="external nofollow">Hexo</a> 强力驱动
 </div>
 
 <div class="theme-info">
   主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" rel="external nofollow">
     NexT.Gemini
   </a>
 </div>
@@ -759,7 +759,7 @@
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99034, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
 		
-		_hcwp.push({widget:"Stream", widget_id: 99034, xid: "2017/12/15/react-native-animation-anlaysis-summary/"});
+		_hcwp.push({widget:"Stream", widget_id: 99034, xid: "react-native-animation-anlaysis-summary.html"});
 		
 
 		(function() {

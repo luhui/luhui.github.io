@@ -98,7 +98,7 @@
 <meta name="keywords" content="react-native,animation,android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="android 动画原理">
-<meta property="og:url" content="http://mlazy.club/2017/12/15/android-animation-principle/index.html">
+<meta property="og:url" content="http://mlazy.club/android-animation-principle.html">
 <meta property="og:site_name" content="懒人小屋">
 <meta property="og:description" content="前言在上一篇：react-native 下，Android动画性能分析工具-systrace 中，为了定位 react-native 项目中部分 android 机型动画效果不流畅问题，提到最终定位的结果是因为画面不连续导致的，实际上分析的过程并没有那么简单。我们通过systrace对比 demo 项目（RN实现及 native 实现），分析排查出动画不流畅不是因为丢帧，CPU 负债问题引起的，那">
 <meta property="og:locale" content="zh-Hans">
@@ -138,7 +138,7 @@
 
 
 
-  <link rel="canonical" href="http://mlazy.club/2017/12/15/android-animation-principle/"/>
+  <link rel="canonical" href="http://mlazy.club/android-animation-principle.html"/>
 
 
 
@@ -314,7 +314,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/15/android-animation-principle/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/android-animation-principle.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -363,8 +363,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/15/android-animation-principle/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/12/15/android-animation-principle/" itemprop="commentsCount"></span>
+                <a href="/android-animation-principle.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="android-animation-principle.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -373,7 +373,7 @@
 
           
           
-             <span id="/2017/12/15/android-animation-principle/" class="leancloud_visitors" data-flag-title="android 动画原理">
+             <span id="/android-animation-principle.html" class="leancloud_visitors" data-flag-title="android 动画原理">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -404,7 +404,7 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上一篇：<a href="/2017/12/15/react-native-animation-performance-tool-systrace/" title="react-native 下，Android动画性能分析工具-systrace">react-native 下，Android动画性能分析工具-systrace</a> 中，为了定位 react-native 项目中部分 android 机型动画效果不流畅问题，提到最终定位的结果是因为<code>画面不连续</code>导致的，实际上分析的过程并没有那么简单。我们通过<code>systrace</code>对比 demo 项目（RN实现及 native 实现），分析排查出动画不流畅不是因为丢帧，CPU 负债问题引起的，那么只能是 react-native 的动画实现有问题，为了定位问题点，需要对比 android 的动画实现及 react-native 的动画实现，通过对比双方实现的差一点来定位问题可能出现的位置。</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上一篇：<a href="/react-native-animation-performance-tool-systrace.html" title="react-native 下，Android动画性能分析工具-systrace">react-native 下，Android动画性能分析工具-systrace</a> 中，为了定位 react-native 项目中部分 android 机型动画效果不流畅问题，提到最终定位的结果是因为<code>画面不连续</code>导致的，实际上分析的过程并没有那么简单。我们通过<code>systrace</code>对比 demo 项目（RN实现及 native 实现），分析排查出动画不流畅不是因为丢帧，CPU 负债问题引起的，那么只能是 react-native 的动画实现有问题，为了定位问题点，需要对比 android 的动画实现及 react-native 的动画实现，通过对比双方实现的差一点来定位问题可能出现的位置。</p>
 <p>因此，本篇主要是针对 android 的实现原理（api-26）进行解析。</p>
 <h1 id="Android-动画原理"><a href="#Android-动画原理" class="headerlink" title="Android 动画原理"></a>Android 动画原理</h1><p>Android 的动画实现目前有两种，一种是古老的 Animation （3.0之前）方式，另一种是 Animator</p>
 <p>Animation 是在 draw 方法中被使用的，那么看看 draw 方法里具体做了些什么事情：</p>
@@ -467,7 +467,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/15/react-native-animation-performance-tool-systrace/" rel="next" title="react-native 下，Android动画性能分析工具-systrace">
+              <a href="/react-native-animation-performance-tool-systrace.html" rel="next" title="react-native 下，Android动画性能分析工具-systrace">
                 <i class="fa fa-chevron-left"></i> react-native 下，Android动画性能分析工具-systrace
               </a>
             
@@ -477,7 +477,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/15/react-native-animated-principle/" rel="prev" title="react-native animated 动画实现原理">
+              <a href="/react-native-animated-principle.html" rel="prev" title="react-native animated 动画实现原理">
                 react-native animated 动画实现原理 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -585,7 +585,7 @@
           
             
               <span class="links-of-author-item">
-                <a href="https://github.com/luhui" target="_blank" title="GitHub">
+                <a href="https://github.com/luhui" target="_blank" title="GitHub" rel="external nofollow">
                   
                     <i class="fa fa-fw fa-github"></i>
                   
@@ -651,12 +651,12 @@
 
 
 <div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  由 <a class="theme-link" href="https://hexo.io" rel="external nofollow">Hexo</a> 强力驱动
 </div>
 
 <div class="theme-info">
   主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" rel="external nofollow">
     NexT.Gemini
   </a>
 </div>
@@ -773,7 +773,7 @@
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99034, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
 		
-		_hcwp.push({widget:"Stream", widget_id: 99034, xid: "2017/12/15/android-animation-principle/"});
+		_hcwp.push({widget:"Stream", widget_id: 99034, xid: "android-animation-principle.html"});
 		
 
 		(function() {

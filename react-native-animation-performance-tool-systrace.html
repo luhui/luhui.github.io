@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="吾日三省吾身," />
+  <meta name="keywords" content="react-native,animation,android,工具," />
 
 
 
@@ -94,18 +94,22 @@
 
 
 
-<meta name="description" content="背景最近需要对手头上的项目做一个性能优化，要求应用能正常的跑在一个低性能的设备上，碰碰巧这一块是此前没怎么涉及到的，相当于是一个全新的任务。真正做起来的时候绕了不少弯路，回过头在总结的时候才发现，使用的方法和编程都是一个套路，用在不同的场景下得出了不同的名字，本质上仍然是相同的，这也是为什么历史上站在行业顶峰的人，都是一长串的 XX 家作为 title。比如爱因斯坦，数学、物理很厉害，小提琴也有不">
-<meta name="keywords" content="吾日三省吾身">
+<meta name="description" content="前言最近在项目中发现 react-native 的项目在实现转场动画的过程中，部分国产 android 机型出现转场时有不流畅的感觉，因此需要对动画过程进行分析，定位问题。本篇文章是定位问题过程衍生出来的第一篇文章。这一系列文章，会涉及到  react-native 下，Android动画性能分析工具-systrace android 动画原理 react-native animated 动画实现">
+<meta name="keywords" content="react-native,animation,android,工具">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android 性能分析（道篇）">
-<meta property="og:url" content="http://mlazy.club/2017/09/21/thought-of-android-performance-anlaysis/index.html">
+<meta property="og:title" content="react-native 下，Android动画性能分析工具-systrace">
+<meta property="og:url" content="http://mlazy.club/react-native-animation-performance-tool-systrace.html">
 <meta property="og:site_name" content="懒人小屋">
-<meta property="og:description" content="背景最近需要对手头上的项目做一个性能优化，要求应用能正常的跑在一个低性能的设备上，碰碰巧这一块是此前没怎么涉及到的，相当于是一个全新的任务。真正做起来的时候绕了不少弯路，回过头在总结的时候才发现，使用的方法和编程都是一个套路，用在不同的场景下得出了不同的名字，本质上仍然是相同的，这也是为什么历史上站在行业顶峰的人，都是一长串的 XX 家作为 title。比如爱因斯坦，数学、物理很厉害，小提琴也有不">
+<meta property="og:description" content="前言最近在项目中发现 react-native 的项目在实现转场动画的过程中，部分国产 android 机型出现转场时有不流畅的感觉，因此需要对动画过程进行分析，定位问题。本篇文章是定位问题过程衍生出来的第一篇文章。这一系列文章，会涉及到  react-native 下，Android动画性能分析工具-systrace android 动画原理 react-native animated 动画实现">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-22T01:34:47.000Z">
+<meta property="og:image" content="http://mlazy.club/images/react-native-animation-performance-tool-systrace/CE7AF2EB29354FF79D54A3E05F310D01.jpg">
+<meta property="og:image" content="http://mlazy.club/images/react-native-animation-performance-tool-systrace/3871F6AC03A57304753B84964C56E564.jpg">
+<meta property="og:image" content="http://mlazy.club/images/react-native-animation-performance-tool-systrace/CBE4145B3B4BF25025077BF9909556BF.jpg">
+<meta property="og:updated_time" content="2017-12-15T12:12:17.425Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android 性能分析（道篇）">
-<meta name="twitter:description" content="背景最近需要对手头上的项目做一个性能优化，要求应用能正常的跑在一个低性能的设备上，碰碰巧这一块是此前没怎么涉及到的，相当于是一个全新的任务。真正做起来的时候绕了不少弯路，回过头在总结的时候才发现，使用的方法和编程都是一个套路，用在不同的场景下得出了不同的名字，本质上仍然是相同的，这也是为什么历史上站在行业顶峰的人，都是一长串的 XX 家作为 title。比如爱因斯坦，数学、物理很厉害，小提琴也有不">
+<meta name="twitter:title" content="react-native 下，Android动画性能分析工具-systrace">
+<meta name="twitter:description" content="前言最近在项目中发现 react-native 的项目在实现转场动画的过程中，部分国产 android 机型出现转场时有不流畅的感觉，因此需要对动画过程进行分析，定位问题。本篇文章是定位问题过程衍生出来的第一篇文章。这一系列文章，会涉及到  react-native 下，Android动画性能分析工具-systrace android 动画原理 react-native animated 动画实现">
+<meta name="twitter:image" content="http://mlazy.club/images/react-native-animation-performance-tool-systrace/CE7AF2EB29354FF79D54A3E05F310D01.jpg">
 
 
 
@@ -134,13 +138,13 @@
 
 
 
-  <link rel="canonical" href="http://mlazy.club/2017/09/21/thought-of-android-performance-anlaysis/"/>
+  <link rel="canonical" href="http://mlazy.club/react-native-animation-performance-tool-systrace.html"/>
 
 
 
 
 
-  <title>Android 性能分析（道篇） | 懒人小屋</title>
+  <title>react-native 下，Android动画性能分析工具-systrace | 懒人小屋</title>
   
 
 
@@ -310,7 +314,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/09/21/thought-of-android-performance-anlaysis/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/react-native-animation-performance-tool-systrace.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -327,7 +331,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Android 性能分析（道篇）</h1>
+          <h1 class="post-title" itemprop="name headline">react-native 下，Android动画性能分析工具-systrace</h1>
         
 
         <div class="post-meta">
@@ -339,8 +343,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-21T19:25:42+08:00">
-                2017-09-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-15T19:08:24+08:00">
+                2017-12-15
               </time>
             
 
@@ -359,8 +363,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/09/21/thought-of-android-performance-anlaysis/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/09/21/thought-of-android-performance-anlaysis/" itemprop="commentsCount"></span>
+                <a href="/react-native-animation-performance-tool-systrace.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="react-native-animation-performance-tool-systrace.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -369,7 +373,7 @@
 
           
           
-             <span id="/2017/09/21/thought-of-android-performance-anlaysis/" class="leancloud_visitors" data-flag-title="Android 性能分析（道篇）">
+             <span id="/react-native-animation-performance-tool-systrace.html" class="leancloud_visitors" data-flag-title="react-native 下，Android动画性能分析工具-systrace">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -400,60 +404,36 @@
       
 
       
-        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近需要对手头上的项目做一个性能优化，要求应用能正常的跑在一个低性能的设备上，碰碰巧这一块是此前没怎么涉及到的，相当于是一个全新的任务。真正做起来的时候绕了不少弯路，回过头在总结的时候才发现，使用的方法和编程都是一个套路，用在不同的场景下得出了不同的名字，本质上仍然是相同的，这也是为什么历史上站在行业顶峰的人，都是一长串的 XX 家作为 title。比如爱因斯坦，数学、物理很厉害，小提琴也有不小的造诣。再如达芬奇虽然以艺术功底闻名于世，其机械、医学能力也是相当出彩的。</p>
-<p>复杂的事往往都有简单的道理，而简单的道理往往能运用在工作生活的方方面面。</p>
-<h1 id="从宏观到微观（至顶向下）的分析方法"><a href="#从宏观到微观（至顶向下）的分析方法" class="headerlink" title="从宏观到微观（至顶向下）的分析方法"></a>从宏观到微观（至顶向下）的分析方法</h1><p>编程世界里，我们倡导设计先行，从需求出发，先进行需求分析，再进行软件设计，最后才开始编码实现。这一套方法论总结起来就是从宏观的角度分析、发现问题，再分解到微观角度去解析问题的本质。</p>
-<p>无独有偶，物理、化学也是一个从宏观到微观的过程，先通过宏观了解到事物的表象，再从微观去理解本质。</p>
-<p>那么套方法论到性能分析上，就可以逐层分解出几个主题：</p>
-<p><strong>确定性能指标</strong><br><strong>寻找分析工具</strong><br><strong>确定分析方法</strong><br><strong>问题修复</strong></p>
-<h2 id="确定性能指标"><a href="#确定性能指标" class="headerlink" title="确定性能指标"></a>确定性能指标</h2><p>通过 Google，搜索一些诸如 android 性能分析 性能评估 性能瓶颈 等等关键词，提取出确定性能的几个指标，再结合当前的项目抽取出合适当前项目的指标。</p>
-<p>比如本次我总结出来以下几点：</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近在项目中发现 react-native 的项目在实现转场动画的过程中，部分国产 android 机型出现转场时有不流畅的感觉，因此需要对动画过程进行分析，定位问题。本篇文章是定位问题过程衍生出来的第一篇文章。这一系列文章，会涉及到</p>
+<ol>
+<li><a href="/react-native-animation-performance-tool-systrace.html" title="react-native 下，Android动画性能分析工具-systrace">react-native 下，Android动画性能分析工具-systrace</a></li>
+<li><a href="/android-animation-principle.html" title="android 动画原理">android 动画原理</a></li>
+<li><a href="/react-native-animated-principle.html" title="react-native animated 动画实现原理">react-native animated 动画实现原理</a></li>
+<li><a href="/react-navigation-animation-principle.html" title="react-navigation 动画实现原理">react-navigation 动画实现原理</a></li>
+<li><a href="/react-native-animation-anlaysis-summary.html" title="react-native 动画性能分析总结">react-native 动画性能分析总结</a>
+</li>
+</ol>
+<h1 id="systrace"><a href="#systrace" class="headerlink" title="systrace"></a>systrace</h1><p>官方文档的 <a href="https://facebook.github.io/react-native/docs/performance.html" target="_blank" rel="external">performance</a> 里，提到了不少分析工具，在定位的过程中，更多使用的是 android 提供的 systrace 方法，其使用说明在 <a href="https://facebook.github.io/react-native/docs/performance.html#Profiling" target="_blank" rel="external">performance</a> 的 <code>profiling</code> 章节中也有提到</p>
+<h2 id="systrace-的使用方法"><a href="#systrace-的使用方法" class="headerlink" title="systrace 的使用方法"></a>systrace 的使用方法</h2><p>systrace 本质上是通过记录关键方法的调用记录进行统计分析。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ &lt;path_to_android_sdk&gt;/platform-tools/systrace/systrace.py --time=10 -o trace.html <span class="built_in">sched</span> gfx view -a &lt;your_package_name&gt;</div></pre></td></tr></table></figure>
+<p>几个参数的含义：</p>
 <ul>
-<li>OS<ul>
-<li>cpu</li>
-<li>memory</li>
-<li>I/O</li>
+<li><code>time</code>：数据记录收集的时长</li>
+<li><code>sched</code>，<code>gfx</code>，<code>view</code>都是分析指标，这三个属于分析过程中需要关注到的几个指标。<code>sched</code>是提供集每一核 cpu 具体在处理的事情，<code>gfx</code>提供图形化的信息，比如按照每一帧来给时间划分区域，<code>view</code>则是提供视图的计算、布局和渲染耗时</li>
+<li>-a <package_name>用于指定收集特定应用的数据</package_name></li>
+<li>-o <file.html> 用于指定分析结果的输出位置，输出结果最好用 chrome 打开，其他浏览器不保证兼容性</file.html></li>
 </ul>
-</li>
-<li>App<ul>
-<li>业务方法调用耗时<ul>
-<li>java</li>
-<li>native</li>
-</ul>
-</li>
-<li>UI 布局</li>
-</ul>
-</li>
-</ul>
-<p>主要分为了两个角度，一个是系统层面，从操作系统的角度来分析应用的性能，二是应用层面，从应用层的角度去分析性能瓶颈。这两者实际上是有重叠的，但是因为切入的角度不一样，通过对比，可以更容易的发现和解决问题。</p>
-<p>另外，在当前的项目中，由于 I/O 操作几乎没有，因此这部分可以不在此次的评估范围内，因此就目前的项目来说，就可以把分析指标定位在以下几个：</p>
-<ul>
-<li>OS<ul>
-<li>cpu</li>
-<li>memory</li>
-<li>I/O</li>
-</ul>
-</li>
-<li>App<ul>
-<li>业务方法调用耗时<ul>
-<li>java</li>
-<li>native</li>
-</ul>
-</li>
-<li>UI 布局</li>
-</ul>
-</li>
-</ul>
-<h2 id="寻找分析工具"><a href="#寻找分析工具" class="headerlink" title="寻找分析工具"></a>寻找分析工具</h2><p>Android 的性能分析工具种类繁多，简书上有一篇收集的挺好的 - <a href="http://www.jianshu.com/p/8b77d394b2a6" target="_blank" rel="external">Android 性能分析工具整理汇总</a>，这里就不再赘述。</p>
-<p>那么问题来了，这么多工具，应该选哪一个呢？</p>
-<p>前面说到，分析问题的时候，需要使用至顶向下的分析方式，那么需要使用工具解决问题的时候，还能使用这个方法吗？</p>
-<p>答案是不能，使用工具、解决问题，这已经是一个顶层的事情，你看网络模型里，application layer 是不是放在上边的？</p>
-<p>所以到使用工具，解决问题的领域时，就需要刚好相反的能力，至底向上。我们需要从底部开始，了解事物的本质，才能够从容的选择上层的工具来解决问题。比如你访问 Google 出现 connection reset，如果仅限于了解http 404是网页未找到，这个问题就等于无解了。你得先了解 TCP/IP，了解浏览器访问 google.com 时都做了什么事情，国家防火墙在这个过程又充当了什么角色，这才有底气的通过抓包工具定位问题。</p>
-<p>回到性能分析，我的答案是先看<a href="https://developer.android.com/studio/profile/am-cpu.html" target="_blank" rel="external">官方文档</a>，官方文档里提供的工具，相对基础，先了解这些工具如何使用，也就基本掌握指标对应的含义。那么在使用过程中产生的痛点，也就是你对工具的需求了，针对自己的需求，再去找工具，就有的放矢了。</p>
-<h2 id="确定分析方法"><a href="#确定分析方法" class="headerlink" title="确定分析方法"></a>确定分析方法</h2><p>上面说到先用官方工具来分析，那么如何分析呢。那些如何看图表，指标的含义在这里不再赘述，后续的文章中会详细说明。在这里只说一点，就是要排出干扰，无论什么领域，在分析问题的时候，都需要遵守单一变量原则，做科学实验如此，解 bug 如此，分析性能也是一样。无论是低端一点的注释方法，还是高级一些的 API mock，都是围绕单一变量原则来进行的。了解这个，那么所使用的方法就不会有太多拘束了。独孤九剑的最高奥义无招胜有招也是一个道理，了解剑招的本质，也就无所谓剑招了。</p>
-<h2 id="问题修复"><a href="#问题修复" class="headerlink" title="问题修复"></a>问题修复</h2><p>这里又会回到分析问题，因此继续套用至顶向下的分析方法。定位到对应代码出了问题，要避免单纯的针对问题本身做修复，而是要从宏观的角度来分析问题，多问问自己，这个问题是否设计上的缺陷？语言缺陷？应该如何从根本上去避免此类问题？</p>
-<p>题外话，修复问题的时候，不要想着“先这样改吧，以后有时间再做优化”，然后还加个 TODO 以此为证。历史经验证明，这招往往是没有效的，计划赶不上变化，技术一直在持续更新，你现在不优化，跟上节奏，那么会越来越跟不上节奏。另外，需求一直有，今年特别多，你也不大有机会再回来处理这个优先级如此之低的 TODO 了</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>以上，就是我在分析当前项目性能的过程中领悟到的一些知识。总体来说就是分析问题时，至顶向下来分析，解决问题时，至底向上去解决。前者有利于把问题想透，后者有利于把问题彻底解决。</p>
+<h2 id="阅读分析结果"><a href="#阅读分析结果" class="headerlink" title="阅读分析结果"></a>阅读分析结果</h2><p>在 chrome 打开文件后，可以在右上角的<code>View Options</code>里，打开 Hightlight VSync，用于标记显示系统（display subsystem）渲染每一帧的时间点。</p>
+<p>一个测试结果如下：<br><img src="/images/react-native-animation-performance-tool-systrace/CE7AF2EB29354FF79D54A3E05F310D01.jpg" alt="IMAGE"><br><a href="/images/react-native-animation-performance-tool-systrace/268FACA41EBCD174731B1A95B7C68AA7.zip">测试结果源文件</a></p>
+<p>左侧是进程以及进程下正在执行的线程（并不是所有线程，而是在记录时活跃的线程）。中间的图形则是渲染的分析结果，F 表示视图开始渲染的时间点，即 view 执行<code>performTraversals</code>时的时间点。F 标记为绿色，说明视图渲染的时间不超过一帧，不是绿色，说明已经有丢帧出现。这时就可以查看丢帧严重的地方，看看是哪个部分占用耗时。</p>
+<p><img src="/images/react-native-animation-performance-tool-systrace/3871F6AC03A57304753B84964C56E564.jpg" alt="IMAGE"><br>比如上图红色的 frame，可以看到大部分是在 performTraversals 耗时较多，说明视图的渲染比较耗时。虽然说是在渲染视图时耗时，但是并不一定完全是因为 view 太过复杂引起的，实际上，在上述例子中，这个界面只是简单的几个按钮，view 并不复杂，这时候需要同步分析 cpu 中线程的执行情况，看看是否是因为 CPU 负载过高，导致任务等待。点击 DrawFrame，我们可以看到执行时间实际只有13ms（CPU Duration），但是等待 cpu 资源达到了20ms（Wall Duration - CPU Duration），这就 与应用的环境、系统的环境有关系了。<br><img src="/images/react-native-animation-performance-tool-systrace/CBE4145B3B4BF25025077BF9909556BF.jpg" alt="IMAGE"></p>
+<h2 id="有关丢帧"><a href="#有关丢帧" class="headerlink" title="有关丢帧"></a>有关丢帧</h2><p>在上节分析结果，我们说到 F 标记为黄色或者红色时，说明有丢帧出现，但从实际体验上看，只是黄色的丢帧并没有令人感觉到不流畅，或者说短时间的动画，让人感受不到那细微的差异。因为从本质上说，30FPS（人眼能够感知的最低动画频率是24FPS） 的动画也是让人感受不到异常的，当然这要具体情况具体分析，不同场景下，对帧率的要求也是不同的（比如射击游戏对帧率的要求就比较高，不然会让人有眩晕感）。总的来说，我们不能单纯的以 profile 的结果来判定动画的性能，需要结合实际情况进行分析，profile 只是一个辅助定位的手段。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>[performance]（<a href="https://facebook.github.io/react-native/docs/performance.html）章节中，提到了很多性能分析的方法，定位动画问题最常用到的是" target="_blank" rel="external">https://facebook.github.io/react-native/docs/performance.html）章节中，提到了很多性能分析的方法，定位动画问题最常用到的是</a> systrace</li>
+<li>利用 systrace，我们可以得到每一帧中视图的渲染情况、线程的执行情况及 CPU 的负载情况，综合上述的几个指标，可以分析定位可能影响动画性能的地方</li>
+<li>丢帧并不一定会影响最终的展现效果，手机一般的帧率是60FPS，远大于人眼能够感知的最低帧率（24FPS），因此单纯靠分析结果去判定动画性能是不靠谱的。某些丢帧的部分可能是影响不大的地方，对最终的动画效果并不能产生决定性的影响。我们应该把 profile 的结果作为一个分析参数，最终还要综合其他因素进行考量</li>
+</ol>
+<h1 id="有个坑"><a href="#有个坑" class="headerlink" title="有个坑"></a>有个坑</h1><p>虽然有了如此多的分析工具，但是这些工具本质上是在分析动画的渲染频率，并没有对中间过程的动画进行分析。动画，本质上是一组<code>连续的</code>画面，按照<code>一定频率</code>播放的结果，这些工具主要是在验证动画是否是按照<code>一定频率</code>进行渲染，而在本次分析的结果中，发现，实际上发现是因为画面<code>不连续</code>导致的。那么这个结果是如何发现的？其看下集：<a href="/android-animation-principle.html" title="android 动画原理">android 动画原理</a></p>
 
       
     </div>
@@ -471,7 +451,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/吾日三省吾身/" rel="tag"># 吾日三省吾身</a>
+            <a href="/tags/react-native/" rel="tag"># react-native</a>
+          
+            <a href="/tags/animation/" rel="tag"># animation</a>
+          
+            <a href="/tags/android/" rel="tag"># android</a>
+          
+            <a href="/tags/工具/" rel="tag"># 工具</a>
           
         </div>
       
@@ -484,8 +470,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/10/22/ios-background-mode/" rel="next" title="iOS 的后台运行机制">
-                <i class="fa fa-chevron-left"></i> iOS 的后台运行机制
+              <a href="/thought-of-android-performance-anlaysis.html" rel="next" title="Android 性能分析（道篇）">
+                <i class="fa fa-chevron-left"></i> Android 性能分析（道篇）
               </a>
             
           </div>
@@ -494,8 +480,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/15/react-native-animation-performance-tool-systrace/" rel="prev" title="react-native 下，Android动画性能分析工具-systrace">
-                react-native 下，Android动画性能分析工具-systrace <i class="fa fa-chevron-right"></i>
+              <a href="/android-animation-principle.html" rel="prev" title="android 动画原理">
+                android 动画原理 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -602,7 +588,7 @@
           
             
               <span class="links-of-author-item">
-                <a href="https://github.com/luhui" target="_blank" title="GitHub">
+                <a href="https://github.com/luhui" target="_blank" title="GitHub" rel="external nofollow">
                   
                     <i class="fa fa-fw fa-github"></i>
                   
@@ -636,7 +622,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从宏观到微观（至顶向下）的分析方法"><span class="nav-number">2.</span> <span class="nav-text">从宏观到微观（至顶向下）的分析方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#确定性能指标"><span class="nav-number">2.1.</span> <span class="nav-text">确定性能指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寻找分析工具"><span class="nav-number">2.2.</span> <span class="nav-text">寻找分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#确定分析方法"><span class="nav-number">2.3.</span> <span class="nav-text">确定分析方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题修复"><span class="nav-number">2.4.</span> <span class="nav-text">问题修复</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#systrace"><span class="nav-number">2.</span> <span class="nav-text">systrace</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#systrace-的使用方法"><span class="nav-number">2.1.</span> <span class="nav-text">systrace 的使用方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#阅读分析结果"><span class="nav-number">2.2.</span> <span class="nav-text">阅读分析结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#有关丢帧"><span class="nav-number">2.3.</span> <span class="nav-text">有关丢帧</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#有个坑"><span class="nav-number">4.</span> <span class="nav-text">有个坑</span></a></li></ol></div>
             
 
           </div>
@@ -668,12 +654,12 @@
 
 
 <div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  由 <a class="theme-link" href="https://hexo.io" rel="external nofollow">Hexo</a> 强力驱动
 </div>
 
 <div class="theme-info">
   主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" rel="external nofollow">
     NexT.Gemini
   </a>
 </div>
@@ -790,7 +776,7 @@
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99034, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
 		
-		_hcwp.push({widget:"Stream", widget_id: 99034, xid: "2017/09/21/thought-of-android-performance-anlaysis/"});
+		_hcwp.push({widget:"Stream", widget_id: 99034, xid: "react-native-animation-performance-tool-systrace.html"});
 		
 
 		(function() {

@@ -98,7 +98,7 @@
 <meta name="keywords" content="react-native,animation,android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="react-native animated 动画实现原理">
-<meta property="og:url" content="http://mlazy.club/2017/12/15/react-native-animated-principle/index.html">
+<meta property="og:url" content="http://mlazy.club/react-native-animated-principle.html">
 <meta property="og:site_name" content="懒人小屋">
 <meta property="og:description" content="前言在上篇：android 动画原理 说到，要对比 android 本身的动画实现以及 react-native 的动画实现来对比分析。本篇主要分析 react-native 的 Animated 控件是如何实现动画的，包含 Animated 中使用 nativeDriver 的 native 层动画实现方案以及不使用 nativeDriver 的纯 JS 动画实现方案 P.S. 本篇源码分析是基">
 <meta property="og:locale" content="zh-Hans">
@@ -137,7 +137,7 @@
 
 
 
-  <link rel="canonical" href="http://mlazy.club/2017/12/15/react-native-animated-principle/"/>
+  <link rel="canonical" href="http://mlazy.club/react-native-animated-principle.html"/>
 
 
 
@@ -313,7 +313,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/15/react-native-animated-principle/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/react-native-animated-principle.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -362,8 +362,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/15/react-native-animated-principle/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/12/15/react-native-animated-principle/" itemprop="commentsCount"></span>
+                <a href="/react-native-animated-principle.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="react-native-animated-principle.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -372,7 +372,7 @@
 
           
           
-             <span id="/2017/12/15/react-native-animated-principle/" class="leancloud_visitors" data-flag-title="react-native animated 动画实现原理">
+             <span id="/react-native-animated-principle.html" class="leancloud_visitors" data-flag-title="react-native animated 动画实现原理">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -403,7 +403,7 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上篇：<a href="/2017/12/15/android-animation-principle/" title="android 动画原理">android 动画原理</a> 说到，要对比 android 本身的动画实现以及 react-native 的动画实现来对比分析。本篇主要分析 react-native 的 Animated 控件是如何实现动画的，包含 Animated 中使用 nativeDriver 的 native 层动画实现方案以及不使用 nativeDriver 的纯 JS 动画实现方案</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上篇：<a href="/android-animation-principle.html" title="android 动画原理">android 动画原理</a> 说到，要对比 android 本身的动画实现以及 react-native 的动画实现来对比分析。本篇主要分析 react-native 的 Animated 控件是如何实现动画的，包含 Animated 中使用 nativeDriver 的 native 层动画实现方案以及不使用 nativeDriver 的纯 JS 动画实现方案</p>
 <p>P.S. 本篇源码分析是基于 react-native-0.47.2 进行解析的</p>
 <h1 id="react-native-动画实现原理"><a href="#react-native-动画实现原理" class="headerlink" title="react-native 动画实现原理"></a>react-native 动画实现原理</h1><p>react-native 的动画也有两种方案，一种是纯 JS 方案，仅在 JS 层通过 <code>requestAnimationFrame</code> 来实现定时渲染，以此来实现动画。<br>另一种是 native 方案，在 js 层配置好视图（ AnimatedNode ）与数据（ AnimatedValue ）的绑定，再把配置信息以及动画信息传递给 native 层，由 native 层来实现动画，而 native 层则利用与原生Animator 相似的方案来执行动画。稍微有些区别的是，Animator 是直接针对 view 的属性进行更新，而 native 方案是通过更新 node 来实现的，native 方案几乎和 Animator 等价，区别是在于native 方案中间需要 findNode 之类的操作找到最终需要操作的 view，他们之间的性能差距取决于 react-native 对于布局的更新处理机制。<br>值得注意的是，虽然 native 方案利用了 Choreographer 来实现定时器，但如果系统版本不支持，则其使用自定义的 Handler 来实现，时间是17ms，而原生的 Choreographer，在不支持 VSYNC 的设备中，自定义的 handler 的间隔是10ms，因此在低版本（api &lt; 16, android 3.0以下）的设备上，react-native 的动画在 android 上可能不会很流畅。</p>
 <p>建议先阅读<a href="http://www.alloyteam.com/2016/01/reactnative-animated/" target="_blank" rel="external">react-native animated 动画原理</a>，以此来对动画是如何实现的有个基本的认知，因为核心思路都是一致的，不同的只是在具体的环境中，如何对模块进行划分，模块之间如何通讯协作。</p>
@@ -482,7 +482,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/15/android-animation-principle/" rel="next" title="android 动画原理">
+              <a href="/android-animation-principle.html" rel="next" title="android 动画原理">
                 <i class="fa fa-chevron-left"></i> android 动画原理
               </a>
             
@@ -492,7 +492,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/15/react-navigation-animation-principle/" rel="prev" title="react-navigation 动画实现原理">
+              <a href="/react-navigation-animation-principle.html" rel="prev" title="react-navigation 动画实现原理">
                 react-navigation 动画实现原理 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -600,7 +600,7 @@
           
             
               <span class="links-of-author-item">
-                <a href="https://github.com/luhui" target="_blank" title="GitHub">
+                <a href="https://github.com/luhui" target="_blank" title="GitHub" rel="external nofollow">
                   
                     <i class="fa fa-fw fa-github"></i>
                   
@@ -666,12 +666,12 @@
 
 
 <div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  由 <a class="theme-link" href="https://hexo.io" rel="external nofollow">Hexo</a> 强力驱动
 </div>
 
 <div class="theme-info">
   主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" rel="external nofollow">
     NexT.Gemini
   </a>
 </div>
@@ -788,7 +788,7 @@
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99034, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
 		
-		_hcwp.push({widget:"Stream", widget_id: 99034, xid: "2017/12/15/react-native-animated-principle/"});
+		_hcwp.push({widget:"Stream", widget_id: 99034, xid: "react-native-animated-principle.html"});
 		
 
 		(function() {

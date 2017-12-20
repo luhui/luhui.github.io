@@ -98,7 +98,7 @@
 <meta name="keywords" content="Android,UnitTest">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android UnitTest with JMockit using Kotlin - In Practice">
-<meta property="og:url" content="http://mlazy.club/2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/index.html">
+<meta property="og:url" content="http://mlazy.club/android-unit-test-with-jmocit-using-kotlin-in-practice.html">
 <meta property="og:site_name" content="懒人小屋">
 <meta property="og:description" content="前言在上篇：Android UnitTest with JMockit using Kotlin - API Guide 里，我们列举了 JMockit 中一些常用的 api，及其用法，本篇主要是提出一些真实的项目场景，探讨如何利用上篇提到的 api 来实现单元测试。 record-replay-verify工欲善其事必先利其器，在开始编写单元测试前，我们需要先了解一般单元测试编写的基本规则，如何">
 <meta property="og:locale" content="zh-Hans">
@@ -134,7 +134,7 @@
 
 
 
-  <link rel="canonical" href="http://mlazy.club/2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/"/>
+  <link rel="canonical" href="http://mlazy.club/android-unit-test-with-jmocit-using-kotlin-in-practice.html"/>
 
 
 
@@ -310,7 +310,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://mlazy.club/2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/">
+    <link itemprop="mainEntityOfPage" href="http://mlazy.club/android-unit-test-with-jmocit-using-kotlin-in-practice.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mluffy">
@@ -359,8 +359,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/" itemprop="commentsCount"></span>
+                <a href="/android-unit-test-with-jmocit-using-kotlin-in-practice.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="android-unit-test-with-jmocit-using-kotlin-in-practice.html" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -369,7 +369,7 @@
 
           
           
-             <span id="/2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/" class="leancloud_visitors" data-flag-title="Android UnitTest with JMockit using Kotlin - In Practice">
+             <span id="/android-unit-test-with-jmocit-using-kotlin-in-practice.html" class="leancloud_visitors" data-flag-title="Android UnitTest with JMockit using Kotlin - In Practice">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -400,7 +400,7 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上篇：<a href="/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/" title="Android UnitTest with JMockit using Kotlin - API Guide">Android UnitTest with JMockit using Kotlin - API Guide</a> 里，我们列举了 JMockit 中一些常用的 api，及其用法，本篇主要是提出一些真实的项目场景，探讨如何利用上篇提到的 api 来实现单元测试。</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上篇：<a href="/android-unit-test-with-jmocit-using-kotlin-api-guide.html" title="Android UnitTest with JMockit using Kotlin - API Guide">Android UnitTest with JMockit using Kotlin - API Guide</a> 里，我们列举了 JMockit 中一些常用的 api，及其用法，本篇主要是提出一些真实的项目场景，探讨如何利用上篇提到的 api 来实现单元测试。</p>
 <h1 id="record-replay-verify"><a href="#record-replay-verify" class="headerlink" title="record-replay-verify"></a>record-replay-verify</h1><p>工欲善其事必先利其器，在开始编写单元测试前，我们需要先了解一般单元测试编写的基本规则，如何实现 APP 应用前先了解 MVC 架构是怎么回事，提前做好设计是一个道理。</p>
 <p>通常来说，我们的一个 testcase 可以这么写：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">someTestMethod</span><span class="params">()</span></span> &#123;</div><div class="line">  <span class="comment">//1. 准备阶段：测试环境的初始化</span></div><div class="line">  ...</div><div class="line">  <span class="comment">//2. 执行阶段：测试代码的调用，一般是调用 public 方法</span></div><div class="line">  ...</div><div class="line">  <span class="comment">//3. 验证阶段：验证执行结果的正确性</span></div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>这也是传说中的 Arrange, Act, Assert syntax（AAA）。<br>如同 MVC 一样，这只是一个指导思想。在实际的项目中，一个类的行为可能不只是单纯的输入输出，还有一些复杂的副作用（side-effect）。因此 JMockit 中，为了满足这样相对复杂的类，他提出了升级版的 AAA，利用 mock 实现基于行为的单元测试方法，即 record-replay-verify:</p>
@@ -475,7 +475,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/" rel="next" title="Android UnitTest with JMockit using Kotlin - API Guide">
+              <a href="/android-unit-test-with-jmocit-using-kotlin-api-guide.html" rel="next" title="Android UnitTest with JMockit using Kotlin - API Guide">
                 <i class="fa fa-chevron-left"></i> Android UnitTest with JMockit using Kotlin - API Guide
               </a>
             
@@ -589,7 +589,7 @@
           
             
               <span class="links-of-author-item">
-                <a href="https://github.com/luhui" target="_blank" title="GitHub">
+                <a href="https://github.com/luhui" target="_blank" title="GitHub" rel="external nofollow">
                   
                     <i class="fa fa-fw fa-github"></i>
                   
@@ -655,12 +655,12 @@
 
 
 <div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  由 <a class="theme-link" href="https://hexo.io" rel="external nofollow">Hexo</a> 强力驱动
 </div>
 
 <div class="theme-info">
   主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" rel="external nofollow">
     NexT.Gemini
   </a>
 </div>
@@ -777,7 +777,7 @@
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99034, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
 		
-		_hcwp.push({widget:"Stream", widget_id: 99034, xid: "2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/"});
+		_hcwp.push({widget:"Stream", widget_id: 99034, xid: "android-unit-test-with-jmocit-using-kotlin-in-practice.html"});
 		
 
 		(function() {
