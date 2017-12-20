@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>http://mlazy.club/2017/12/20/android-unit-test-with-jmocit-using-kotlin-in-practice/</loc>
+    <lastmod>2017-12-20T11:26:11.510Z</lastmod>
+    <data>
+        <display>
+        <title>Android UnitTest with JMockit using Kotlin - In Practice</title>
+        <pubTime>2017-12-20T11:23:59.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>UnitTest</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://mlazy.club/2017/12/19/android-unit-test-with-jmocit-using-kotlin-api-guide/</loc>
+    <lastmod>2017-12-19T09:06:17.729Z</lastmod>
+    <data>
+        <display>
+        <title>Android UnitTest with JMockit using Kotlin - API Guide</title>
+        <pubTime>2017-12-19T01:45:02.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>UnitTest</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://mlazy.club/2017/12/15/android-animation-principle/</loc>
+    <lastmod>2017-12-15T12:12:17.709Z</lastmod>
+    <data>
+        <display>
+        <title>android 动画原理</title>
+        <pubTime>2017-12-15T11:10:58.000Z</pubTime>
+        
+        <tag>react-native</tag>
+         
+        <tag>animation</tag>
+         
+        <tag>android</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://mlazy.club/2017/12/15/react-native-animation-anlaysis-summary/</loc>
+    <lastmod>2017-12-15T12:12:17.432Z</lastmod>
+    <data>
+        <display>
+        <title>react-native 动画性能分析总结</title>
+        <pubTime>2017-12-15T11:33:40.000Z</pubTime>
+        
+        <tag>react-native</tag>
+         
+        <tag>animation</tag>
+         
+        <tag>android</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://mlazy.club/2017/12/15/react-navigation-animation-principle/</loc>
+    <lastmod>2017-12-15T12:12:17.430Z</lastmod>
+    <data>
+        <display>
+        <title>react-navigation 动画实现原理</title>
+        <pubTime>2017-12-15T11:33:23.000Z</pubTime>
+        
+        <tag>react-native</tag>
+         
+        <tag>animation</tag>
+         
+        <tag>android</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://mlazy.club/2017/12/15/react-native-animated-principle/</loc>
+    <lastmod>2017-12-15T12:12:17.427Z</lastmod>
+    <data>
+        <display>
+        <title>react-native animated 动画实现原理</title>
+        <pubTime>2017-12-15T11:32:54.000Z</pubTime>
+        
+        <tag>react-native</tag>
+         
+        <tag>animation</tag>
+         
+        <tag>android</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://mlazy.club/2017/12/15/react-native-animation-performance-tool-systrace/</loc>
+    <lastmod>2017-12-15T12:12:17.425Z</lastmod>
+    <data>
+        <display>
+        <title>react-native 下，Android动画性能分析工具-systrace</title>
+        <pubTime>2017-12-15T11:08:24.000Z</pubTime>
+        
+        <tag>react-native</tag>
+         
+        <tag>animation</tag>
+         
+        <tag>android</tag>
+         
+        <tag>工具</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://mlazy.club/2017/09/21/thought-of-android-performance-anlaysis/</loc>
+    <lastmod>2017-09-22T01:34:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android 性能分析（道篇）</title>
+        <pubTime>2017-09-21T11:25:42.000Z</pubTime>
+        
+        <tag>吾日三省吾身</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://mlazy.club/2016/10/22/ios-background-mode/</loc>
+    <lastmod>2017-09-15T02:07:02.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 的后台运行机制</title>
+        <pubTime>2016-10-22T12:01:58.000Z</pubTime>
+        
+        <tag>iOS</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://mlazy.club/2014/12/02/git-getting-start/</loc>
+    <lastmod>2017-09-14T12:42:11.000Z</lastmod>
+    <data>
+        <display>
+        <title>git 入门</title>
+        <pubTime>2014-12-02T12:18:57.000Z</pubTime>
+        
+        <tag>程序猿的基本素养</tag>
+         
+        <tag>七天入门到精通</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+</urlset>
