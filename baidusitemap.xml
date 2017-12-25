@@ -4,12 +4,12 @@
 
     
   <url>
-    <loc>http://mlazy.club/android-unit-test-with-jmocit-using-kotlin-in-practice.html</loc>
-    <lastmod>2017-12-20T11:26:11.510Z</lastmod>
+    <loc>http://mlazy.club/android-unit-test-with-jmocit-using-kotlin-api-guide.html</loc>
+    <lastmod>2017-12-25T11:23:23.529Z</lastmod>
     <data>
         <display>
-        <title>Android UnitTest with JMockit using Kotlin - In Practice</title>
-        <pubTime>2017-12-20T11:23:59.000Z</pubTime>
+        <title>Android UnitTest with JMockit using Kotlin - API Guide</title>
+        <pubTime>2017-12-19T01:45:02.000Z</pubTime>
         
         <tag>Android</tag>
          
@@ -23,12 +23,12 @@
 
     
   <url>
-    <loc>http://mlazy.club/android-unit-test-with-jmocit-using-kotlin-api-guide.html</loc>
-    <lastmod>2017-12-19T09:06:17.729Z</lastmod>
+    <loc>http://mlazy.club/android-unit-test-with-jmocit-using-kotlin-in-practice.html</loc>
+    <lastmod>2017-12-20T11:26:11.510Z</lastmod>
     <data>
         <display>
-        <title>Android UnitTest with JMockit using Kotlin - API Guide</title>
-        <pubTime>2017-12-19T01:45:02.000Z</pubTime>
+        <title>Android UnitTest with JMockit using Kotlin - In Practice</title>
+        <pubTime>2017-12-20T11:23:59.000Z</pubTime>
         
         <tag>Android</tag>
          

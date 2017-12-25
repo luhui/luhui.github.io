@@ -187,7 +187,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">为了偷懒而使用工具</p>
+        <h1 class="site-subtitle" itemprop="description">为了偷懒而使用工具</h1>
       
   </div>
 
@@ -324,9 +324,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/android-unit-test-with-jmocit-using-kotlin-in-practice.html" itemprop="url">Android UnitTest with JMockit using Kotlin - In Practice</a></h1>
+                <a class="post-title-link" href="/android-unit-test-with-jmocit-using-kotlin-in-practice.html" itemprop="url">Android UnitTest with JMockit using Kotlin - In Practice</a></h2>
         
 
         <div class="post-meta">
@@ -509,9 +509,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/android-unit-test-with-jmocit-using-kotlin-api-guide.html" itemprop="url">Android UnitTest with JMockit using Kotlin - API Guide</a></h1>
+                <a class="post-title-link" href="/android-unit-test-with-jmocit-using-kotlin-api-guide.html" itemprop="url">Android UnitTest with JMockit using Kotlin - API Guide</a></h2>
         
 
         <div class="post-meta">
@@ -597,7 +597,7 @@
 <h2 id="Injectable"><a href="#Injectable" class="headerlink" title="Injectable"></a>Injectable</h2><p>Injectable 是一个 mocked 对象，声明 Injectable 不会像 Mocked 一样，他只会影响被标记的对象。一般和@Tested 配合使用，作为依赖注入的参数</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@RunWith(JMockit::class)</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">InjectableExample</span> </span>&#123;</div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span></span>(<span class="keyword">private</span> <span class="keyword">val</span> a: DependencyA) &#123;</div><div class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">plus1</span><span class="params">()</span></span> = a.value() + <span class="number">1</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">DependencyA</span> </span>&#123;</div><div class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">value</span><span class="params">()</span></span> = <span class="number">1</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">testPlus1</span><span class="params">(<span class="meta">@Tested</span> testInstance: <span class="type">SomeClass</span>, <span class="meta">@Injectable</span> a: <span class="type">DependencyA</span>)</span></span> &#123;</div><div class="line">        <span class="comment">//a 是一个 mocked 对象，int 返回必定是0</span></div><div class="line">        Assert.assertEquals(<span class="number">0</span>, a.value())</div><div class="line">        <span class="comment">//a 是一个 mocked 对象，可以修改 value 的返回值</span></div><div class="line">        <span class="keyword">object</span> : Expectations() &#123;</div><div class="line">            init &#123;</div><div class="line">                a.value()</div><div class="line">                result = <span class="number">2</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//修改了 a.value 的结果，所以预期的结果是 2 + 1 = 3</span></div><div class="line">        Assert.assertEquals(<span class="number">3</span>, testInstance.plus1())</div><div class="line"></div><div class="line">        <span class="comment">//因为 Injectable 只是标识对应的实例是 mocked，不影响其他实例，所以生成一个新的 a，a.value()返回的是1</span></div><div class="line">        Assert.assertEquals(<span class="number">1</span>, DependencyA().value())</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">testPlus1WithCustomCreation</span><span class="params">()</span></span> &#123;</div><div class="line">        <span class="keyword">val</span> a = DependencyA()</div><div class="line">        <span class="comment">//Mock 失败，因为a 不是一个 mock 对象</span></div><div class="line">        <span class="keyword">object</span> : Expectations() &#123;</div><div class="line">            init &#123;</div><div class="line">                a.value()</div><div class="line">                result = <span class="number">2</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">val</span> testInstance = SomeClass(a)</div><div class="line">        Assert.assertEquals(<span class="number">2</span>, testInstance.plus1())</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="Mock"><a href="#Mock" class="headerlink" title="Mock"></a>Mock</h2><p>用于标记一个方法，声明这个方法是一个 mock 方法，是被 mocked 对象对应方法的实现。具体使用参见下面的<a href="#Faking">Faking</a>一节</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeLib</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">fun</span> <span class="title">doSomething</span><span class="params">()</span></span> = <span class="number">1</span></div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FakeLog</span>: <span class="type">MockUp</span>&lt;<span class="type">Log</span>&gt; </span>&#123;</div><div class="line">  <span class="meta">@Mock</span></div><div class="line">  <span class="function"><span class="keyword">fun</span> <span class="title">doSomething</span><span class="params">()</span></span> = <span class="number">2</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeLib</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">fun</span> <span class="title">doSomething</span><span class="params">()</span></span> = <span class="number">1</span></div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FakeLog</span>: <span class="type">MockUp</span>&lt;<span class="type">Log</span>&gt;</span>() &#123;</div><div class="line">  <span class="meta">@Mock</span></div><div class="line">  <span class="function"><span class="keyword">fun</span> <span class="title">doSomething</span><span class="params">()</span></span> = <span class="number">2</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
 <li>Annotation 可以声明成员变量，会影响所有该 test suit 下的所有 testcase</li>
 <li>Annotation 可以声明单个 testcase 的方法参数，他仅在该 testcase 下生效</li>
@@ -714,9 +714,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/react-native-animation-anlaysis-summary.html" itemprop="url">react-native 动画性能分析总结</a></h1>
+                <a class="post-title-link" href="/react-native-animation-anlaysis-summary.html" itemprop="url">react-native 动画性能分析总结</a></h2>
         
 
         <div class="post-meta">
@@ -871,9 +871,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/react-navigation-animation-principle.html" itemprop="url">react-navigation 动画实现原理</a></h1>
+                <a class="post-title-link" href="/react-navigation-animation-principle.html" itemprop="url">react-navigation 动画实现原理</a></h2>
         
 
         <div class="post-meta">
@@ -1039,9 +1039,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/react-native-animated-principle.html" itemprop="url">react-native animated 动画实现原理</a></h1>
+                <a class="post-title-link" href="/react-native-animated-principle.html" itemprop="url">react-native animated 动画实现原理</a></h2>
         
 
         <div class="post-meta">
@@ -1226,9 +1226,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/android-animation-principle.html" itemprop="url">android 动画原理</a></h1>
+                <a class="post-title-link" href="/android-animation-principle.html" itemprop="url">android 动画原理</a></h2>
         
 
         <div class="post-meta">
@@ -1397,9 +1397,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/react-native-animation-performance-tool-systrace.html" itemprop="url">react-native 下，Android动画性能分析工具-systrace</a></h1>
+                <a class="post-title-link" href="/react-native-animation-performance-tool-systrace.html" itemprop="url">react-native 下，Android动画性能分析工具-systrace</a></h2>
         
 
         <div class="post-meta">
@@ -1569,9 +1569,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/thought-of-android-performance-anlaysis.html" itemprop="url">Android 性能分析（道篇）</a></h1>
+                <a class="post-title-link" href="/thought-of-android-performance-anlaysis.html" itemprop="url">Android 性能分析（道篇）</a></h2>
         
 
         <div class="post-meta">
@@ -1765,9 +1765,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/ios-background-mode.html" itemprop="url">iOS 的后台运行机制</a></h1>
+                <a class="post-title-link" href="/ios-background-mode.html" itemprop="url">iOS 的后台运行机制</a></h2>
         
 
         <div class="post-meta">
@@ -1951,9 +1951,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/git-getting-start.html" itemprop="url">git 入门</a></h1>
+                <a class="post-title-link" href="/git-getting-start.html" itemprop="url">git 入门</a></h2>
         
 
         <div class="post-meta">
@@ -2133,7 +2133,7 @@
           <p class="site-author-name" itemprop="name">mluffy</p>
            
               <p class="site-description motion-element" itemprop="description"></p>
-          
+           
         </div>
         <nav class="site-state motion-element">
 
