@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://mlazy.club/usage-of-kotlin-difference-with-java.html</loc>
+    
+    <lastmod>2017-12-28T03:23:36.211Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://mlazy.club/android-unit-test-with-jmocit-using-kotlin-api-guide.html</loc>
     
     <lastmod>2017-12-25T11:23:23.529Z</lastmod>
